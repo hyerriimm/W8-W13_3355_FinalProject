@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import axios from 'axios';
 import { signUp, _getUsersName } from "../../../redux/modules/user";
 
-
+const API_URL = process.env.REACT_APP_HOST_PORT; 
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -16,6 +17,10 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
   const [nickname, setNickname] = useState("");
+
+  const [idCheckRes, setIdCheckRes] = useState("");
+  const [nickCheckRes, setNickCheckRes] = useState("");
+
   
   //이미지
   const [previewImg, setPreviewImg] = useState();
@@ -103,6 +108,51 @@ const Signup = () => {
         }
     },[clicker])
 
+    const userIdCheckHandler = async() => {
+        if (userId.trim() === ''
+        ) {
+        return alert('아이디를 입력해주세요.')
+        }
+        try {
+            const response = await axios.post(`${API_URL}/member/id`, {idCheck: userId});
+                
+            if (response.data.success === true) {
+                alert(response.data.data);
+                setIdCheckRes(response.data.success);
+                return
+            };
+            if (response.data.success === false) {
+                alert(response.data.error.message);
+                setIdCheckRes(response.data.success);
+                return
+            };
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const nicknameCheckHandler = async() => {
+        if (userId.trim() === ''
+        ) {
+        return alert('닉네임을 입력해주세요.')
+        }
+        try {
+            const response = await axios.post(`${API_URL}/member/nickname`, {nickCheck: nickname});
+                
+            if (response.data.success === true) {
+                alert(response.data.data);
+                setNickCheckRes(response.data.success);
+                return
+            };
+            if (response.data.success === false) {
+                alert(response.data.error.message);
+                setNickCheckRes(response.data.success);
+                return
+            };
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const onSubmitHandler = (e) => {
         e.preventDefault();
@@ -112,7 +162,21 @@ const Signup = () => {
             nickname.trim() === ''
             ) {
                 return alert('모든 항목을 입력해야 회원가입이 가능합니다.')
-            }
+        };
+        if (idCheckRes === "") {
+            return alert('아이디 중복검사는 필수입니다.')
+        };
+        if (nickCheckRes === "") {
+            return alert('닉네임 중복검사는 필수입니다.')
+        };
+        if (idCheckRes === false) {
+            alert('이미 존재하는 아이디입니다.\n새로운 아이디를 입력 후 중복검사 바랍니다.');
+            return setIdCheckRes("");
+        };
+        if (nickCheckRes === false) {
+            alert('이미 존재하는 닉네임입니다.\n새로운 아이디를 입력 후 중복검사 바랍니다.');
+            return setNickCheckRes("");
+        };
         const formData = new FormData();
         formData.append('userId', userId);
         formData.append('password', password);
@@ -137,8 +201,8 @@ const Signup = () => {
         style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
             <>
                 <Input 
-                    placeholder='example@gmail.com'
-                    type="email"
+                    placeholder='아이디'
+                    type="text"
                     name="userId"
                     onChange={(e)=>setUserId(e.target.value)}/>
                     {/* {
@@ -148,6 +212,7 @@ const Signup = () => {
                         : <div style={{color:"red", fontSize:"8px"}}>이메일을 다시 확인해주세요</div>)
                         : <div style={{color:"red", fontSize:"8px"}}>이미 있는 이메일입니다.</div>)
                     } */}
+                <button type='button' onClick={userIdCheckHandler}>중복확인</button>
 
 
                 <Input  
@@ -179,6 +244,7 @@ const Signup = () => {
                     type="text"
                     name="nickname"
                     onChange={(e)=>setNickname(e.target.value)}/>
+                <button type='button' onClick={nicknameCheckHandler}>중복확인</button>
 
             <ImgFile
                     src={previewImg}
