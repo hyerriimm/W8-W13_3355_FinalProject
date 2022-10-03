@@ -56,10 +56,8 @@ export default function BasicTabs() {
 
   const waitlist = useSelector((state) => state.gatheringlist.waitlist);
   const applylist = useSelector((state) => state.gatheringlist.applylist);
-  const applycancellist = useSelector(
-    (state) => state.gatheringlist.applycancellist
-  );
   // const { applicants } = useSelector((state) => state.application);
+
 
   useEffect(() => {
     dispatch(__wait());
@@ -67,19 +65,8 @@ export default function BasicTabs() {
   useEffect(() => {
     dispatch(__apply());
   }, []);
-  useEffect(() => {
-    dispatch(__applycancel());
-  }, []);
 
-  // 지원 취소
-  const params_id = useParams().id;
 
-  const onClickApplyCancelBtn = () => {
-    if (window.confirm("지원을 취소하시겠습니까?")) {
-      dispatch(__applycancel(params_id));
-      navigate("/mypage/activity");
-    }
-  };
 
   return (
     <>
@@ -279,7 +266,11 @@ export default function BasicTabs() {
                               >
                                 모임확인
                               </ConfirmButton>
-                              <Cancelbutton onClick={onClickApplyCancelBtn}>
+                              <Cancelbutton onClick={()=>{
+                                if (window.confirm("지원을 취소하시겠습니까?")) {
+                                dispatch(__applycancel(applylist.postId));
+                                navigate("/mypage/activity");
+                              }}}>
                                 지원취소
                               </Cancelbutton>
                             </ButtonDiv>

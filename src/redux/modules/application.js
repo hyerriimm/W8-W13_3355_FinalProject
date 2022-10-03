@@ -100,6 +100,7 @@ export const __applycancel = createAsyncThunk(
   }
 );    
 
+
 export const application = createSlice({
   name: 'application',
   initialState: {
