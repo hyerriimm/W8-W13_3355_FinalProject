@@ -70,6 +70,37 @@ export const __accept = createAsyncThunk(
         }
     });
 
+
+//내활동 - 참여신청 지원취소
+export const __applycancel = createAsyncThunk(
+  "application/__applycancel",
+  async (payload, thunkAPI) => {
+    try {
+      const data = await axios.post(
+        `${API_URL}/post/application/cancel/${payload}`,
+        { postId: payload },
+        {
+          headers: {
+            authorization: localStorage.getItem("ACCESSTOKEN"),
+            refreshtoken: localStorage.getItem("REFRESHTOKEN"),
+          },
+        }
+      );
+      console.log(data);
+      if (data.data.success === false) {
+        alert(data.data.error.message);
+      } else {
+        alert(data.data.data);
+        window.location.reload();
+      }
+      return thunkAPI.fulfillWithValue(data.data.data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);    
+
+
 export const application = createSlice({
   name: 'application',
   initialState: {
