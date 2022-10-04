@@ -8,12 +8,15 @@ export const __getApplication = createAsyncThunk(
     "application/__getApplication", 
     async (payload, thunkAPI) => { 
         try {
-            const data = await axios.get(`${API_URL}/application/${payload}`, {
-            headers: {
-                authorization: localStorage.getItem("ACCESSTOKEN"),
-                refreshtoken: localStorage.getItem("REFRESHTOKEN")
-            }
-            });
+            const data = await axios.get(
+              `${API_URL}/post/application/${payload}`,
+              {
+                headers: {
+                  authorization: localStorage.getItem("ACCESSTOKEN"),
+                  refreshtoken: localStorage.getItem("REFRESHTOKEN"),
+                },
+              }
+            );
         return thunkAPI.fulfillWithValue(data.data.data);
         } catch (error) {
         return thunkAPI.rejectWithValue(error);
