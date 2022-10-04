@@ -223,10 +223,8 @@ const Form = () => {
         </div>
       </DatePickerDiv>
       <hr style={{width:'100%', marginTop:'15px'}}/>
-      <AddressDiv>
         <div style={{fontWeight:'bold'}}>모임 장소</div>
-        <div style={{marginTop:'10px',color:'#18a0fb'}}><strong>{placeName}</strong></div>
-        <div style={{margin:'10px 0',color:'#18a0fb'}}>{address}</div>
+      <AddressDiv>
         <form className="inputForm" onSubmit={handleSubmit}>
           <input
           placeholder='주소 찾기 (키워드, 도로명 주소, 지번 주소 입력 가능)'
@@ -234,14 +232,6 @@ const Form = () => {
           value={inputText}
           />
           <button type="submit">검색</button>
-          <DetailAddressInput
-            name='detailAddress'
-            maxLength={30}
-            placeholder='(선택) 상세 주소를 입력해주세요.'
-            type='text'
-            value={detailAddress || ''}
-            onChange={(e) => setDetailAddress(e.target.value)}
-          />
           <div style={{fontWeight:'bold', color:'grey', marginBottom:'10px'}}>※ 검색 후 지도의 핀을 눌러 선택해주세요.</div>
         </form>
         <MapContainer 
@@ -252,7 +242,17 @@ const Form = () => {
         setPlaceX={setPlaceX}
         setPlaceY={setPlaceY}
         />
+        <div style={{marginTop:'10px',color:'#18a0fb'}}><strong>{placeName}</strong></div>
+        <div style={{margin:'10px 0',color:'#18a0fb'}}>{address}</div>
       </AddressDiv>
+          <DetailAddressInput
+            name='detailAddress'
+            maxLength={30}
+            placeholder='(선택) 상세 주소를 입력해주세요.'
+            type='text'
+            value={detailAddress || ''}
+            onChange={(e) => setDetailAddress(e.target.value)}
+          />
       <StButton type='button' style={{ backgroundColor: '#038E00' }}
       onClick={onSubmitHandler}>
         모임 등록하기

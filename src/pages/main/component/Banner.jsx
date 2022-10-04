@@ -19,9 +19,9 @@ export default class SimpleSlider extends Component {
     };
 
     const items = [
-        { id: 1, url: "http://placeimg.com/1920/540/any" },
-        { id: 2, url: "http://placeimg.com/1920/540/any" },
-        { id: 3, url: "http://placeimg.com/1920/540/any"  },
+        { id: 1, url: `${process.env.PUBLIC_URL}/img/banner_.png` },
+        { id: 2, url: `${process.env.PUBLIC_URL}/img/banner_.png` },
+        // { id: 3, url: "http://placeimg.com/1920/540/any"  },
       ];    
 
     return (

@@ -21,8 +21,8 @@ const CommentItem = ({ item, getCommentList }) => {
     setIsUpdate(!isUpdate);
   };
 
-  const handleUpdate = async (ev) => {
-    if (ev.key === "Enter") {
+  const handleUpdate = async (e) => {
+    if (e.key === "Enter") {
       if (!comment) {
         alert("댓글을 입력해주세요.");
         return false;
@@ -51,12 +51,13 @@ const CommentItem = ({ item, getCommentList }) => {
         comment: "test",
       })
     );
+    window.location.reload();
 
     getCommentList();
   };
 
-  const change = (ev) => {
-    const { value } = ev.target;
+  const change = (e) => {
+    const { value } = e.target;
 
     setComment(value);
   };

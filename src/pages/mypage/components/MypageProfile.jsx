@@ -11,9 +11,7 @@ const MypageProfile = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const myinfo = useSelector((state) => state.myinfo.myinfo);
-
-    console.log(myinfo)
-
+    
     useEffect(() => {
         window.scrollTo(0, 0); // 스크롤 맨 위로
         dispatch(__getMyInfo());
