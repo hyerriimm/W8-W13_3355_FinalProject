@@ -6,6 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { __getMyInfo } from '../../../redux/modules/myinfo';
 
+const API_URL = process.env.REACT_APP_HOST_PORT;
+const ACCESSTOKEN = localStorage.getItem('ACCESSTOKEN');
+const REFRESHTOKEN = localStorage.getItem('REFRESHTOKEN');
 
 const InfoEdit = () => {
 
@@ -24,6 +27,7 @@ const InfoEdit = () => {
 
     const imgFileInputRef = useRef();
     const imgFileUploadBtnRef = useRef();
+    const removeinfoBtnRef = useRef();
 
     const resetAllStates = () => {
         setNickname('');
@@ -44,9 +48,7 @@ const InfoEdit = () => {
           }
       
           try {
-            const ACCESSTOKEN = localStorage.getItem('ACCESSTOKEN');
-            const REFRESHTOKEN = localStorage.getItem('REFRESHTOKEN');
-            const response = await axios.put('http://13.125.229.126:8080/member', formData, {
+            const response = await axios.put(`${API_URL}/member`, formData, {
               headers: {
                 "Content-Type":"multipart/form-data",
                 "Authorization":ACCESSTOKEN,
@@ -76,6 +78,36 @@ const InfoEdit = () => {
     const onChangeImgFileInput = (e) => {
         setImgFile(e.target.files[0]);
         setPreviewImg(URL.createObjectURL(e.target.files[0]));
+      };
+
+    const onChangeRemoveInfo = async (e) => { 
+        // e.preventDefault();
+        if (window.confirm("정말로 삼삼오오를 탈퇴하시겠습니까?")) {
+          try {
+            const deletedata = await axios.delete(`${API_URL}/member`, {
+              headers: {
+                "Authorization": ACCESSTOKEN,
+                "RefreshToken": REFRESHTOKEN,
+              }
+            });
+            console.log(deletedata)
+            
+            if (deletedata.data.success === true) {
+              localStorage.removeItem("ACCESSTOKEN");
+              localStorage.removeItem("REFRESHTOKEN");
+              localStorage.removeItem("ImgURL");
+              resetAllStates();
+              alert('회원 탈퇴가 완료되었습니다.')
+              return navigate('/');
+            };
+            if (deletedata.data.success === false) {
+              alert(deletedata.data.error.message);
+              return
+            };
+          } catch (error) {
+            console.log(error);
+          }
+        }
       };
 
     return (
@@ -131,6 +163,11 @@ const InfoEdit = () => {
                                 프로필 사진 변경
                             </BtnEdit>
                             <BtnEdit>비밀번호 변경</BtnEdit>
+                            <BtnEdit
+                                type='button'
+                                onClick={onChangeRemoveInfo}
+                                ref={removeinfoBtnRef}
+                            >회원 탈퇴</BtnEdit>
                         </Contentwrapper>
                     </EditContainer>
                     <StButton type='submit' style={{ width: '200px', backgroundColor: '#038E00', marginTop: '60px' }}>

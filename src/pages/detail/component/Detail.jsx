@@ -147,7 +147,7 @@ const Detail = () => {
                style={{color:'#18A0FB', fontStyle:'oblique', cursor:'pointer', width:'fit-content'}} 
                onClick={()=>window.open(detail.placeUrl, '_blank')}
               >{detail.placeName}</div>
-              <div>( {detail.address} {detail.detailAddress} )</div>
+             <div>( {detail.address} {detail.detailAddress === 'undefined' ? false : detail.detailAddress} )</div>
             </div>
             <BtnsDiv>
               { logIn == null ? false : 
