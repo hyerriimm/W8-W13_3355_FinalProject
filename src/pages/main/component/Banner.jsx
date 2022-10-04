@@ -16,6 +16,8 @@ export default class SimpleSlider extends Component {
       autoplay: true,
       autoplaySpeed: 4000,
       pauseOnHover: true,
+      centerPadding: '0px',
+      adaptiveHeight: true,
     };
 
     const items = [
@@ -50,10 +52,10 @@ const SliderWrapper = styled.div`
 `
 
 const StSlider = styled(Slider)`
-    .slick-slide div{
+    .slick-slide > div{
       outline: none;
+      width: 100%;
     }
-    /* .slick-list { padding: 0 20px 0 20px !important; } */
 `;
 
 const ImageContainer = styled.div`
@@ -62,7 +64,6 @@ const ImageContainer = styled.div`
 
 const Image = styled.img`
   max-width: 100%;
-  max-height: 80%;
-  min-height: 240px;
+  min-height: 150px;
   object-fit: cover;
 `;
