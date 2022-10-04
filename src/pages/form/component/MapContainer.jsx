@@ -66,7 +66,25 @@ const MapContainer = ({ searchPlace, setAddress, setPlaceName, setPlaceUrl, setP
             setPlaceX(place.x);
             setPlaceY(place.y);
         });
-    };
+
+        window.kakao.maps.event.addListener(
+          marker,
+          "mouseover",
+          function () {
+            infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>');
+            infowindow.open(map, marker);
+          }
+        );
+
+        window.kakao.maps.event.addListener(
+          marker,
+          "mouseout",
+          function () {
+            infowindow.close();
+          }
+        );
+        
+      };
   }, [searchPlace]);
 
   return (
