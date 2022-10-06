@@ -1,8 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from 'axios'
+import axios from "axios";
 
 const API_URL = process.env.REACT_APP_HOST_PORT;
-
 
 //내활동 - 참여 대기중인 모임 조회
 export const __wait = createAsyncThunk(
@@ -22,7 +21,6 @@ export const __wait = createAsyncThunk(
   }
 );
 
-
 //내활동 - 참여신청 내역 보기
 export const __apply = createAsyncThunk(
   "/mypage/act/applicant",
@@ -41,7 +39,6 @@ export const __apply = createAsyncThunk(
   }
 );
 
-
 //참여 중인 모임 조회
 export const __parti = createAsyncThunk(
   "/mypage/participation",
@@ -50,14 +47,15 @@ export const __parti = createAsyncThunk(
       const data = await axios.get(`${API_URL}/mypage/participation`, {
         headers: {
           authorization: localStorage.getItem("ACCESSTOKEN"),
-          refreshtoken: localStorage.getItem("REFRESHTOKEN")
-        }
+          refreshtoken: localStorage.getItem("REFRESHTOKEN"),
+        },
       });
       return thunkAPI.fulfillWithValue(data.data.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  });
+  }
+);
 
 //내가 주최한 모임 조회
 export const __lead = createAsyncThunk(
@@ -67,14 +65,15 @@ export const __lead = createAsyncThunk(
       const data = await axios.get(`${API_URL}/mypage/leader`, {
         headers: {
           authorization: localStorage.getItem("ACCESSTOKEN"),
-          refreshtoken: localStorage.getItem("REFRESHTOKEN")
-        }
+          refreshtoken: localStorage.getItem("REFRESHTOKEN"),
+        },
       });
       return thunkAPI.fulfillWithValue(data.data.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  });
+  }
+);
 
 export const gatheringlist = createSlice({
   name: "gatheringlist",

@@ -289,13 +289,17 @@ export default function BasicTabs() {
   );
 }
 
+
 const StDiv = styled.div`
-  width: 335px;
   display: flex;
+  width: 80vw;
+  min-width: 320px;
+  max-width: 640px;
   justify-content: space-between;
   align-items: center;
   margin: 0 auto;
-  margin-top: 70px;
+  margin-top: 15px;
+  margin-bottom: 10px;
 `;
 
 const Stcontainer = styled.div`

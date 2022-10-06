@@ -8,6 +8,8 @@ import axios from 'axios';
 import { signUp, _getUsersName } from "../../../redux/modules/user";
 
 
+
+
 const API_URL = process.env.REACT_APP_HOST_PORT; 
 
 const Signup = () => {
@@ -19,6 +21,7 @@ const Signup = () => {
   const [passwordCheck, setPasswordCheck] = useState("");
   const [nickname, setNickname] = useState("");
   const [age, setAge] = useState("");
+  const [gender, setGender] = useState("");
 
   const [idCheckRes, setIdCheckRes] = useState("");
   const [nickCheckRes, setNickCheckRes] = useState("");
@@ -53,6 +56,7 @@ const Signup = () => {
     setImgFile(null);
     setPreviewImg("");
     setAge("");
+    setGender("");
 };
 
     // //중복확인
@@ -73,24 +77,26 @@ const Signup = () => {
 
   //체크박스 전체 선택 및 해제
   const [inputs, setInputs] = useState([
-    { name: "one", level: 1, checked: false },
-    { name: "requiredAgreement1", level: 2, checked: false },
-    { name: "requiredAgreement2", level: 2, checked: false },
+    { name: "allCheck", level: 1, checked: false },
+    { name: "ageCheck", level: 2, checked: false },
+    { name: "requiredAgreement", level: 2, checked: false },
     { name: "marketingAgreement", level: 3, checked: false },
   ]);
 
   const checkboxHandler= (e)=>{
-    if(e.target.name!=="one"){
-        setInputs(inputs.map(
-            (item)=>item.name===e.target.name
-                ?({...item, checked: e.currentTarget.checked})
-                :({...item})
-        ))
-        setClicker(clicker+1)
-    }else{
-        setInputs(inputs.map(
-            (item)=>({...item, checked: e.currentTarget.checked})
-        ))
+    if (e.target.name !== "allCheck") {
+      setInputs(
+        inputs.map((item) =>
+          item.name === e.target.name
+            ? { ...item, checked: e.currentTarget.checked }
+            : { ...item }
+        )
+      );
+      setClicker(clicker + 1);
+    } else {
+      setInputs(
+        inputs.map((item) => ({ ...item, checked: e.currentTarget.checked }))
+      );
     }
 }
 
@@ -99,26 +105,23 @@ const Signup = () => {
         const A = inputs.filter((item)=>item.level>1).length;
         const B = inputs.filter((item)=>item.level>1 && item.checked===true).length
         if(A===B){
-            setInputs(inputs.map((item)=>item.name==="one"
-                ?({...item,checked: true})
-                :({...item})
-            ))
+            setInputs(
+              inputs.map((item) =>
+                item.name === "allCheck"
+                  ? { ...item, checked: true }
+                  : { ...item }
+              )
+            );
         }else{
-            setInputs(inputs.map((item)=>item.name==="one"
-                ?({...item,checked: false})
-                :({...item})
-            ))
+            setInputs(
+              inputs.map((item) =>
+                item.name === "allCheck"
+                  ? { ...item, checked: false }
+                  : { ...item }
+              )
+            );
         }
     },[clicker])
-
-
-    // const handleChange = (e, type) => {
-    //   const value = e.target.value;
-    //   if (type === "gender") {
-    //     setGender(value);
-    //     console.log("성별반영완료");
-    //   }
-    // };
 
 
     const userIdCheckHandler = async() => {
@@ -169,13 +172,15 @@ const Signup = () => {
 
     const onSubmitHandler = (e) => {
         e.preventDefault();
-        if (userId.trim() === '' || 
-            password.trim() === '' || 
-            passwordCheck.trim() === '' ||
-            nickname.trim() === '' ||
-            age.trim() === ''
-            ) {
-                return alert('모든 항목을 입력해야 회원가입이 가능합니다.')
+        if (
+          userId.trim() === "" ||
+          password.trim() === "" ||
+          passwordCheck.trim() === "" ||
+          nickname.trim() === "" ||
+          age.trim() === "" ||
+          gender.trim() === ""
+        ) {
+          return alert("모든 항목을 입력해야 회원가입이 가능합니다.");
         };
         if (idCheckRes === "") {
             return alert('아이디 중복검사는 필수입니다.')
@@ -198,6 +203,10 @@ const Signup = () => {
         formData.append('passwordCheck', passwordCheck);
         formData.append('nickname', nickname);
         formData.append("age", age);
+        formData.append("gender", gender);
+        formData.append("ageCheck", inputs[1].checked);
+        formData.append("requiredAgreement", inputs[2].checked);
+        formData.append("marketingAgreement", inputs[3].checked);
         if (imgFile !== null) {
             formData.append('imgFile', imgFile);
         };
@@ -206,8 +215,6 @@ const Signup = () => {
         navigate('/login');
         resetAllStates();
     };
-
-
 
   return (
     <LoginLayout>
@@ -289,26 +296,32 @@ const Signup = () => {
                 중복확인
               </OverlapButton>
             </Item>
+
             <Input
               placeholder="나이를 입력하세요"
               type="number"
               name="age"
-              min={10}
+              min={15}
               max={100}
               onChange={(e) => setAge(e.target.value)}
             />
 
-            {/* <select
+            <select
               name="gender"
-              style={{height: "40px",
-                      width: "275px",
-                      borderRadius: "5px",
-                      border: "1px solid #a1a1a1",
-                      padding: "0 10px"}}
-              onChange={(e) => setGender(e.target.value)}>
-              <option>남</option>
-              <option>여</option>
-            </select> */}
+              style={{
+                height: "40px",
+                width: "273px",
+                borderRadius: "5px",
+                border: "1px solid #a1a1a1",
+                padding: "0 10px",
+                marginTop: "7px",
+              }}
+              onChange={(e) => setGender(e.target.value)}
+            >
+              <option color="gray">성별을 선택해주세요</option>
+              <option value="Male">남자</option>
+              <option value="Female">여자</option>
+            </select>
 
             <ImgFile src={previewImg} alt="" />
             <ImgInput
@@ -336,7 +349,7 @@ const Signup = () => {
             <AgreeBox>
               <input
                 type="checkbox"
-                name="one"
+                name="allCheck"
                 checked={inputs[0].checked}
                 onChange={(e) => {
                   checkboxHandler(e);
@@ -346,23 +359,25 @@ const Signup = () => {
               <br />
               <input
                 type="checkbox"
-                name="requiredAgreement1"
+                name="ageCheck"
                 onChange={(e) => {
                   checkboxHandler(e);
                 }}
                 checked={inputs[1].checked}
               />
-              서비스 약관 동의(필수)
+              만 14세 이상입니다
               <br />
+ 
               <input
                 type="checkbox"
-                name="requiredAgreement2"
+                name="requiredAgreement"
                 onChange={(e) => {
                   checkboxHandler(e);
                 }}
                 checked={inputs[2].checked}
               />
-              개인정보 수집 및 이용 동의(필수)
+              이용약관(필수)
+              <Img alt="" src={`img/open.png`} />
               <br />
               <input
                 type="checkbox"
@@ -373,9 +388,9 @@ const Signup = () => {
                 checked={inputs[3].checked}
               />
               마케팅 정보 수신 동의(선택)
+              <Img alt="" src={`img/open.png`} />
             </AgreeBox>
           </>
-
           <Button type="submit" style={{ backgroundColor: "#038E00" }}>
             가입하기
           </Button>
@@ -507,3 +522,11 @@ const Button = styled.button`
 const AgreeBox = styled.div`
     flex-direction: row;
 `
+
+const Img = styled.img`
+  width: 7px;
+  height: 10px;
+  margin-left: 25px;
+  margin-top: 7px;
+  float: right;
+`;
