@@ -6,6 +6,9 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import axios from 'axios';
 import { signUp, _getUsersName } from "../../../redux/modules/user";
+// import AgreementModal from "./AgreementModal"
+import MarketingAgreement from "./MarketingAgreement";
+import RequiredAgreement from "./RequiredAgreement";
 
 
 
@@ -26,7 +29,7 @@ const Signup = () => {
   const [idCheckRes, setIdCheckRes] = useState("");
   const [nickCheckRes, setNickCheckRes] = useState("");
 
-  
+
   //이미지
   const [previewImg, setPreviewImg] = useState();
   const [imgFile, setImgFile] = useState(null);
@@ -237,13 +240,7 @@ const Signup = () => {
                 name="userId"
                 onChange={(e) => setUserId(e.target.value)}
               />
-              {/* {
-                        user.userId && (Idcheck.length === 0
-                        ? (regexuserId.test(user.userId)
-                        ? <div style={{color:"green", fontSize:"8px"}}>사용가능한 이메일입니다</div>
-                        : <div style={{color:"red", fontSize:"8px"}}>이메일을 다시 확인해주세요</div>)
-                        : <div style={{color:"red", fontSize:"8px"}}>이미 있는 이메일입니다.</div>)
-                    } */}
+
               <OverlapButton type="button" onClick={userIdCheckHandler}>
                 중복확인
               </OverlapButton>
@@ -254,6 +251,7 @@ const Signup = () => {
               name="password"
               onChange={(e) => setPassword(e.target.value)}
             />
+
             {
               password &&
                 (regexPassword.test(password) ? (
@@ -318,9 +316,9 @@ const Signup = () => {
               }}
               onChange={(e) => setGender(e.target.value)}
             >
-              <option color="gray">성별을 선택해주세요</option>
-              <option value="Male">남자</option>
-              <option value="Female">여자</option>
+              <option>성별을 선택해주세요</option>
+              <option value="male">남자</option>
+              <option value="female">여자</option>
             </select>
 
             <ImgFile src={previewImg} alt="" />
@@ -365,9 +363,8 @@ const Signup = () => {
                 }}
                 checked={inputs[1].checked}
               />
-              만 14세 이상입니다
+              만 14세 이상입니다<span>(필수)</span>
               <br />
- 
               <input
                 type="checkbox"
                 name="requiredAgreement"
@@ -376,8 +373,10 @@ const Signup = () => {
                 }}
                 checked={inputs[2].checked}
               />
-              이용약관(필수)
-              <Img alt="" src={`img/open.png`} />
+              이용약관<span>(필수)</span>
+              <Agree>
+                <RequiredAgreement />
+              </Agree>
               <br />
               <input
                 type="checkbox"
@@ -387,8 +386,10 @@ const Signup = () => {
                 }}
                 checked={inputs[3].checked}
               />
-              마케팅 정보 수신 동의(선택)
-              <Img alt="" src={`img/open.png`} />
+              마케팅 정보 수신 동의<Color>(선택)</Color>
+              <Agree>
+                <MarketingAgreement />
+              </Agree>
             </AgreeBox>
           </>
           <Button type="submit" style={{ backgroundColor: "#038E00" }}>
@@ -398,8 +399,10 @@ const Signup = () => {
       </Stcontainer>
     </LoginLayout>
   );
-  }
   
+  }
+
+
 
 
 export default Signup
@@ -520,13 +523,29 @@ const Button = styled.button`
 `;  
 
 const AgreeBox = styled.div`
-    flex-direction: row;
-`
-
-const Img = styled.img`
-  width: 7px;
-  height: 10px;
-  margin-left: 25px;
-  margin-top: 7px;
-  float: right;
+  flex-direction: row;
+  span {
+    font-size: 10px;
+    color: red;
+    font-weight: 600;
+  }
 `;
+
+const Color = styled.div`
+  font-size: 10px;
+  font-weight: 600;
+  float: right;
+  margin-top: 7px;
+  margin-right: 70px;
+`;
+
+const Agree = styled.div`
+  border: 1px solid #a1a1a1;
+  width: 250px;
+  height: 130px;
+  overflow: scroll;
+  margin-top: 7px;
+  font-size: 10px;
+  padding: 0 10px;
+`;
+

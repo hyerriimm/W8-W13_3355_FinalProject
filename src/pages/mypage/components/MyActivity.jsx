@@ -230,7 +230,9 @@ export default function BasicTabs() {
                               </div>
                               되었습니다.
                             </DDiv>
-                            <ChatButton>채팅바로가기</ChatButton>
+                            <ChatButton>
+                              채팅바로가기
+                            </ChatButton>
                           </Div>
                         ) : (
                           <Div>
@@ -266,11 +268,16 @@ export default function BasicTabs() {
                               >
                                 모임확인
                               </ConfirmButton>
-                              <Cancelbutton onClick={()=>{
-                                if (window.confirm("지원을 취소하시겠습니까?")) {
-                                dispatch(__applycancel(applylist.postId));
-                                navigate("/mypage/activity");
-                              }}}>
+                              <Cancelbutton
+                                onClick={() => {
+                                  if (
+                                    window.confirm("지원을 취소하시겠습니까?")
+                                  ) {
+                                    dispatch(__applycancel(applylist.postId));
+                                    navigate("/mypage/activity");
+                                  }
+                                }}
+                              >
                                 지원취소
                               </Cancelbutton>
                             </ButtonDiv>
