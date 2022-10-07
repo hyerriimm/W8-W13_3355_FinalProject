@@ -55,69 +55,74 @@ export const __getChatList = createAsyncThunk(
 
 // createSlice를 통한 redux 생성 - store에서 사용할 수 있는 내용들을 담고 있음
 export const chat = createSlice({
-  name: "chat",
-  initialState: {
-    data: [],
-    chatList: [],
-    chatRoomTitle: null,
-    currentPage: 0,
-    isFirstPage: true,
-    hasNextPage: false,
-    totalPage: 0,
-    totalMessage: 0,
-    success: false,
-    error: null,
-    isLoading: false,
-  },
-  reducers: {},
-  // 내부에서 동작하는 함수 외 외부에서 선언해준 함수 동작을 보조하는 기능
-  extraReducers: (builder) => {
-    // 대화 내용 불러오기
-    builder
-      .addCase(__getChat.pending, (state) => {
-        state.isLoading = true; // 네트워크 요청이 시작되면 로딩상태를 true로 변경합니다.
-      })
-      .addCase(__getChat.fulfilled, (state, action) => {
-        state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
-        // state.data = action.payload.data.data;
+    name:"chat",
+    initialState: {
+      chatRoomList: [],
+        data: [],
+        chatList: [],
+        chatRoomTitle: null,
+        currentPage:0,
+        isFirstPage:true,
+        hasPreviousPage:false,
+        totalPage:0,
+        totalMessage:0,
+        success: false,
+        error: null,
+        isLoading: false
+      },
+    reducers:{},
+    // 내부에서 동작하는 함수 외 외부에서 선언해준 함수 동작을 보조하는 기능
+    extraReducers: (builder) => {
 
-        // 처음으로 데이터 값 불러올때는 배열에 추가식이 아닌 state값 수정
-        if (action.payload.page === 0) {
-          // console.log(action.payload);
-          state.chatList = action.payload.data.chatMessageList;
-          state.chatRoomTitle = action.payload.data.chatRoomTitle;
-          state.currentPage = action.payload.data.currentPage;
-          state.isFirstPage = action.payload.data.isFirstPage;
-          state.hasNextPage = action.payload.data.hasNextPage;
-          state.totalPage = action.payload.data.totalPage;
-          state.totalMessage = action.payload.data.totalMessage;
-          // state.data = action.payload.data.data
-          // 처음 불러오기때 데이터 변경
-        } else {
-          // 이후 인피니티 스크롤 시 데이터 앞에 저장
-          state.chatList.unshift(...action.payload.data.chatMessageList);
-        }
-      })
-      .addCase(__getChat.rejected, (state, action) => {
-        state.isLoading = false; // 에러가 발생했지만, 네트워크 요청이 끝났으니, false로 변경합니다.
-        state.error = action.payload; // catch 된 error 객체를 state.error에 넣습니다.
-      });
+      // 대화 내용 불러오기
+      builder
+        .addCase(__getChat.pending, (state) => {
+          state.isLoading = true; // 네트워크 요청이 시작되면 로딩상태를 true로 변경합니다.
+        })
+        .addCase(__getChat.fulfilled, (state, action) => {
+          state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
+          // 처음으로 데이터 값 불러올때는 배열에 추가식이 아닌 state값 수정
+            if(action.payload.page===0){
+              // console.log('처음 요청하는 페이지', action.payload.page);
+              state.chatList = action.payload.data.chatMessageList;
+              state.chatRoomTitle = action.payload.data.chatRoomTitle;
+              state.currentPage = action.payload.data.currentPage;
+              state.isFirstPage = action.payload.data.isFirstPage;
+              state.hasPreviousPage = action.payload.data.hasPreviousPage;
+              state.totalPage = action.payload.data.totalPage;
+              state.totalMessage = action.payload.data.totalMessage;
+            }else{
+              // 이후 인피니티 스크롤 시 데이터 앞에 저장
+              // console.log('버튼 눌러서 요청하는 페이지',action.payload.page, '서버에서 받은 총 페이지 수', action.payload.data.totalPage );
+            state.chatList.push( ...action.payload.data.chatMessageList);
+            state.currentPage = action.payload.data.currentPage;
+            state.isFirstPage = action.payload.data.isFirstPage;
+            state.hasPreviousPage = action.payload.data.hasPreviousPage;
+            state.totalPage = action.payload.data.totalPage;
+            state.totalMessage = action.payload.data.totalMessage;
+          }
+        })
+        .addCase(__getChat.rejected, (state, action) => {
+          state.isLoading = false; // 에러가 발생했지만, 네트워크 요청이 끝났으니, false로 변경합니다.
+          state.error = action.payload; // catch 된 error 객체를 state.error에 넣습니다.
+        });
 
-    // 채팅방 리스트
-    builder
-      .addCase(__getChatList.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(__getChatList.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.chatList = action.payload.data.data;
-        // Promise가 fullfilled일 때 dispatch
-      })
-      .addCase(__getChatList.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload;
-        // Promise가 rejected일 때 dispatch
-      });
+      // 채팅방 리스트
+      builder
+        .addCase(__getChatList.pending, (state) => {
+          state.isLoading = true;
+        })
+        .addCase(__getChatList.fulfilled, (state, action) => {
+          state.isLoading = false;
+          state.chatRoomList = action.payload.data.data;
+          // Promise가 fullfilled일 때 dispatch
+        })
+        .addCase(__getChatList.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action.payload;
+          // Promise가 rejected일 때 dispatch
+        });
+
   },
 });
 

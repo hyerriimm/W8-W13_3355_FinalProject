@@ -8,8 +8,8 @@ const ChatList = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const ChatList = useSelector((state) => state.chat.chatList);
-    console.log(ChatList);
+    const ChatList = useSelector((state) => state.chat.chatRoomList);
+    // console.log(ChatList);
 
   useEffect(() => {
     dispatch(__getChatList());
