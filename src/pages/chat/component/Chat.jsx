@@ -266,34 +266,17 @@ const Chat = () => {
             return;
           }else{
             if (chat.senderId === localStorage.getItem("Id")) {
-              if(i>0&&chatList?.chatList[i]?.sender===chatList?.chatList[index]?.sender){
-                index=i;
-                return(
-                  <div key={i}>
+              return (
+                <div key={i}>
                     <ChatMessage
                       style={{ display: "flex", justifyContent: "flex-end" }}
                     >
                       <MyChat>{chat.message}</MyChat>
                     </ChatMessage>
                   </div>
-                );
-              } else {
-                index = i;
-                return (
-                  <div key={i}>
-                    {/* <ChatMessage>
-                    <MyNick>{chat.sender}</MyNick>
-                  </ChatMessage> */}
-                    <ChatMessage
-                      style={{ display: "flex", justifyContent: "flex-end" }}
-                    >
-                      <MyChat>{chat.message}</MyChat>
-                    </ChatMessage>
-                  </div>
-                );
-              }
+              )
             } else {
-              if(i>0&&chatList?.chatList[i]?.sender===chatList?.chatList[index]?.sender){
+              if(i>0&&chatList?.chatList.slice().reverse()[i]?.sender===chatList?.chatList.slice().reverse()[index]?.sender){
                 index=i;
                 return(
                   <div key={i}>
@@ -339,37 +322,20 @@ const Chat = () => {
           }
           else {
             if (msg.senderId === localStorage.getItem("Id")) {
-              if(i>0&&messages[i]?.sender===messages[index2]?.sender){
-                index2=i;
-                return(
-                  <div key={i}>
-                    <ChatMessage
-                      style={{ display: "flex", justifyContent: "flex-end" }}
-                    >
-                      <MyChat>{msg.message}</MyChat>
-                    </ChatMessage>
-                  </div>
-                );
-              } else {
-                index2 = i;
-                return (
-                  <div key={i}>
-                    {/* <ChatMessage>
-                      <MyNick>{msg.sender}</MyNick>
-                    </ChatMessage> */}
-                    <ChatMessage
-                      style={{ display: "flex", justifyContent: "flex-end" }}
-                    >
-                      <MyChat>{msg.message}</MyChat>
-                    </ChatMessage>
-                  </div>
-                );
-              }
+              return(
+                <div key={i}>
+                  <ChatMessage
+                    style={{ display: "flex", justifyContent: "flex-end" }}
+                  >
+                    <MyChat>{msg.message}</MyChat>
+                  </ChatMessage>
+                </div>
+              );
             } else {
               if (i > 0 && messages[i]?.sender === messages[index2]?.sender) {
                 index2 = i;
                 return (
-                  <div key={i}>
+                <div key={i}>
                   <ChatMessage>
                     <Chatting>{msg.message}</Chatting>
                   </ChatMessage>
@@ -377,17 +343,17 @@ const Chat = () => {
                 )}else{
                   index2=i;
                   return (
-                    <div key={i}>
-                      <ChatMessage>
+                  <div key={i}>
+                    <ChatMessage>
                       <ProfileImg
-                     style={{backgroundSize:'cover',backgroundImage:`url(${msg.imgUrl})`, backgroundPosition: 'center'}}
-                    ></ProfileImg>
-                        <NickName>{msg.sender}</NickName>
-                      </ChatMessage>
-                      <ChatMessage>
-                        <Chatting>{msg.message}</Chatting>
-                      </ChatMessage>
-                    </div>
+                      style={{backgroundSize:'cover',backgroundImage:`url(${msg.imgUrl})`, backgroundPosition: 'center'}}
+                      ></ProfileImg>
+                      <NickName>{msg.sender}</NickName>
+                    </ChatMessage>
+                    <ChatMessage>
+                      <Chatting>{msg.message}</Chatting>
+                    </ChatMessage>
+                  </div>
                   )}
               }
           }
