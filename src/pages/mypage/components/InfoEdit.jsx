@@ -59,10 +59,10 @@ const InfoEdit = () => {
             if (response.data.success === true) {
                 alert(response.data.data);
                 console.log(response)
+                resetAllStates();
                 localStorage.setItem("ACCESSTOKEN", response.headers.authorization);
                 localStorage.setItem("REFRESHTOKEN", response.headers.refreshtoken);
                 localStorage.setItem("ImgURL", response.headers.imgurl);
-                resetAllStates();
                 return navigate('/mypage');
             };
             if (response.data.success === false) {
@@ -84,7 +84,7 @@ const InfoEdit = () => {
         e.preventDefault();
         if (window.confirm("정말로 삼삼오오를 탈퇴하시겠습니까?")) {
           try {
-            const deletedata = await axios.put(`${API_URL}/member/signout`, {
+            const deletedata = await axios.put(`${API_URL}/member/signout`, {data: '탈퇴요청' } , {
               headers: {
                 "Authorization": ACCESSTOKEN,
                 "RefreshToken": REFRESHTOKEN,
