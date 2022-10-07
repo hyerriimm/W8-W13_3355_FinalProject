@@ -50,7 +50,7 @@ const Header = () => {
         setProfileImg(localStorage.removeItem("ImgURL"));
         localStorage.removeItem("Id");
         alert('로그아웃 되었습니다.')
-        navigate('/')
+        window.location.replace('/')
       } else {
           console.log("로그인 유지");
       }
