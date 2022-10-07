@@ -1,13 +1,26 @@
 import { React, useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { __getMyInfo } from '../redux/modules/myinfo';
 
 
 const Header = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const myinfo = useSelector((state)=>state.myinfo.myinfo.imgUrl);
+
+    useEffect(()=>{
+        dispatch(__getMyInfo())
+      },[])
+
+    // console.log(myinfo)
+
     const [accesstoken,setAccesstoken] = useState(undefined);
-    const [profileImg,setProfileImg] = useState(undefined);
-    const profile = `${profileImg}` // "https://avatars.dicebear.com/api/adventurer-neutral/:seed.svg"
+    // const [profileImg,setProfileImg] = useState(undefined);
+    // const profile = `${profileImg}` // "https://avatars.dicebear.com/api/adventurer-neutral/:seed.svg"
 
     const modalRef = useRef();
     const [isOpen, setIsOpen] = useState(false);
@@ -25,8 +38,8 @@ const Header = () => {
 
     useEffect(() => {
       setAccesstoken(localStorage.getItem("ACCESSTOKEN"));
-      setProfileImg(localStorage.getItem("ImgURL"));
-    }, [accesstoken, profileImg]);
+      // setProfileImg(localStorage.getItem("ImgURL"));
+    }, [accesstoken]);
     
     useEffect(() => {
       const onClickOutside = (e) => {
@@ -46,7 +59,7 @@ const Header = () => {
       if (window.confirm("로그아웃 하시겠습니까?")) {
         setAccesstoken(localStorage.removeItem("ACCESSTOKEN"));
         setAccesstoken(localStorage.removeItem("REFRESHTOKEN"));
-        setProfileImg(localStorage.removeItem("ImgURL"));
+        // setProfileImg(localStorage.removeItem("ImgURL"));
         localStorage.removeItem("Id");
         alert('로그아웃 되었습니다.')
         window.location.replace('/')
@@ -65,7 +78,7 @@ const Header = () => {
                 ( <>
                   <AddBtn onClick={()=>navigate('/form')}>모임등록</AddBtn>
                   <BtnProfile 
-                  style={{backgroundSize:'cover',backgroundImage:`url(${profile})`, backgroundPosition: 'center'}}
+                  style={{backgroundSize:'cover',backgroundImage:`url(${myinfo})`, backgroundPosition: 'center'}}
                   ref={modalRef} onClick={handleModal}>
                       {/* <img src={ profile } alt="profile"/> */}
                   </BtnProfile>
