@@ -18,7 +18,7 @@ const Login = () => {
 
   const onLoginBtnHandler = async (newUserInfo) => {
     if (newUserInfo.userId.trim() === '' || newUserInfo.password.trim() === '') {
-      return alert('이메일과 비밀번호를 입력하세요.');
+      return alert('아이디와 비밀번호를 입력하세요.');
     }
     try {
         const data = await axios.post(`${API_URL}/member/login`, newUserInfo);
