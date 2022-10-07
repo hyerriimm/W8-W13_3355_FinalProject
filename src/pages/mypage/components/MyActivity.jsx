@@ -12,6 +12,7 @@ import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import ChatFloatingBtn from '../../../components/ChatFloatingBtn';
 
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -57,7 +58,7 @@ export default function BasicTabs() {
 
   const waitlist = useSelector((state) => state.gatheringlist.waitlist);
   const applylist = useSelector((state) => state.gatheringlist.applylist);
-  // const { applicants } = useSelector((state) => state.application);
+
 
 
   useEffect(() => {
@@ -231,7 +232,12 @@ export default function BasicTabs() {
                               </div>
                               되었습니다.
                             </DDiv>
-                            <ChatButton>
+                            <ChatButton
+                              key={applylist.postId}
+                              onClick={() => {
+                                navigate(`/chatlist/${applylist.postId}`);
+                              }}
+                            >
                               채팅바로가기
                             </ChatButton>
                           </Div>

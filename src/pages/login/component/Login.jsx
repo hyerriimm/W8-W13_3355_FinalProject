@@ -54,7 +54,7 @@ const Login = () => {
         ref={userIdRef}
         type='email'
         name='userId'
-        placeholder='example@gmail.com'
+        placeholder='아이디를 입력하세요'
         />
         <input 
         ref={passwordRef}
