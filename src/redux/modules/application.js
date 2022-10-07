@@ -36,7 +36,7 @@ export const __refuse = createAsyncThunk(
           },
         }
       );
-      console.log(data);
+      // console.log(data);
       if (data.data.success === false) {
         alert(data.data.error.message);
       } else {
@@ -65,7 +65,7 @@ export const __accept = createAsyncThunk(
           },
         }
       );
-      console.log(data);
+      // console.log(data);
       if (data.data.success === false) {
         alert(data.data.error.message);
       } else {
@@ -94,7 +94,7 @@ export const __applycancel = createAsyncThunk(
           },
         }
       );
-      console.log(data);
+      // console.log(data);
       if (data.data.success === false) {
         alert(data.data.error.message);
       } else {

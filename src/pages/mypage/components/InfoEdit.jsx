@@ -58,7 +58,7 @@ const InfoEdit = () => {
                 
             if (response.data.success === true) {
                 alert(response.data.data);
-                console.log(response)
+                // console.log(response)
                 resetAllStates();
                 localStorage.setItem("ACCESSTOKEN", response.headers.authorization);
                 localStorage.setItem("REFRESHTOKEN", response.headers.refreshtoken);
@@ -90,7 +90,7 @@ const InfoEdit = () => {
                 "RefreshToken": REFRESHTOKEN,
               }
             });
-            console.log(deletedata)
+            // console.log(deletedata)
             
             if (deletedata.data.success === true) {
               localStorage.removeItem("ACCESSTOKEN");

@@ -15,7 +15,7 @@ export const signUp = createAsyncThunk(
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(data.data);
+      // console.log(data.data);
       if (data.data.success === false) alert(data.data.error.message);
       else alert(data.data.data);
       return thunkAPI.fulfillWithValue(data.data);
