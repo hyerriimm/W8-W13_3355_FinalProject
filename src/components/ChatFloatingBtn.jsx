@@ -14,6 +14,7 @@ export default ChatFloatingBtn;
 
 const FloatingBtn = styled.div`
   position: fixed; //포인트!
+  z-index: 1;
   display: flex;
   justify-content: center;
   align-items: center;

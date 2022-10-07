@@ -10,6 +10,7 @@ import { __wait, __apply } from "../../../redux/modules/gatheringlist";
 import { __applycancel } from "../../../redux/modules/application";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
+import ChatFloatingBtn from '../../../components/ChatFloatingBtn';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -291,6 +292,9 @@ export default function BasicTabs() {
             </Container>
           </TabPanel>
         </Box>
+        <div onClick={()=>navigate('/chatlist')}>
+          <ChatFloatingBtn />
+        </div>
       </Stcontainer>
     </>
   );

@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { FiTrash2 } from "react-icons/fi";
 import { FiEdit } from "react-icons/fi";
 import MapOfDetail from './MapOfDetail'
+import ChatFloatingBtn from '../../../components/ChatFloatingBtn';
 
 import { __detail, __delete, __addWish, __removeWish } from '../../../redux/modules/detail';
 
@@ -178,6 +179,9 @@ const Detail = () => {
           placeUrl={detail.placeUrl}
           />
         </Item2Map>
+        <div onClick={()=>navigate('/chatlist')}>
+          <ChatFloatingBtn />
+        </div>
       </Container>
     </div>
   );
