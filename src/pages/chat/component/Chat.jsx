@@ -12,7 +12,7 @@ import { FaArrowCircleUp } from "react-icons/fa";
 // 채팅 기능 컴포넌트
 const Chat = () => {
   const navigate = useNavigate();
-   // 게시물 id로 채팅 룸 아이디 연동
+  // 게시물 id로 채팅 룸 아이디 연동
   const { id } = useParams();
   const dispatch = useDispatch();
   // 사용자랑 연결
@@ -34,7 +34,7 @@ const Chat = () => {
   const inputRef = useRef("");
   const [ment, setMent] = useState("");
   // 이전 채팅 불러와서 출력할 때 닉네임 비교하여 출력여부 결정하는 용도
-  let index=0;
+  let index = 0;
   // 실시간 채팅 닉네임 비교하여 출력여부 결정하는 용도
   let index2= 0;
   
@@ -45,7 +45,7 @@ const Chat = () => {
 
   //스크롤 하단 고정
   useEffect(() => {
-      scrollRef.current?.scrollIntoView()
+    scrollRef.current?.scrollIntoView();
   }, [chatList.chatList, messages]);
 
 
@@ -108,7 +108,7 @@ const Chat = () => {
       brokerURL: `ws://${process.env.REACT_APP_CHAT_HOST}/ws-stomp/websocket`,
       connectHeaders: {
         Authorization: localStorage.getItem("ACCESSTOKEN"),
-        RefreshToken: localStorage.getItem('REFRESHTOKEN')
+        RefreshToken: localStorage.getItem("REFRESHTOKEN"),
       },
       debug: function (str) {
         // console.log(str);
@@ -126,13 +126,13 @@ const Chat = () => {
           destination: "/pub/chat/enter",
           headers: {
             Authorization: localStorage.getItem("ACCESSTOKEN"),
-            RefreshToken: localStorage.getItem('REFRESHTOKEN')
+            RefreshToken: localStorage.getItem("REFRESHTOKEN"),
           },
           // 전송할 데이터를 입력
           body: JSON.stringify({
             // type: 0,
             // message: "OOO님이 입장하셨습니다",
-            message:"",
+            message: "",
             roomId: id,
           }),
         });
@@ -152,11 +152,11 @@ const Chat = () => {
 
 
   // sockJS로 소켓 미지원 브라우저 대응하기
-  if (typeof WebSocket !== 'function') {
+  if (typeof WebSocket !== "function") {
     client.webSocketFactory = () => {
       return new SockJS(process.env.REACT_APP_CHAT_HOST);
     };
-  };
+  }
 
 
    // 구독하기
@@ -206,23 +206,20 @@ const Chat = () => {
     }
   };
 
-
   // 에러처리를 담당하는 함수
   client.current.onStompError = function (frame) {
     console.log("Broker reported error: " + frame.headers["message"]);
     console.log("Additional details: " + frame.body);
   };
 
-  
   //연결 중단
   const disconnect = () => {
-
     //퇴장메시징(type1)
     client.current.publish({
       destination: "/pub/chat/message",
       headers: {
         Authorization: localStorage.getItem("ACCESSTOKEN"),
-        RefreshToken: localStorage.getItem('REFRESHTOKEN')
+        RefreshToken: localStorage.getItem("REFRESHTOKEN"),
       },
       //전송할 데이터를 입력
       body: JSON.stringify({
@@ -234,26 +231,22 @@ const Chat = () => {
     client.current.unsubscribe();
     //웹소켓 비활성화
     client.current.deactivate();
-
   };
 
 
   // 엔터로 채팅하기
-  const handleKeyPress = e => {
-    if (e.key === 'Enter') {
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
       submit();
     }
-  }
+  };
 
   // console.log(chatList);
   // console.log(messages);
 
   return (
     <>
-
-
-
-    <StDiv>
+      <StDiv>
         <img
             alt='뒤로가기'
             src={process.env.PUBLIC_URL + '/img/backspace.png'}
@@ -277,54 +270,62 @@ const Chat = () => {
                 index=i;
                 return(
                   <div key={i}>
-                  <ChatMessage style={{ display: "flex", justifyContent: "flex-end"}}>
-                    <MyChat>{chat.message}</MyChat>
-                  </ChatMessage>
-
+                    <ChatMessage
+                      style={{ display: "flex", justifyContent: "flex-end" }}
+                    >
+                      <MyChat>{chat.message}</MyChat>
+                    </ChatMessage>
                   </div>
-
-                )
-              }else{
-                index=i;
-                return(
+                );
+              } else {
+                index = i;
+                return (
                   <div key={i}>
-                  {/* <ChatMessage>
+                    {/* <ChatMessage>
                     <MyNick>{chat.sender}</MyNick>
                   </ChatMessage> */}
-                  <ChatMessage style={{ display: "flex", justifyContent: "flex-end" }}>
-                    <MyChat>{chat.message}</MyChat>
-                  </ChatMessage>
-                </div>
-                )}
+                    <ChatMessage
+                      style={{ display: "flex", justifyContent: "flex-end" }}
+                    >
+                      <MyChat>{chat.message}</MyChat>
+                    </ChatMessage>
+                  </div>
+                );
+              }
             } else {
               if(i>0&&chatList?.chatList[i]?.sender===chatList?.chatList[index]?.sender){
                 index=i;
                 return(
                   <div key={i}>
-                  <ChatMessage>
-                    <Chatting>{chat.message}</Chatting>
-                  </ChatMessage>
-                </div>
-                )
-              }else{
-                index=i;
+                    <ChatMessage>
+                      <Chatting>{chat.message}</Chatting>
+                    </ChatMessage>
+                  </div>
+                );
+              } else {
+                index = i;
                 return (
                   <div key={i}>
-                  <ChatMessage>
-                    <ProfileImg
-                     style={{backgroundSize:'cover',backgroundImage:`url(${chat.img})`, backgroundPosition: 'center'}}
-                    ></ProfileImg>
-                    <NickName>{chat.sender}</NickName>
-                  </ChatMessage>
-                  <ChatMessage>
-                    <Chatting>{chat.message}</Chatting>
-                  </ChatMessage>
-                </div>
-                )}
+                    <ChatMessage>
+                      <ProfileImg
+                        style={{
+                          backgroundSize: "cover",
+                          backgroundImage: `url(${chat.img})`,
+                          backgroundPosition: "center",
+                        }}
+                      ></ProfileImg>
+                      <NickName>{chat.sender}</NickName>
+                    </ChatMessage>
+                    <ChatMessage>
+                      <Chatting>{chat.message}</Chatting>
+                    </ChatMessage>
+                  </div>
+                );
+              }
             }
           }
         })}
-         {/* 실시간 채팅 불러오기 */}
+        {/* 실시간 채팅 불러오기 */}
         {messages.map((msg, i) => {
           // console.log(messages);
           if (msg.sender === "알림") {
@@ -342,27 +343,32 @@ const Chat = () => {
                 index2=i;
                 return(
                   <div key={i}>
-                  <ChatMessage style={{ display: "flex", justifyContent: "flex-end" }}>
-                    <MyChat>{msg.message}</MyChat>
-                  </ChatMessage>
+                    <ChatMessage
+                      style={{ display: "flex", justifyContent: "flex-end" }}
+                    >
+                      <MyChat>{msg.message}</MyChat>
+                    </ChatMessage>
                   </div>
-                )
+                );
               } else {
-                index2=i;
+                index2 = i;
                 return (
                   <div key={i}>
                     {/* <ChatMessage>
                       <MyNick>{msg.sender}</MyNick>
                     </ChatMessage> */}
-                    <ChatMessage style={{ display: "flex", justifyContent: "flex-end" }}>
+                    <ChatMessage
+                      style={{ display: "flex", justifyContent: "flex-end" }}
+                    >
                       <MyChat>{msg.message}</MyChat>
                     </ChatMessage>
                   </div>
-                )}              
+                );
+              }
             } else {
-              if(i>0&&messages[i]?.sender===messages[index2]?.sender){
-                index2=i;
-                return(
+              if (i > 0 && messages[i]?.sender === messages[index2]?.sender) {
+                index2 = i;
+                return (
                   <div key={i}>
                   <ChatMessage>
                     <Chatting>{msg.message}</Chatting>
@@ -390,16 +396,32 @@ const Chat = () => {
       <div ref={scrollRef}/>
       </div >
       <StInputDiv>
-        <input ref={inputRef}
+        <input
+          ref={inputRef}
           onKeyPress={handleKeyPress}
-          value={ment} onChange={(e) => { setMent(e.target.value) }} />
-        <div onClick={() => { submit() }}>
-          <FaArrowCircleUp style={{color: 'grey', display:'flex', justifyContent:'center', fontSize:'30px'}}/>
+          value={ment}
+          onChange={(e) => {
+            setMent(e.target.value);
+          }}
+        />
+        <div
+          onClick={() => {
+            submit();
+          }}
+        >
+          <FaArrowCircleUp
+            style={{
+              color: "grey",
+              display: "flex",
+              justifyContent: "center",
+              fontSize: "30px",
+            }}
+          />
         </div>
       </StInputDiv>
     </>
-  )
-}
+  );
+};
 export default Chat;
 
 const AddChatListBtnDiv = styled.div`
@@ -434,47 +456,47 @@ box-sizing: border-box;
 `
 
 const ChatMessage = styled.div`
-background-color: white;
-display: flex;
-`
+  background-color: white;
+  display: flex;
+`;
 const MyNick = styled.p`
-margin: 10px 0 3px 0;
-background-color: white;
-margin-right:10px;
-text-align:right;
-`
+  margin: 10px 0 3px 0;
+  background-color: white;
+  margin-right: 10px;
+  text-align: right;
+`;
 const MyChat = styled.p`
-margin: 3px 0;
-background-color:#18A0FB;
-color:white;
-text-align:right;
-width : fit-content;
-max-width: 50%;
-padding:10px;
-border-radius:10px;
-`
+  margin: 3px 0;
+  background-color: #18a0fb;
+  color: white;
+  text-align: right;
+  width: fit-content;
+  max-width: 50%;
+  padding: 10px;
+  border-radius: 10px;
+`;
 
 const ProfileImg = styled.div`
   width: 30px;
   height: 30px;
   border-radius: 100%;
-  border: 2.5px solid #42A5F5;
-`
+  border: 2.5px solid #42a5f5;
+`;
 
 const NickName = styled.p`
-background-color: white;
-margin:10px 0 10px 10px;
-`
+  background-color: white;
+  margin: 10px 0 10px 10px;
+`;
 
 const Chatting = styled.p`
-margin: 3px 0;
-background-color: #ddd;
-width:fit-content;
-max-width: 50%;
-padding:10px;
-border-radius:10px;
-margin-left:40px;
-`
+  margin: 3px 0;
+  background-color: #ddd;
+  width: fit-content;
+  max-width: 50%;
+  padding: 10px;
+  border-radius: 10px;
+  margin-left: 40px;
+`;
 
 const StInputDiv = styled.div`
 background-color: white;
@@ -495,7 +517,7 @@ padding: 10px 0;
     margin-right: 10px;
     border: 1px solid grey;
     border-radius: 15px;
-    background-color: rgba( 255, 255, 255, 0.5 );
+    background-color: rgba(255, 255, 255, 0.5);
     padding-left: 10px;
   }
   button {
@@ -509,4 +531,4 @@ padding: 10px 0;
     background-color: white;
     border-radius: 50%;
   }
-`
+`;

@@ -1,46 +1,57 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from 'axios';
+import axios from "axios";
 
 // 채팅 대화 내용 불러오기 (eventId = 게시글 번호, page = 50개씩 불러오는 인피니티 스크롤)
-  export const __getChat = createAsyncThunk(
-    "/chat/message/{roomId}",
-    async (payload, thunkAPI) => {
-        try {
-            const data =  await axios.get(process.env.REACT_APP_HOST_PORT+`/chat/message?roomId=${payload.id}&page=${payload.page}`,{
-                headers: {
-                    Authorization: localStorage.getItem("ACCESSTOKEN"),
-                    RefreshToken: localStorage.getItem('REFRESHTOKEN')
-              }})
-              // console.log(data);
-            if(data.data.success===false)
-              alert(data.data.error.message);
-            return thunkAPI.fulfillWithValue({data:data.data.data, page:payload.page});
-          } catch (error) {
-            return thunkAPI.rejectWithValue(error);
-          }
+export const __getChat = createAsyncThunk(
+  "/chat/message/{roomId}",
+  async (payload, thunkAPI) => {
+    try {
+      const data = await axios.get(
+        process.env.REACT_APP_HOST_PORT +
+          `/chat/message?roomId=${payload.id}&page=${payload.page}`,
+        {
+          headers: {
+            Authorization: localStorage.getItem("ACCESSTOKEN"),
+            RefreshToken: localStorage.getItem("REFRESHTOKEN"),
+          },
+        }
+      );
+      // console.log(data);
+      if (data.data.success === false) alert(data.data.error.message);
+      return thunkAPI.fulfillWithValue({
+        data: data.data.data,
+        page: payload.page,
+      });
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
     }
-  );
+  }
+);
 
-  // 채팅방 리스트
-  export const __getChatList = createAsyncThunk(
-    "/chat/rooms",
-    async (payload, thunkAPI) => {
-        try {
-            const data =  await axios.get(process.env.REACT_APP_HOST_PORT+`/chat/rooms`,{
-                headers: {
-                    Authorization: localStorage.getItem("ACCESSTOKEN"),
-                    RefreshToken: localStorage.getItem('REFRESHTOKEN')
-              }})
-            if(data.data.success===false) {
-              alert(data.data.error.message);
-              window.location.replace('/');
-            }
-            return thunkAPI.fulfillWithValue({data:data.data});
-          } catch (error) {
-            return thunkAPI.rejectWithValue(error);
-          }
+// 채팅방 리스트
+export const __getChatList = createAsyncThunk(
+  "/chat/rooms",
+  async (payload, thunkAPI) => {
+    try {
+      const data = await axios.get(
+        process.env.REACT_APP_HOST_PORT + `/chat/rooms`,
+        {
+          headers: {
+            Authorization: localStorage.getItem("ACCESSTOKEN"),
+            RefreshToken: localStorage.getItem("REFRESHTOKEN"),
+          },
+        }
+      );
+      if (data.data.success === false) {
+        alert(data.data.error.message);
+        window.location.replace("/");
+      }
+      return thunkAPI.fulfillWithValue({ data: data.data });
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
     }
-  );
+  }
+);
 
 // createSlice를 통한 redux 생성 - store에서 사용할 수 있는 내용들을 담고 있음
 export const chat = createSlice({

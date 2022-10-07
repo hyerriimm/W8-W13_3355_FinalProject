@@ -23,12 +23,11 @@ const Header = () => {
       return ()=>{clearTimeout(timeout);}
     },[window.location.reload, accesstoken, navigate]);
 
-    useEffect(()=>{
+    useEffect(() => {
       setAccesstoken(localStorage.getItem("ACCESSTOKEN"));
       setProfileImg(localStorage.getItem("ImgURL"));
-    });
-
-
+    }, [accesstoken, profileImg]);
+    
     useEffect(() => {
       const onClickOutside = (e) => {
           if (modalRef.current !== null && !modalRef.current.contains(e.target)) {
@@ -50,12 +49,13 @@ const Header = () => {
         setProfileImg(localStorage.removeItem("ImgURL"));
         localStorage.removeItem("Id");
         alert('로그아웃 되었습니다.')
-        navigate('/')
+        window.location.replace('/')
       } else {
           console.log("로그인 유지");
       }
   };
-    
+  
+
     return (
         <>
         <HdContainer>
