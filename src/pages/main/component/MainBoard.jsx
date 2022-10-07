@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { __cardlist } from '../../../redux/modules/cardlist';
+import ChatFloatingBtn from '../../../components/ChatFloatingBtn';
 
 const MainBoard = () => {
 
@@ -69,6 +70,9 @@ if (isLoading) {
           );
           })}
       </ListContainer>
+      <div onClick={()=>navigate('/chatlist')}>
+        <ChatFloatingBtn />
+      </div>
       </Container>
     </>
   )

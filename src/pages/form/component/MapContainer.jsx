@@ -60,13 +60,34 @@ const MapContainer = ({ searchPlace, setAddress, setPlaceName, setPlaceUrl, setP
             infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>');
             infowindow.open(map, marker);
             // console.log(place);
-            setAddress(place.address_name);
+            setAddress(place.road_address_name ? place.road_address_name : place.address_name);
             setPlaceName(place.place_name);
             setPlaceUrl(place.place_url);
             setPlaceX(place.x);
             setPlaceY(place.y);
+            let markerPosition = marker.getPosition(); 
+            map.setCenter(markerPosition);
         });
-    };
+
+        window.kakao.maps.event.addListener(
+          marker,
+          "mouseover",
+          function () {
+            infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>');
+            infowindow.open(map, marker);
+          }
+        );
+
+        window.kakao.maps.event.addListener(
+          marker,
+          "mouseout",
+          function () {
+            infowindow.close();
+          }
+        );
+        
+      };
+    
   }, [searchPlace]);
 
   return (

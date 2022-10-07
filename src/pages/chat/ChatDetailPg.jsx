@@ -1,11 +1,14 @@
 import React from 'react';
+import Header from '../../components/Header';
+import Chat from './component/Chat';
 
 const ChatDetailPg = () => {
-    return (
-        <div>
-            
-        </div>
-    );
-}
+  return (
+    <>
+      <Header />
+      <Chat />
+    </>
+  );
+};
 
 export default ChatDetailPg;
