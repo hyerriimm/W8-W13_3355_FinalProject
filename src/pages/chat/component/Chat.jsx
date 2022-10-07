@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { __getChat } from '../../../redux/modules/chat';
 import { useDispatch, useSelector } from 'react-redux';
 import { useInView } from 'react-intersection-observer';
+import { MdRefresh } from "react-icons/md";
 import { FaArrowCircleUp } from "react-icons/fa";
 
 // 채팅 기능 컴포넌트
@@ -18,20 +19,17 @@ const Chat = () => {
   const client = useRef({});
    // 이전 채팅내용 불러오기
    const chatList = useSelector((state)=>state.chat);
-   const { isLoading, chatRoomTitle, currentPage, isFirstPage, hasNextPage, totalPage, totalMessage } = useSelector((state)=>state.chat);
-
-   console.log(chatRoomTitle);
-
+   const { isLoading, chatRoomTitle, currentPage, hasPreviousPage, totalPage} = useSelector((state)=>state.chat);
+   
    // 인피니티스크롤로 다음페이지 채팅내역 불러오기
   const page = useRef(0);
   const [ref, inView] = useInView(); // ref가 화면에 나타나면 inView는 true, 아니면 false를 반환한다.
-  const [stateHasNextPage, setHasNextPage] = useState(hasNextPage);
+  const [stateHasPreviousPage, setHasPreviousPage] = useState(hasPreviousPage);
+  const [prevScrollHeight, setPrevScrollHeight] = useState("");
   
   // 실시간 채팅 쌓이는 state
-  const [messages, setMessages] = useState([{
-    message: "",
-    sender: ""
-  }]);
+  const [messages, setMessages] = useState([]);
+  // {message: "", sender: "", senderId:"", imgUrl: ""} 배열 안에 들어오는 객체 정보
   // 타이핑 치는 input과 연동
   const inputRef = useRef("");
   const [ment, setMent] = useState("");
@@ -40,39 +38,70 @@ const Chat = () => {
   // 실시간 채팅 닉네임 비교하여 출력여부 결정하는 용도
   let index2= 0;
   
-  const scrollRef = useRef(null); //스크롤 하단 고정
+
+  //스크롤 하단 고정
+  const scrollRef = useRef(null); 
   
+
   //스크롤 하단 고정
   useEffect(() => {
       scrollRef.current?.scrollIntoView()
   }, [chatList.chatList, messages]);
- 
 
-  // 랜더링시 이전 채팅내용 불러오는 함수 및 stomp채팅 연결
-  useEffect(() => {
-    connect();
-    dispatch(__getChat({id, page:page.current})); //,page:page.current
-    return () =>
-    disconnect();
-  }, []);
-  
 
   // 인피니티 스크롤 기능 (다음페이지 데이터 받아옴)
-  const fetch = useCallback(() => { dispatch(__getChat({ id, page: page.current })); page.current += 1; }, []);
+  const fetch = () => { 
+    if (currentPage === totalPage) {
+      return
+    } else{
+      page.current += 1; 
+      dispatch(__getChat({ id, page: page.current })); 
+    } 
+    // return;
+  };
+
   useEffect(() => {
-    // if (chatList.chatlist?.length < 10 ) {
-    //   return
-    // }
-    if (inView && hasNextPage) {
-      fetch();
+    if (prevScrollHeight) {
+      document.documentElement.scrollTo(
+        0,
+        document.documentElement.scrollHeight - prevScrollHeight
+      );
+      return setPrevScrollHeight(null);
     }
-    // if (inView && Number(currentPage) <= Number(totalPage) ) {
-    //   fetch();
-    // }
-  }, [inView])
+
+    document.documentElement.scrollTo(
+      0,
+      document.documentElement.scrollHeight -
+        document.documentElement.clientHeight
+    );
+  }, [chatList.chatList.length]);
 
 
+// 이전 채팅 더보기 버튼 조건부 렌더링
+  const PrevChatList = () => { 
+    if (page.current === totalPage) {
+      return (
+        <div style={{marginTop:'15px'}}></div>
+      );
+    }
+
+    if ( page.current >= 0 ) {
+      return (
+        <AddChatListBtnDiv>
+        <button
+        onClick={()=>{
+          setPrevScrollHeight(document.documentElement.scrollHeight);
+          fetch();
+        }}
+        >
+        <MdRefresh style={{fontSize:'20px'}} /> &nbsp;이전 채팅 더보기
+        </button>
+      </AddChatListBtnDiv>
+      );
+    } 
+  };
   
+
   // 웹소켓 서버와 연결 
   const connect = () => {
     client.current = new StompJs.Client({
@@ -92,13 +121,14 @@ const Chat = () => {
         // 구독을 통한 채팅방 연결
         // 처음 입장시 채팅방 서버에 입장한 것으로 인식
         subscribe();
+        // page.current = totalPage;
         client.current.publish({
           destination: "/pub/chat/enter",
           headers: {
             Authorization: localStorage.getItem("ACCESSTOKEN"),
             RefreshToken: localStorage.getItem('REFRESHTOKEN')
           },
-          //전송할 데이터를 입력
+          // 전송할 데이터를 입력
           body: JSON.stringify({
             // type: 0,
             // message: "OOO님이 입장하셨습니다",
@@ -111,6 +141,16 @@ const Chat = () => {
     client.current.activate();
   };
 
+
+    // 랜더링시 이전 채팅내용 불러오는 함수 및 stomp채팅 연결
+    useEffect(() => {
+      connect();
+      dispatch(__getChat({id, page:page.current}));
+      return () =>
+      disconnect();
+    }, []);
+
+
   // sockJS로 소켓 미지원 브라우저 대응하기
   if (typeof WebSocket !== 'function') {
     client.webSocketFactory = () => {
@@ -118,46 +158,52 @@ const Chat = () => {
     };
   };
 
+
    // 구독하기
   const subscribe = () => {
     client.current.subscribe(`/sub/chat/room/${id}`, function (chat) {
       let content = JSON.parse(chat.body);
-      console.log(content);
+      // console.log(content);
       setMessages((_messages) => [
         ..._messages,
-        { message: content.message, sender: content.sender, img: content.img },
+        { message: content.message, 
+          sender: content.sender, 
+          senderId:content.senderId, 
+          imgUrl: content.imgUrl },
       ]);
+      // page.current = totalPage;
     });
   };
+  
 
   // 메세지 보내는 함수
   const submit = () => {
-    console.log(JSON.stringify({
-      // 타입 1 = 메세지 보내기
-      // type: 1,
-      message: inputRef.current.value,
-      roomId: id,
-    }));
+    // console.log(JSON.stringify({
+    //   // 타입 1 = 메세지 보내기
+    //   // type: 1,
+    //   message: inputRef.current.value,
+    //   roomId: id,
+    // }));
      // 값이 없으면 전달 x
-    if(inputRef.current.value === ""){
-      return;
+    if(inputRef.current.value.trim() !== ""){
+
+      // 메세지 보내는 동작
+      client.current.publish({
+        destination: `/pub/chat/message`,
+        headers: {
+              Authorization: localStorage.getItem("ACCESSTOKEN"),
+              RefreshToken: localStorage.getItem('REFRESHTOKEN')
+        },
+        //전송할 데이터를 입력
+        body: JSON.stringify({
+          // type: 1,
+          message: inputRef.current.value,
+          roomId: Number(id),
+        }),
+      });
+      // 보내고나서 채팅 입력 초기화
+      setMent("")
     }
-    // 메세지 보내는 동작
-    client.current.publish({
-      destination: `/pub/chat/message`,
-      headers: {
-            Authorization: localStorage.getItem("ACCESSTOKEN"),
-            RefreshToken: localStorage.getItem('REFRESHTOKEN')
-      },
-      //전송할 데이터를 입력
-      body: JSON.stringify({
-        // type: 1,
-        message: inputRef.current.value,
-        roomId: Number(id),
-      }),
-    });
-    // 보내고나서 채팅 입력 초기화
-    setMent("")
   };
 
 
@@ -191,6 +237,7 @@ const Chat = () => {
 
   };
 
+
   // 엔터로 채팅하기
   const handleKeyPress = e => {
     if (e.key === 'Enter') {
@@ -198,17 +245,9 @@ const Chat = () => {
     }
   }
 
-  console.log(chatList);
+  // console.log(chatList);
   // console.log(messages);
 
-  if (isLoading) {
-    return <Loading>
-      <img alt='로딩중'
-    src='https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif?20151024034921'
-    />
-      </Loading>
-  };
-  
   return (
     <>
 
@@ -219,20 +258,22 @@ const Chat = () => {
             alt='뒤로가기'
             src={process.env.PUBLIC_URL + '/img/backspace.png'}
             style={{ width: '25px', height: '25px', marginRight: '10px' }}
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/chatlist')}
         />
         <h3>{chatRoomTitle}</h3>
     </StDiv>
-      <div style={{margin:"2%", border:"1px solid black", overflow:'scroll', height:'80vh'}}>
-        {/* 인피니티 스크롤 인식 ref */}
-        <div  ref={ref} style={{width:'10px',height:'10px', backgroundColor:"red"}}/> 
+      <div style={{padding:"0 4%", border:'1px solid black', marginBottom:'50px', marginTop:'63px', paddingBottom: '15px'}}>
+        
+        {/* 이전 채팅 내용 불러오기 버튼 조건부 렌더링 */}
+        <PrevChatList />
+        
         {/* 이전 채팅내용 불러오기 */}
-        {chatList?.chatList?.map((chat,i)=>{
+        {chatList?.chatList?.slice().reverse().map((chat,i)=>{
           if(chat.message === null){
             return;
           }else{
-            if (chat.sender === localStorage.getItem("Id")) {
-              if(i>0&&chatList?.data[i]?.sender===chatList?.data[index]?.sender){
+            if (chat.senderId === localStorage.getItem("Id")) {
+              if(i>0&&chatList?.chatList[i]?.sender===chatList?.chatList[index]?.sender){
                 index=i;
                 return(
                   <div key={i}>
@@ -256,7 +297,7 @@ const Chat = () => {
                 </div>
                 )}
             } else {
-              if(i>0&&chatList?.data[i]?.sender===chatList?.data[index]?.sender){
+              if(i>0&&chatList?.chatList[i]?.sender===chatList?.chatList[index]?.sender){
                 index=i;
                 return(
                   <div key={i}>
@@ -285,17 +326,18 @@ const Chat = () => {
         })}
          {/* 실시간 채팅 불러오기 */}
         {messages.map((msg, i) => {
+          // console.log(messages);
           if (msg.sender === "알림") {
             return (
               <div key={i}>
                 <p>{msg.message}</p>
               </div>
             )
-          } else if (msg.sender === "") {
+          } else if (msg.sender === "" || msg.message === "") {
             return;
           }
           else {
-            if (msg.sender === localStorage.getItem("Id")) {
+            if (msg.senderId === localStorage.getItem("Id")) {
               if(i>0&&messages[i]?.sender===messages[index2]?.sender){
                 index2=i;
                 return(
@@ -331,6 +373,9 @@ const Chat = () => {
                   return (
                     <div key={i}>
                       <ChatMessage>
+                      <ProfileImg
+                     style={{backgroundSize:'cover',backgroundImage:`url(${msg.imgUrl})`, backgroundPosition: 'center'}}
+                    ></ProfileImg>
                         <NickName>{msg.sender}</NickName>
                       </ChatMessage>
                       <ChatMessage>
@@ -341,6 +386,7 @@ const Chat = () => {
               }
           }
         })}
+      {/* 스크롤 하단 고정 */}
       <div ref={scrollRef}/>
       </div >
       <StInputDiv>
@@ -351,30 +397,40 @@ const Chat = () => {
           <FaArrowCircleUp style={{color: 'grey', display:'flex', justifyContent:'center', fontSize:'30px'}}/>
         </div>
       </StInputDiv>
-      {/* 스크롤 하단 고정 */}
     </>
   )
 }
 export default Chat;
 
-const Loading = styled.div`
+const AddChatListBtnDiv = styled.div`
   display: flex;
   justify-content: center;
-  margin: 0 auto;
-  width: 80%;
-`;
+  align-items: center;
+  padding: 15px 0;
+  button {
+    display: flex;
+    align-items: center;
+    border: transparent;
+    height: 30px;
+    padding: 0 10px;
+    color: white;
+    font-size: 14px;
+    background-color:grey;
+    border-radius: 15px;
+  }
+`
 
 const StDiv = styled.div`
+box-sizing: border-box;
   display: flex;
-  width: 85vw;
+  width: 100vw;
   min-width: 320px;
-  max-width: 640px;
+  /* max-width: 640px; */
   justify-content: flex-start;
   align-items: center;
-  /* margin: 0 auto; */
-  margin: 2%;
-  margin-top: 15px;
-  margin-bottom: 10px;
+  position: fixed;
+  background-color: white;
+  padding-left: 4%;
 `
 
 const ChatMessage = styled.div`
@@ -421,12 +477,14 @@ margin-left:40px;
 `
 
 const StInputDiv = styled.div`
+background-color: white;
+padding: 10px 0;
   position: fixed; //포인트!
   display: flex;
   justify-content: center;
   align-items: center;
   line-height: 63px;
-  bottom: 40px; //위치
+  bottom: 0; //위치
   /* left: 40px; //위치 */
   width: 100vw;
   height: 30px;

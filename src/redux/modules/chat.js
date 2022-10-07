@@ -46,12 +46,13 @@ import axios from 'axios';
 export const chat = createSlice({
     name:"chat",
     initialState: {
+      chatRoomList: [],
         data: [],
         chatList: [],
         chatRoomTitle: null,
         currentPage:0,
         isFirstPage:true,
-        hasNextPage:false,
+        hasPreviousPage:false,
         totalPage:0,
         totalMessage:0,
         success: false,
@@ -69,23 +70,25 @@ export const chat = createSlice({
         })
         .addCase(__getChat.fulfilled, (state, action) => {
           state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
-          // state.data = action.payload.data.data;
-
           // 처음으로 데이터 값 불러올때는 배열에 추가식이 아닌 state값 수정
             if(action.payload.page===0){
-              // console.log(action.payload);
+              // console.log('처음 요청하는 페이지', action.payload.page);
               state.chatList = action.payload.data.chatMessageList;
               state.chatRoomTitle = action.payload.data.chatRoomTitle;
               state.currentPage = action.payload.data.currentPage;
               state.isFirstPage = action.payload.data.isFirstPage;
-              state.hasNextPage = action.payload.data.hasNextPage;
+              state.hasPreviousPage = action.payload.data.hasPreviousPage;
               state.totalPage = action.payload.data.totalPage;
               state.totalMessage = action.payload.data.totalMessage;
-                // state.data = action.payload.data.data
-              // 처음 불러오기때 데이터 변경
             }else{
               // 이후 인피니티 스크롤 시 데이터 앞에 저장
-            state.chatList.unshift( ...action.payload.data.chatMessageList);
+              // console.log('버튼 눌러서 요청하는 페이지',action.payload.page, '서버에서 받은 총 페이지 수', action.payload.data.totalPage );
+            state.chatList.push( ...action.payload.data.chatMessageList);
+            state.currentPage = action.payload.data.currentPage;
+            state.isFirstPage = action.payload.data.isFirstPage;
+            state.hasPreviousPage = action.payload.data.hasPreviousPage;
+            state.totalPage = action.payload.data.totalPage;
+            state.totalMessage = action.payload.data.totalMessage;
           }
         })
         .addCase(__getChat.rejected, (state, action) => {
@@ -100,7 +103,7 @@ export const chat = createSlice({
         })
         .addCase(__getChatList.fulfilled, (state, action) => {
           state.isLoading = false;
-          state.chatList = action.payload.data.data;
+          state.chatRoomList = action.payload.data.data;
           // Promise가 fullfilled일 때 dispatch
         })
         .addCase(__getChatList.rejected, (state, action) => {
