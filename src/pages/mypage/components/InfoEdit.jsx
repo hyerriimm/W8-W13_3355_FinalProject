@@ -81,10 +81,10 @@ const InfoEdit = () => {
       };
 
     const onChangeRemoveInfo = async (e) => { 
-        // e.preventDefault();
+        e.preventDefault();
         if (window.confirm("정말로 삼삼오오를 탈퇴하시겠습니까?")) {
           try {
-            const deletedata = await axios.delete(`${API_URL}/member`, {
+            const deletedata = await axios.put(`${API_URL}/member/signout`, {
               headers: {
                 "Authorization": ACCESSTOKEN,
                 "RefreshToken": REFRESHTOKEN,
