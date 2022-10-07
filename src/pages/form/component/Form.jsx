@@ -69,8 +69,8 @@ const Form = () => {
         maxNum.trim() === '' ||
         startDate === null||
         endDate === null ||
-        dDay === null ||
-        imgFile === null
+        dDay === null
+        // imgFile === null
     ) {
       return alert('모든항목을 입력해야 등록 가능합니다.')
     }

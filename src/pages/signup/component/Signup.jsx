@@ -199,6 +199,10 @@ const Signup = () => {
             alert('이미 존재하는 닉네임입니다.\n새로운 아이디를 입력 후 중복검사 바랍니다.');
             return setNickCheckRes("");
         };
+        if (inputs[1].checked === false || inputs[2].checked === false) {
+          alert('필수이용약관에 동의해주세요.');
+          return
+        };
 
         const formData = new FormData();
         formData.append('userId', userId);

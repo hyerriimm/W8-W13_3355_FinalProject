@@ -64,7 +64,7 @@ const Header = () => {
         alert('로그아웃 되었습니다.')
         window.location.replace('/')
       } else {
-          console.log("로그인 유지");
+          // console.log("로그인 유지");
       }
   };
   

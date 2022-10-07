@@ -179,10 +179,10 @@ const Detail = () => {
           placeUrl={detail.placeUrl}
           />
         </Item2Map>
+      </Container>
         <div onClick={()=>navigate('/chatlist')}>
           <ChatFloatingBtn />
         </div>
-      </Container>
     </div>
   );
 };
