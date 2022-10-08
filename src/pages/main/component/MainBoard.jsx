@@ -12,7 +12,7 @@ const MainBoard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { cardList, hasNextPage, isLoading, error } = useSelector((state) => state.cardlist);
-  console.log(cardList);
+  // console.log(cardList);
   const page = useRef(0);
   const [ref, inView] = useInView({
     /* Optional options */
