@@ -67,7 +67,7 @@ const Header = () => {
           // console.log("로그인 유지");
       }
   };
-  
+
 
     return (
         <>
@@ -75,14 +75,27 @@ const Header = () => {
             <Logo onClick={()=>navigate('/')}>3355</Logo>
             <BtnWrapper>            
                 { accesstoken ? 
-                ( <>
-                  <AddBtn onClick={()=>navigate('/form')}>모임등록</AddBtn>
-                  <BtnProfile 
-                  style={{backgroundSize:'cover',backgroundImage:`url(${myinfo})`, backgroundPosition: 'center'}}
-                  ref={modalRef} onClick={handleModal}>
-                      {/* <img src={ profile } alt="profile"/> */}
-                  </BtnProfile>
-                  </>
+                ( localStorage.getItem("Role") === "ROLE_ADMIN" ?
+                  (
+                    <>
+                    <AddBtn style={{border:'1px solid grey',backgroundColor:'grey'}} onClick={()=>navigate('/admin')}>신고</AddBtn>
+                    <AddBtn onClick={()=>navigate('/form')}>모임등록</AddBtn>
+                    <BtnProfile 
+                    style={{backgroundSize:'cover',backgroundImage:`url(${myinfo})`, backgroundPosition: 'center'}}
+                    ref={modalRef} onClick={handleModal}>
+                        {/* <img src={ profile } alt="profile"/> */}
+                    </BtnProfile>
+                    </>
+                  ): (
+                    <>
+                    <AddBtn onClick={()=>navigate('/form')}>모임등록</AddBtn>
+                    <BtnProfile 
+                    style={{backgroundSize:'cover',backgroundImage:`url(${myinfo})`, backgroundPosition: 'center'}}
+                    ref={modalRef} onClick={handleModal}>
+                        {/* <img src={ profile } alt="profile"/> */}
+                    </BtnProfile>
+                    </>
+                  )
                 )
                 :
                 ( <><LoginBtn onClick={()=>navigate('/login')}>로그인</LoginBtn></>
