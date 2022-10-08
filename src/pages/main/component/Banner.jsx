@@ -1,11 +1,16 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
 import styled from 'styled-components';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-export default class SimpleSlider extends Component {
-  render() {
+
+import banner from '../../../assets/img/nw_banner_pc01.png';
+import banner_gift from '../../../assets/img/nw_banner_pc03.png';
+import bannerMobile from '../../../assets/img/nw_banner01.png';
+import bannerMobileGift from '../../../assets/img/nw_banner03.png';
+
+const Banner = () => {
     const settings = {
       dots: false,
       infinite: true,
@@ -20,33 +25,67 @@ export default class SimpleSlider extends Component {
       adaptiveHeight: true,
     };
 
-    const items = [
-        { id: 1, url: `${process.env.PUBLIC_URL}/img/banner_.png` },
-        { id: 2, url: `${process.env.PUBLIC_URL}/img/banner_2.png` },
-        // { id: 3, url: "http://placeimg.com/1920/540/any"  },
-      ];    
+      // const items = [
+      //     { id: 1, url: `${process.env.PUBLIC_URL}/img/nw_banner01.png` },
+      //     { id: 2, url: `${process.env.PUBLIC_URL}/img/nw_banner03.png` },
+      //     // { id: 3, url: "http://placeimg.com/1920/540/any"  },
+      //   ];
+
+    const [windowSize, setWindowSize] = useState({
+      width: undefined,
+      height: undefined,
+    });
+    const [isMobile, setIsMobile] = useState();
+  
+    useEffect(() => {
+      function handleResize() {
+        setWindowSize({
+          width: window.innerWidth,
+          height: window.innerHeight,
+        });
+      }
+      window.addEventListener('resize', handleResize);
+      handleResize();
+      if (windowSize.width < 1230) {
+        setIsMobile(true);
+      } else if (windowSize.width >= 1230) {
+        setIsMobile(false);
+      }
+      return () => window.removeEventListener('resize', handleResize);
+    }, [windowSize.width]);
 
     return (
-    <SliderWrapper>
-        <StSlider {...settings}>
-        {items.map(item => {
-            return (
-              <div key={item.id}>
-                <ImageContainer>
-                  <Image src={item.url} />
-                </ImageContainer>
-              </div>
-            );
-          })}
-        </StSlider>
-    </SliderWrapper>
+    // <SliderWrapper>
+    //     <StSlider {...settings}>
+    //     {items.map(item => {
+    //         return (
+    //           <div key={item.id}>
+    //             <ImageContainer>
+    //               <Image src={item.url} />
+    //             </ImageContainer>
+    //           </div>
+    //         );
+    //       })}
+    //     </StSlider>
+    // </SliderWrapper>
+     <SliderWrapper>
+     <StSlider {...settings}>
+           <div >
+               <Image src={isMobile ? bannerMobile : banner} alt=""/>
+           </div>
+           <div >
+               <Image src={isMobile ? bannerMobileGift : banner_gift} alt=""/>
+           </div>
+     </StSlider>
+ </SliderWrapper>
     );
-  }
-}
+  };
+
+  export default Banner;
 
 const SliderWrapper = styled.div`
-  /* background-color: darkblue; */
-  width: 1210px;
+
+  width: 1230px;
   margin: 0 auto;
   margin-top: 20px;
   overflow: hidden;
@@ -61,18 +100,21 @@ const SliderWrapper = styled.div`
 `
 
 const StSlider = styled(Slider)`
-    .slick-slide > div{
-      outline: none;
-      width: 100%;
-    }
-`;
-
-const ImageContainer = styled.div`
-  width: 100%;
+  .slick-slide {
+    width: 30px;
+    /* a {
+      text-decoration: none;
+    } */
+  }
+  .slick-slide div {
+    outline: none;
+  }
+  .slick-list {
+    border-radius: 15px;
+  }
 `;
 
 const Image = styled.img`
   max-width: 100%;
-  min-height: 150px;
   object-fit: cover;
 `;
