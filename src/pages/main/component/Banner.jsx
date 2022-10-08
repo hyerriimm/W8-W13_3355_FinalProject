@@ -46,9 +46,18 @@ export default class SimpleSlider extends Component {
 
 const SliderWrapper = styled.div`
   /* background-color: darkblue; */
-  width: 100%;
-  height: 100%;
+  width: 1210px;
+  margin: 0 auto;
+  margin-top: 20px;
   overflow: hidden;
+  border-radius: 10px;
+  @media only screen and (min-width: 854px) and (max-width: 1255px) {
+    width: 800px;
+  }
+
+  @media only screen and (max-width: 854px) {
+    width: 390px;
+  }
 `
 
 const StSlider = styled(Slider)`
