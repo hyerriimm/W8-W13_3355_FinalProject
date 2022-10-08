@@ -14,6 +14,7 @@ import WishPg from "../pages/mypage/WishPg";
 import MyActivityPg from "../pages/mypage/MyActivityPg";
 import ChatListPg from "../pages/chat/ChatListPg";
 import ChatDetailPg from "../pages/chat/ChatDetailPg";
+import AdminPg from "../pages/admin/AdminPg";
 
 const Router = () => {
     return (
@@ -35,6 +36,7 @@ const Router = () => {
           <Route path="/mypage/activity" element={<MyActivityPg />} />
           <Route path="/chatlist" element={<ChatListPg />} />
           <Route path="/chatlist/:id" element={<ChatDetailPg />} />
+          <Route path="/admin" element={<AdminPg />} />
           <Route path="*" element={<div>404 error 없는페이지입니다</div>} />
         </Routes>
       </BrowserRouter>
