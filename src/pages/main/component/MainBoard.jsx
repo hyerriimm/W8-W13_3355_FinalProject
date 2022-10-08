@@ -1,36 +1,58 @@
-import { React, useEffect } from 'react';
+import { React, useState,useEffect, useRef, useCallback } from 'react';
 import styled from 'styled-components';
+import { v4 as uuidv4 } from 'uuid';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useInView } from 'react-intersection-observer';
 import { __cardlist } from '../../../redux/modules/cardlist';
 import ChatFloatingBtn from '../../../components/ChatFloatingBtn';
 
 const MainBoard = () => {
 
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { cardList, hasNextPage, isLoading, error } = useSelector((state) => state.cardlist);
+  console.log(cardList);
+  const page = useRef(0);
+  const [ref, inView] = useInView({
+    /* Optional options */
+    threshold: 1,
+  });
+  const [prevScrollHeight, setPrevScrollHeight] = useState("");
 
-    const { isLoading, error } = useSelector((state) => state.cardlist);
-    const list = useSelector((state) => state.cardlist.cardlist);
-    // console.log(list);
 
-    useEffect(()=> {
-      dispatch(__cardlist());
-    }, [list.length]);
+  useEffect(()=> {
+    window.scrollTo(0, 0);
+    dispatch(__cardlist(page.current));
+  }, []);
 
-if (isLoading) {
-  return <Loading>
-    <img alt='로딩중'
-  src='https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif?20151024034921'
-  />
-    </Loading>
-}
+
+  // 인피니티 스크롤 기능 (다음페이지 데이터 받아옴)
+  const fetch = useCallback(() => {
+    page.current += 1;
+    dispatch(__cardlist(page.current));
+  }, []);
+
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetch();
+    }
+  }, [fetch, hasNextPage, inView]);
+
+
+  // if (isLoading) {
+  //   return <Loading>
+  //     <img alt='로딩중'
+  //   src='https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif?20151024034921'
+  //   />
+  //     </Loading>
+  // }
 
   if (error) {
     return <div>{error.message}</div>;
   }
 
-  if (list.length === 0) {
+  if (cardList.length === 0) {
     return (
       <Stack>
         <Empty>•••🤔</Empty>
@@ -44,32 +66,34 @@ if (isLoading) {
     <>
       <Container>
       <ListContainer>
-        {list.slice().reverse().map((list) => {
+        {cardList.map((card) => {
           return ( 
             <CardWrapper 
-            key={list.id} 
-            onClick={() => navigate(`/detail/${list.id}`)}>
+            key={uuidv4()} 
+            onClick={() => navigate(`/detail/${card.id}`)}>
               <ImageContainer>
-                <img src={list.imgUrl} alt=""/>
+                <img src={card.imgUrl} alt=""/>
               </ImageContainer>
               <DescContainer>
                 <TitleWrapper>
-                <Title>{list.title}</Title>
+                <Title>{card.title}</Title>
                 <RestDay>
-                {list.restDay.split("일")[0] == 0 ? (
+                {card.restDay.split("일")[0] == 0 ? (
                 <p style={{ color: '#e51e1e'}}>오늘 마감</p>
                 ):(
-                  <p>마감 {list.restDay}</p>
+                  <p>마감 {card.restDay}</p>
                 )}
                 </RestDay>
                 </TitleWrapper>
-                <Address>{list.address}</Address>
-                <Dday>{list.dday}</Dday>
+                <Address>{card.address}</Address>
+                <Dday>{card.dday}</Dday>
               </DescContainer>
             </CardWrapper>
           );
           })}
       </ListContainer>
+          {/* 인피니티 스크롤 인식 ref */}
+          <div ref={ref} style={{height:'30px', backgroundColor:'red', color:"white"}}>내가 100% 보이면 새 페이지 요청이 감</div>
       <div onClick={()=>navigate('/chatlist')}>
         <ChatFloatingBtn />
       </div>
@@ -84,7 +108,8 @@ const Loading = styled.div`
   display: flex;
   justify-content: center;
   margin: 0 auto;
-  width: 80%;
+  height: 40px;
+  /* width: 80%; */
   /* display: flex;
   justify-content: center;
   height: 400px;
@@ -113,7 +138,9 @@ const Empty = styled.h1`
 const Container = styled.div`
     display: flex;
     margin-top: 20px;
-    justify-content: center;
+    /* justify-content: center; */
+    flex-direction: column;
+    align-items: center;
     /* background-color: antiquewhite; */
     /* border: 1px solid black; */
     
