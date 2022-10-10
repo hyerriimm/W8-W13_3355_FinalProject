@@ -1,13 +1,20 @@
 import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import axios from "axios";
 import {
   deleteComment,
   updateComment,
 } from "../../../../redux/modules/comment";
+import ModalComment from "./ModalComment";
+
+
 
 const CommentItem = ({ item, getCommentList }) => {
+  const navigate = useNavigate();
+  const { state } = useLocation();
   const { id } = useParams();
   const dispatch = useDispatch();
 
@@ -73,8 +80,65 @@ const CommentItem = ({ item, getCommentList }) => {
 
   };
 
+  //신고 모달
+const [modalOpen, setModalOpen] = useState(false);
 
-console.log(item)
+const openModal = () => {
+  setModalOpen(true);
+};
+const closeModal = () => {
+  setModalOpen(false);
+};
+
+
+  //신고 기능
+
+   const initialState = {
+     content: "",
+   };
+   const [content, setContent] = useState(initialState);
+
+   // 게시글 신고 기능
+   const ReportCommentBtn = async () => {
+     if (item.content.trim() === "") {
+       return alert("내용을 입력해야 신고가 가능합니다.");
+     }
+     if (
+       window.confirm(
+         "게시글을 신고하시겠습니까?\n신고 후 취소는 불가능합니다."
+       )
+     ) {
+       try {
+         const response = await axios.post(
+           `${process.env.REACT_APP_HOST_PORT}/report/comment/${item.commentId}`,
+           content,
+           {
+             headers: {
+               authorization: localStorage.getItem("ACCESSTOKEN"),
+               refreshtoken: localStorage.getItem("REFRESHTOKEN"),
+             },
+           }
+         );
+
+         if (response.data.success === true) {
+           alert(response.data.data);
+           setContent(initialState);
+           navigate(`/detail/${item.postId}`);
+           return closeModal();
+         }
+         if (response.data.success === false) {
+           alert(response.data.error.message);
+           return;
+         }
+       } catch (error) {
+         console.log(error);
+       }
+       navigate(`/detail/${item.postId}`);
+       
+     }
+   };
+
+
 
   return (
     <Item>
@@ -95,7 +159,19 @@ console.log(item)
             </Right>
           )
         ) : (
-          false
+          <Right>
+            <RightButton onClick={openModal}>신고</RightButton>
+            <ModalComment
+              open={modalOpen}
+              close={closeModal}
+              header={`${item.memberNickname}님 신고하기`}
+              comment={`${item.content}`}
+              ReportCommentBtn={ReportCommentBtn}
+              setContent={setContent}
+            >
+              {/* Modal.js의  <main> {props.children} </main>에 내용이 입력된다.  */}
+            </ModalComment>
+          </Right>
         )}
       </First>
 

@@ -115,7 +115,7 @@ export default function BasicTabs() {
                               }}
                             >
                               {waitlist.nickname}
-                            </div>{" "}
+                            </div>
                             님이
                             <div
                               style={{
@@ -129,7 +129,7 @@ export default function BasicTabs() {
                               }}
                             >
                               {waitlist.title}
-                            </div>{" "}
+                            </div>
                             모임 참여를 신청하였습니다.
                           </Title>
                         </TitleWrapper>

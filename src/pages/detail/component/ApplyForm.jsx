@@ -137,13 +137,14 @@ const StDiv = styled.div`
 `;
 
 const StTextarea = styled.textarea`
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
   width: 100%;
   height: 200px;
   margin-top: 10px;
   padding-left: 10px;
   border: transparent;
   border-bottom: 1px solid grey;
+  resize: none;
   :focus {
     outline: none;
     border-color: #18a0fb;
