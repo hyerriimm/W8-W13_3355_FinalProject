@@ -14,13 +14,20 @@ const CommentItem = ({ item, getCommentList }) => {
   const [isUpdate, setIsUpdate] = useState(false);
   const [comment, setComment] = useState({});
 
+  const Id = localStorage.getItem("Id");
+
+
+  //등록
   const setUpdate = () => {
     if (!isUpdate) {
       setComment(item.content);
     }
     setIsUpdate(!isUpdate);
   };
+  
+  
 
+  //수정
   const handleUpdate = async (e) => {
     if (e.key === "Enter") {
       if (!comment) {
@@ -38,8 +45,11 @@ const CommentItem = ({ item, getCommentList }) => {
       setIsUpdate(false);
       getCommentList();
     }
+    
   };
+  
 
+  //삭제
   const handleDelete = async () => {
     if (!window.confirm("댓글을 삭제하시겠습니까?")) {
       return;
@@ -60,7 +70,11 @@ const CommentItem = ({ item, getCommentList }) => {
     const { value } = e.target;
 
     setComment(value);
+
   };
+
+
+console.log(item)
 
   return (
     <Item>
@@ -71,15 +85,20 @@ const CommentItem = ({ item, getCommentList }) => {
           </Circle>
           <Nickname>{item.memberNickname}</Nickname>
         </Left>
-        {isUpdate ? (
-          <RightButton onClick={setUpdate}>취소</RightButton>
+        {Id === item.memberId ? (
+          isUpdate ? (
+            <RightButton onClick={setUpdate}>취소</RightButton>
+          ) : (
+            <Right>
+              <RightButton onClick={setUpdate}>수정</RightButton>
+              <RightButton onClick={handleDelete}>삭제</RightButton>
+            </Right>
+          )
         ) : (
-          <Right>
-            <RightButton onClick={setUpdate}>수정</RightButton>
-            <RightButton onClick={handleDelete}>삭제</RightButton>
-          </Right>
+          false
         )}
       </First>
+
       {isUpdate ? (
         <Stcontainer>
           <Input
