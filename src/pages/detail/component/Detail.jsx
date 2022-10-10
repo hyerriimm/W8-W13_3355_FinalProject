@@ -39,6 +39,7 @@ const Detail = () => {
 //   currentNum 현재 모집된 인원
 //   wishPeople: [] 게시물 찜한 사람들 아이디
 //   wish 찜 했는지 아닌지 boolean
+//   memeberId 회원 고유 아이디
 
   // wishBoolean: 찜명단에서 내 아이디과 일치하는 게 있으면 true, 아니면 false
   // const wishBoolean = detail_wishPeople?.includes(Id);
@@ -141,8 +142,27 @@ const Detail = () => {
               </TitleDiv>
               <div style={{display:'flex', alignItems: 'center', justifyContent:'space-between'}}>
                 <div style={{display:'flex', alignItems: 'center'}}>
-                  <ProfileImg src={ detail.memberImgUrl } alt="profile"/>
-                  <h4 style={{width:'150px'}}>{detail.authorNickname}</h4>
+                  <ProfileImg 
+                  src={ detail.memberImgUrl } 
+                  alt="profile"
+                  onClick={()=>{
+                    if (logIn && Id === detail.authorId) {
+                      navigate('/mypage')
+                    } else if (logIn && Id !== detail.authorId) {
+                      navigate(`/someonesmypage/${detail.memberId}`)
+                    } else { return }
+                  }}
+                  />
+                  <h4 
+                  style={{width:'150px'}}
+                  onClick={()=>{
+                    if (logIn && Id === detail.authorId) {
+                      navigate('/mypage')
+                    } else if (logIn && Id !== detail.authorId) {
+                      navigate(`/someonesmypage/${detail.memberId}`)
+                    } else { return }
+                  }}
+                  >{detail.authorNickname}</h4>
                 </div>
                 <StDiv>
                   {detail.restDay?.split("일")[0] == 0 ? ( 
