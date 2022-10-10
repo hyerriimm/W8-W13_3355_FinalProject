@@ -23,7 +23,7 @@ const Form = () => {
   const imgFileUploadBtnRef = useRef();
 
   const [address, setAddress] = useState("주소를 선택해주세요");
-  const [detailAddress, setDetailAddress] = useState(undefined);
+  const [detailAddress, setDetailAddress] = useState("");
   const [placeName, setPlaceName] = useState("");
   const [placeUrl, setPlaceUrl] = useState(null);
   const [placeX, setPlaceX] = useState("");
