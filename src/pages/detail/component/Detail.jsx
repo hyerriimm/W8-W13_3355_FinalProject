@@ -5,6 +5,7 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { FiTrash2 } from "react-icons/fi";
 import { FiEdit } from "react-icons/fi";
+import { RiAlarmWarningFill } from "react-icons/ri";
 import MapOfDetail from './MapOfDetail'
 import ChatFloatingBtn from '../../../components/ChatFloatingBtn';
 
@@ -55,7 +56,7 @@ const Detail = () => {
       dispatch(__removeWish(params_id));
     }
   };
-
+  
   // 게시글 삭제 기능
   const onDeleteBtn = () => {
     if (window.confirm('게시글을 삭제하시겠습니까?')) {
@@ -63,6 +64,22 @@ const Detail = () => {
       navigate('/');
     }
   };
+
+  // 게시글 신고하러 이동
+  const goToReportBtn = () => {
+    navigate(
+    '/detail/postreport', 
+    {state: {
+      postId: params_id, 
+      title:detail.title, 
+      authorNickname: detail.authorNickname, 
+      memberImgUrl:detail.memberImgUrl, 
+      postImgUrl: detail.postImgUrl, 
+      content:detail.content  
+    }}
+    );
+  };
+
 
   useEffect(()=>{
     setIsWish(detail.wish);
@@ -98,7 +115,8 @@ const Detail = () => {
               <FiTrash2 size='20' color='#fff' />
             </StEditnDeleteBtn>
           </>
-        ) : false )}
+        ) : ( false ) 
+        )}
         </EditnDeleteDiv>
       <Container>
         <Item1>
@@ -110,6 +128,16 @@ const Detail = () => {
             <div>
               <TitleDiv>
                 <h3>{detail.title}</h3>
+                { logIn == null ? false : 
+                (Id === detail.authorId ? ( false ) : 
+                (
+                  <ReportBtn
+                  onClick={goToReportBtn}
+                  >
+                    <RiAlarmWarningFill size='20' color='#1a399c' />
+                  </ReportBtn>
+                )   
+                )}
               </TitleDiv>
               <div style={{display:'flex', alignItems: 'center', justifyContent:'space-between'}}>
                 <div style={{display:'flex', alignItems: 'center'}}>
@@ -229,6 +257,7 @@ const Item1 = styled.div`
   height: fit-content;
   /* max-height: 60vh; */
   max-height: 750px;
+  align-items: center;
   @media only screen and (max-width: 720px) {
     // 720보다 작을 때 나오는 화면
     flex-direction: column;
@@ -240,7 +269,8 @@ const Img = styled.img`
   /* background-color: orange; */
   object-fit: contain;
   width: 50%;
-  max-height: 70%;    
+  /* max-height: 70%;     */
+  max-height: 500px;    
   @media only screen and (max-width: 720px) {
     width: 100%;
     max-height: 500px;
@@ -261,12 +291,13 @@ box-sizing: border-box;
 
 const TitleDiv = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  @media only screen and (max-width: 720px) {
+  /* flex-direction: column; */
+  justify-content: space-between;
+  align-items: center;
+  /* @media only screen and (max-width: 720px) {
     display: flex;
     flex-direction: column;
-  }
+  } */
 `;
 
 const StDiv = styled.div`
@@ -349,6 +380,23 @@ object-fit: contain;
   :hover {
             filter: brightness(90%);
             box-shadow: 1px 1px 3px 0 #bcd7ff;
+  }
+`; 
+
+const ReportBtn = styled.button`
+object-fit: contain;
+  min-width: 35px;
+  min-height: 35px;
+  border: transparent;
+  background-color: transparent;
+  border-radius: 50%;
+  margin-top: 10px;
+  margin-right: 10px;
+  cursor: pointer;
+  :hover {
+  filter: brightness(110%);
+  box-shadow: 1px 1px 3px 0 #bcd7ff;
+  background-color: #ff8a1d;
   }
 `; 
 
