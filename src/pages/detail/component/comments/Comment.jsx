@@ -41,6 +41,13 @@ const Comment = () => {
     getCommentList();
   };
 
+  // 엔터로 채팅하기
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      submit();
+    }
+  };
+
   const change = (e) => {
     const { value } = e.target;
 
@@ -57,6 +64,7 @@ const Comment = () => {
       <CommentItem
         item={item}
         key={item.commentId}
+        onKeyPress={handleKeyPress}
         getCommentList={getCommentList}
       ></CommentItem>
     );
@@ -69,6 +77,7 @@ const Comment = () => {
           <Stcontainer>
             <Input
               onChange={change}
+              onKeyPress={handleKeyPress}
               placeholder="댓글을 입력해주세요"
               type="text"
             />
