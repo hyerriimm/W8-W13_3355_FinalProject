@@ -43,7 +43,7 @@ function a11yProps(index) {
   };
 }
 
-export default function BasicTabs() {
+export default function BasicTabs({someoneWatchingYourMypage}) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -68,8 +68,14 @@ export default function BasicTabs() {
     <Box sx={{ width: '90%', margin: 'auto' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="내가 만든 모임" {...a11yProps(0)} />
+          {someoneWatchingYourMypage ? (
+            <Tab label="작성한 모임" {...a11yProps(0)} />
+            ) : (
+            <Tab label="내가 만든 모임" {...a11yProps(0)} />
+          )}
+          {someoneWatchingYourMypage ? (false) : (
           <Tab label="내가 참여한 모임" {...a11yProps(1)} />
+          )}
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>

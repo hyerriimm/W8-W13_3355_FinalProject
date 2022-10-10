@@ -78,7 +78,7 @@ const Header = () => {
                 ( localStorage.getItem("Role") === "ROLE_ADMIN" ?
                   (
                     <>
-                    <AddBtn style={{border:'1px solid grey',backgroundColor:'grey'}} onClick={()=>navigate('/admin')}>신고</AddBtn>
+                    <AddBtn style={{border:'1px solid #1a399c',backgroundColor:'#1a399c'}} onClick={()=>navigate('/admin')}>신고함</AddBtn>
                     <AddBtn onClick={()=>navigate('/form')}>모임등록</AddBtn>
                     <BtnProfile 
                     style={{backgroundSize:'cover',backgroundImage:`url(${myinfo})`, backgroundPosition: 'center'}}
