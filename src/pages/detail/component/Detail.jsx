@@ -228,7 +228,7 @@ const Item1 = styled.div`
   display: flex;
   height: fit-content;
   /* max-height: 60vh; */
-  max-height: 600px;
+  max-height: 750px;
   @media only screen and (max-width: 720px) {
     // 720보다 작을 때 나오는 화면
     flex-direction: column;
