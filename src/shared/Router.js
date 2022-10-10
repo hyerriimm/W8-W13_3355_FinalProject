@@ -7,6 +7,7 @@ import DetailPg from "../pages/detail/DetailPg"
 import DetailEditPg from "../pages/detail/DetailEditPg"
 import ApplyFormPg from "../pages/detail/ApplyFormPg"
 import ApplyCheckPg from "../pages/detail/ApplyCheckPg"
+import PostReport from "../pages/detail/PostReport"
 import FormPg from "../pages/form/FormPg"
 import MypagePg from "../pages/mypage/MypagePg";
 import MyInfoEditPg from "../pages/mypage/MyInfoEditPg";
@@ -29,6 +30,7 @@ const Router = () => {
           <Route path="/detail/:id/edit" element={<DetailEditPg />} />
           <Route path="/detail/:id/apply" element={<ApplyFormPg />} />
           <Route path="/detail/:id/check" element={<ApplyCheckPg />} />
+          <Route path="/detail/postreport" element={<PostReport />} />
           <Route path="form" element={<FormPg />} />
           <Route path="/mypage" element={<MypagePg />} />
           <Route path="/mypage/infoedit" element={<MyInfoEditPg />} />
