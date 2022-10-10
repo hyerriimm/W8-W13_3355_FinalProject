@@ -95,3 +95,21 @@ export const deleteComment = createAsyncThunk(
     }
   }
 );
+
+
+//댓글 신고
+export const reportComment = createAsyncThunk(
+  "comment", async (payload, thunkAPI) => {
+  try {
+    const data = await axios.get(`${API_URL}/comment/${payload}`, {
+      headers: {
+        authorization: localStorage.getItem("ACCESSTOKEN"),
+        refreshtoken: localStorage.getItem("REFRESHTOKEN"),
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return thunkAPI.fulfillWithValue(data.data);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
