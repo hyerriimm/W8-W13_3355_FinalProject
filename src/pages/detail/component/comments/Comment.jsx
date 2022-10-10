@@ -59,7 +59,6 @@ const Comment = () => {
   };
 
   const commentItems = commentList.map((item) => {
-    // console.log(item);
     return (
       <CommentItem
         item={item}
@@ -80,6 +79,7 @@ const Comment = () => {
               onKeyPress={handleKeyPress}
               placeholder="댓글을 입력해주세요"
               type="text"
+              maxLength={250}
             />
 
             <Button type="button" onClick={submit}>
