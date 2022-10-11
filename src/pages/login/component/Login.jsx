@@ -48,8 +48,15 @@ const Login = () => {
     }
   };
 
+    // 엔터로 로그인하기
+    const handleKeyPress = (e) => {
+      if (e.key === "Enter") {
+        onLoginBtnHandler();
+      }
+    };
+
   return (
-    <Container>
+    <ContainerForm>
       <Item1>
         <input 
         ref={userIdRef}
@@ -62,10 +69,13 @@ const Login = () => {
         type='password'
         name='password'
         placeholder='비밀번호를 입력하세요.' 
+        onKeyPress={handleKeyPress}
         />
         <StButton
+        onkey
           style={{ backgroundColor: '#18A0FB' }}
-          onClick={()=>{
+          onClick={(e)=>{
+            e.preventDefault();
             const newUserInfo = {
                 userId: userIdRef.current.value,
                 password: passwordRef.current.value
@@ -87,13 +97,13 @@ const Login = () => {
          onClick={()=>navigate('/signup')}
          >회원가입</StButton>
       </Item2>
-    </Container>
+    </ContainerForm>
   );
 };
 
 export default Login;
 
-const Container = styled.div`
+const ContainerForm = styled.form`
   display: grid;
   align-items: center;
   justify-content: center;
