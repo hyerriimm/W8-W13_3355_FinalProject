@@ -69,16 +69,21 @@ export default function BasicTabs({postList, commentList, memberList}) {
       <TabPanel value={value} index={0}>
         <Container>
           <ListContainer>
-            {postList?.map((post) => {
+            {postList?.slice().reverse().map((post) => {
               return (
-                <CardWrapper key={uuidv4()}>
+                <CardWrapper 
+                key={uuidv4()}
+                onClick={() => { navigate(`/detail/${post.postId}`) }}
+                >
                   <ImgNDescDiv>
                     {/* <ImageContainer>
                       <img src={post.postUrl} alt="" />
                     </ImageContainer> */}
                     <DescContainer>
+                      <span style={{fontSize:'13px', color:'#2196f3'}}>신고대상&nbsp;</span>
                       <PostId onClick={() => { navigate(`/detail/${post.postId}`) }}>Post No.{post.postId}</PostId>
                       <TitleWrapper>
+                        <span style={{fontSize:'13px', color:'#2196f3'}}>신고사유&nbsp;</span>
                         <Title>{post.content}</Title>
                       </TitleWrapper>          
                     </DescContainer>
@@ -117,7 +122,7 @@ export default function BasicTabs({postList, commentList, memberList}) {
       <TabPanel value={value} index={1}>
         <Container>
           <ListContainer>
-            {commentList?.map((comment) => {
+            {commentList?.slice().reverse().map((comment) => {
               return (
                 <CardWrapper key={uuidv4()}>
                   {/* onClick={() => { navigate(`/detail/${comment.postId}`) }} */}
@@ -181,7 +186,7 @@ export default function BasicTabs({postList, commentList, memberList}) {
       <TabPanel value={value} index={2}>
         <Container>
           <ListContainer>
-            {memberList?.map((member) => {
+            {memberList?.slice().reverse().map((member) => {
               return (
                 <CardWrapper
                   key={uuidv4()}
@@ -191,11 +196,13 @@ export default function BasicTabs({postList, commentList, memberList}) {
                       <img src={member.imgUrl} alt="" />
                     </ImageContainer> */}
                     <DescContainer>
+                      <span style={{fontSize:'13px', color:'#2196f3'}}>신고대상&nbsp;</span>
                       <Circle>
                         <img src={member.memberImgUrl} alt="" />
-                        <div>&nbsp;{member.reportNickname}</div>
+                        <div style={{fontSize:'13px', display:'flex', alignItems:'center'}}>&nbsp;{member.reportNickname}</div>
                       </Circle>
                       <TitleWrapper>
+                        <span style={{fontSize:'13px', color:'#2196f3'}}>신고사유&nbsp;</span>
                         <Title>{member.content}</Title>
                       </TitleWrapper>
                     </DescContainer>
@@ -300,8 +307,9 @@ const DescContainer = styled.div`
 
 const TitleWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  /* justify-content: space-between; */
+  /* align-items: center; */
   margin: 13px 0 0 0;
 `;
 
@@ -317,7 +325,7 @@ const BtnWrapper = styled.div`
 const Title = styled.div`
   font-size: 15px;
   font-weight: 600;
-  margin: 0 0 0 10px;
+  /* margin: 0 0 0 10px; */
   font-family: 'NotoSansKR';
 `;
 
@@ -325,14 +333,12 @@ const Title = styled.div`
 const PostId = styled.div`
   font-size: 13px;
   font-weight: 400;
-  margin: 0 0 0 10px;
 `;
 
 const WithdrawButton = styled.button`
   height: 30px;
   width: 50px;
   padding: 0 10px;
-  margin-top: px;
   margin-bottom: 7px;
   margin-right: 5px;
   border: transparent;
@@ -350,8 +356,7 @@ const ExecuteButton = styled.button`
   height: 30px;
   width: 50px;
   padding: 0 10px;
-  margin-top: px;
-  margin-bottom: 7px;
+  /* margin-bottom: 7px; */
   margin-right: 5px;
   border: transparent;
   border-radius: 5px;
