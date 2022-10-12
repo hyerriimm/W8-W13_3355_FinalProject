@@ -56,13 +56,9 @@ export default function BasicTabs({postList, commentList, memberList}) {
 
 
   return (
-    <Box sx={{ width: "90%", margin: "auto" }}>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-        >
+    <Box sx={{ width: '90%', margin: 'auto' }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="신고된 게시글" {...a11yProps(0)} />
           <Tab label="신고된 댓글" {...a11yProps(1)} />
           <Tab label="신고된 회원" {...a11yProps(2)} />
@@ -73,36 +69,31 @@ export default function BasicTabs({postList, commentList, memberList}) {
       <TabPanel value={value} index={0}>
         <Container>
           <ListContainer>
-            {postList?.map((post) => {
+            {postList?.slice().reverse().map((post) => {
               return (
-                <CardWrapper key={uuidv4()}>
+                <CardWrapper 
+                key={uuidv4()}
+                onClick={() => { navigate(`/detail/${post.postId}`) }}
+                >
                   <ImgNDescDiv>
                     {/* <ImageContainer>
                       <img src={post.postUrl} alt="" />
                     </ImageContainer> */}
                     <DescContainer>
-                      <PostId
-                        onClick={() => {
-                          navigate(`/detail/${post.postId}`);
-                        }}
-                      >
-                        Post No.{post.postId}
-                      </PostId>
+                      <span style={{fontSize:'13px', color:'#2196f3'}}>신고대상&nbsp;</span>
+                      <PostId onClick={() => { navigate(`/detail/${post.postId}`) }}>Post No.{post.postId}</PostId>
                       <TitleWrapper>
+                        <span style={{fontSize:'13px', color:'#2196f3'}}>신고사유&nbsp;</span>
                         <Title>{post.content}</Title>
                       </TitleWrapper>
                     </DescContainer>
                   </ImgNDescDiv>
                   <BtnWrapper>
                     <WithdrawButton
-                      type="button"
-                      onClick={() => {
-                        if (
-                          window.confirm(
-                            "해당 게시글에 대한 신고를 반려하시겠습니까?"
-                          )
-                        ) {
-                          dispatch(__withdraw(Number(post.reportId)));
+                      type='button'
+                      onClick={()=>{
+                          if (window.confirm('해당 게시글에 대한 신고를 반려하시겠습니까?')) {
+                              dispatch(__withdraw(Number(post.reportId)))
                         }
                       }}
                     >
@@ -131,61 +122,31 @@ export default function BasicTabs({postList, commentList, memberList}) {
       <TabPanel value={value} index={1}>
         <Container>
           <ListContainer>
-            {commentList
-              ?.slice()
-              .reverse()
-              .map((comment) => {
-                return (
-                  <CardWrapper key={uuidv4()}>
-                    <ImgNDescDiv>
-                      {/* <ImageContainer>
+            {commentList?.slice().reverse().map((comment) => {
+              return (
+                <CardWrapper key={uuidv4()}>
+                  {/* onClick={() => { navigate(`/detail/${comment.postId}`) }} */}
+                  <ImgNDescDiv>
+                    {/* <ImageContainer>
                       <img src={comment.postUrl} alt="" />
                     </ImageContainer> */}
                       <DescContainer>
-                        <CommentId>
-                          <div
-                            onClick={() => {
-                              navigate(`/detail/${comment.postId}`);
-                            }}
-                          >
-                            Comment No.{comment.commentId}&nbsp;
-                          </div>
-                        </CommentId>
-                        <span
-                          style={{
-                            fontSize: "13px",
-                            color: "#2196f3",
-                            marginTop: "10px",
-                            marginLeft: "10px",
-                          }}
-                        >
-                          신고 댓글
-                        </span>
-                        <Circle>
-                          <img src={comment.memberUrl} alt="" />
-                          <div>{comment.nickname}</div>
-                        </Circle>
-                        <Circle>
-                          <div  style={{fontSize: "15px",
-                                        marginRight: "10px",
-                                        fontFamily: "NotoSansKR"
-                                        }} 
-                                        >
-                         {comment.reportCommentContent}</div>
-                        </Circle>
-                        <span
-                          style={{
-                            fontSize: "13px",
-                            color: "#2196f3",
-                            marginTop: "10px",
-                            marginLeft: "10px",
-                          }}
-                        >
-                          신고 사유
-                        </span>
-                        <CommentTitleWrapper>
-                          <CommentTitle>{comment.content}</CommentTitle>
-                        </CommentTitleWrapper>
+                      <span style={{fontSize:'13px', color:'#2196f3'}}>신고대상&nbsp;</span>
+                        <PostId onClick={() => { navigate(`/detail/${comment.postId}`) }}>Comment No.{comment.commentId}&nbsp; (Post No.{comment.postId})</PostId>
+                      <div style={{backgroundColor:'#f3f3f3', borderRadius:'10px', padding:'0 10px'}}>
+                          <Circle>
+                            <img src={comment.memberUrl} alt="" />
+                            <div style={{fontSize:'13px', display:'flex', alignItems:'center'}}>&nbsp;{comment.nickname}</div>
+                          </Circle>
+                          <Circle>
+                            <div style={{fontSize:'13px', display:'flex', alignItems:'center', fontFamily: "NotoSansKR"}}>
+                          {comment.reportCommentContent}</div>
+                          </Circle>
+                      </div>
+                          <TitleWrapper>
+                            <span style={{fontSize:'13px', color:'#2196f3'}}>신고사유&nbsp;</span>
+                            <Title>{comment.content}</Title>
+                          </TitleWrapper>
                       </DescContainer>
                     </ImgNDescDiv>
                     <BtnWrapper>
@@ -226,24 +187,23 @@ export default function BasicTabs({postList, commentList, memberList}) {
       <TabPanel value={value} index={2}>
         <Container>
           <ListContainer>
-            {memberList?.map((member) => {
+            {memberList?.slice().reverse().map((member) => {
               return (
                 <CardWrapper
                   key={uuidv4()}
-                  onClick={() => {
-                    navigate(`/someonesmypage/${member.memberId}`);
-                  }}
-                >
+                  onClick={() => {navigate(`/someonesmypage/${member.memberId}`);}}>
                   <ImgNDescDiv>
                     {/* <ImageContainer>
                       <img src={member.imgUrl} alt="" />
                     </ImageContainer> */}
                     <DescContainer>
+                      <span style={{fontSize:'13px', color:'#2196f3'}}>신고대상&nbsp;</span>
                       <Circle>
                         <img src={member.memberImgUrl} alt="" />
-                        <div>&nbsp;{member.reportNickname}</div>
+                        <div style={{fontSize:'13px', display:'flex', alignItems:'center'}}>&nbsp;{member.reportNickname}</div>
                       </Circle>
                       <TitleWrapper>
+                        <span style={{fontSize:'13px', color:'#2196f3'}}>신고사유&nbsp;</span>
                         <Title>{member.content}</Title>
                       </TitleWrapper>
                     </DescContainer>
@@ -311,7 +271,7 @@ const CardWrapper = styled.div`
   margin: 10px;
   cursor: pointer;
   :hover {
-            filter: brightness(90%);
+            /* filter: brightness(90%); */
             /* box-shadow: 1px 1px 3px 0 #bcd7ff; */
   }
 `;
@@ -321,18 +281,6 @@ display: flex;
 width: 100%;
 align-items: center;
 /* justify-content: flex-start; */
-`;
-
-const ImageContainer = styled.div`
-  display: flex;
-  box-sizing: border-box;
-    img {
-        display: flex;
-        width: 100px;
-        height: 115px;
-        object-fit: cover;
-        border-radius: 4px;
-    }
 `;
 
 const DescContainer = styled.div`
@@ -346,15 +294,10 @@ const DescContainer = styled.div`
 
 const TitleWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  /* justify-content: space-between; */
+  /* align-items: center; */
   margin: 13px 0 0 0;
-`;
-
-const CommentTitleWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 `;
 
 const BtnWrapper = styled.div`
@@ -369,43 +312,25 @@ const BtnWrapper = styled.div`
 const Title = styled.div`
   font-size: 15px;
   font-weight: 600;
-  margin: 0 0 0 10px;
+  /* margin: 0 0 0 10px; */
   font-family: 'NotoSansKR';
 `;
-
-const CommentTitle = styled.div`
-  font-size: 15px;
-  font-weight: 600;
-  margin-bottom: 10px;
-  margin-left: 10px;
-  font-family: "NotoSansKR";
-`;
-
 
 const PostId = styled.div`
   font-size: 13px;
   font-weight: 400;
-  margin: 0 0 0 10px;
-`;
-
-const CommentId = styled.div`
-  font-size: 13px;
-  font-weight: 400;
-  margin-left: 10px;
-  margin-top: 5px;
 `;
 
 const WithdrawButton = styled.button`
   height: 30px;
   width: 50px;
   padding: 0 10px;
-  margin-top: px;
   margin-bottom: 7px;
   margin-right: 5px;
   border: transparent;
   border-radius: 5px;
   outline: none;
-  background-color: #d9d9d9;
+  background-color: #bbb;
   color: white;
   cursor: pointer;
   :hover {
@@ -417,13 +342,12 @@ const ExecuteButton = styled.button`
   height: 30px;
   width: 50px;
   padding: 0 10px;
-  margin-top: px;
-  margin-bottom: 7px;
+  /* margin-bottom: 7px; */
   margin-right: 5px;
   border: transparent;
   border-radius: 5px;
   outline: none;
-  background-color: #2196f3;
+  background-color: #1a399c;
   color: white;
   cursor: pointer;
   :hover {
@@ -435,8 +359,7 @@ const Circle = styled.div`
   display: flex;
   width: 100%;
   margin-top: 7px;
-  margin-right: 7px;
-  margin-left: 10px; 
+  margin-bottom: 7px;
   img {
     width: 21px;
     height: 21px;

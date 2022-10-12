@@ -102,6 +102,35 @@ export const __removeWish = createAsyncThunk(
   }
 );
 
+// 게시글 모집완료 버튼
+export const __recruitDone = createAsyncThunk(
+  "detail/__recruitDone",
+  async (payload, thunkAPI) => {
+    try {
+      const data = await axios.put(
+        `${API_URL}/post/execute/${payload}`,
+        {postId: payload},
+        {
+          headers: {
+            authorization: localStorage.getItem("ACCESSTOKEN"),
+            refreshtoken: localStorage.getItem("REFRESHTOKEN"),
+          },
+        }
+      );
+      // console.log(data.data.data);
+      if(data.data.success === false) {
+        alert(data.data.error.message)
+      } else {
+        alert(data.data.data);
+        window.location.reload();
+      }
+      // return thunkAPI.fulfillWithValue(data.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 export const detail = createSlice({
   name: "detail",
   initialState: {

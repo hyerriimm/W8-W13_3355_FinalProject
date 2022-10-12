@@ -9,7 +9,7 @@ import { RiAlarmWarningFill } from "react-icons/ri";
 import MapOfDetail from './MapOfDetail'
 import ChatFloatingBtn from '../../../components/ChatFloatingBtn';
 
-import { __detail, __delete, __addWish, __removeWish } from '../../../redux/modules/detail';
+import { __detail, __delete, __addWish, __removeWish, __recruitDone } from '../../../redux/modules/detail';
 
 const Detail = () => {
   const navigate = useNavigate();
@@ -40,6 +40,7 @@ const Detail = () => {
 //   wishPeople: [] 게시물 찜한 사람들 아이디
 //   wish 찜 했는지 아닌지 boolean
 //   memeberId 회원 고유 아이디
+//   status 게시글 상태 (모집중, 마감)
 
   // wishBoolean: 찜명단에서 내 아이디과 일치하는 게 있으면 true, 아니면 false
   // const wishBoolean = detail_wishPeople?.includes(Id);
@@ -165,10 +166,14 @@ const Detail = () => {
                   >{detail.authorNickname}</h4>
                 </div>
                 <StDiv>
-                  {detail.restDay?.split("일")[0] == 0 ? ( 
-                    <h4 style={{color:'#e51e1e'}}>오늘 마감</h4>
-                  ):(
-                    <RestDayBtn disable>마감 {detail.restDay}</RestDayBtn> 
+                  {detail.status === 'RECRUIT' ? (
+                    detail.restDay?.split("일")[0] == 0 ? ( 
+                      <h4 style={{color:'#e51e1e'}}>오늘 마감</h4>
+                    ):(
+                      <RestDayBtn disable>마감 {detail.restDay}</RestDayBtn> 
+                    )
+                    ):(
+                    <RestDayBtn disable>마감 완료</RestDayBtn>
                   )}
                   {logIn == null ? false : 
                     (Id === detail.authorId? false : (
@@ -205,11 +210,19 @@ const Detail = () => {
               { logIn == null ? false : 
               (Id === detail.authorId ? 
                 (
-                  <StBtn
-                  onClick={()=>navigate(`/detail/${detail.id}/check`)}
-                  >
-                  지원확인
-                  </StBtn>
+                  <>
+                    <StBtn
+                    style={{backgroundColor:'grey', marginRight:'10px'}}
+                    onClick={()=>dispatch(__recruitDone(params_id))}
+                    >
+                    모집마감
+                    </StBtn>
+                    <StBtn
+                    onClick={()=>navigate(`/detail/${detail.id}/check`)}
+                    >
+                    지원확인
+                    </StBtn>
+                  </>
                 ):(
                   <StBtn
                   onClick={()=>navigate(`/detail/${detail.id}/apply`)}
@@ -366,7 +379,7 @@ height: 35px;
 const BtnsDiv = styled.div`
 object-fit: contain;
 display: flex;
-justify-content: space-around;
+justify-content: center;
 flex-wrap: wrap;
 margin: 10px 0;
 `;
