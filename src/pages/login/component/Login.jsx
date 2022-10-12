@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useRef } from 'react';
 // import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { KAKAO_AUTH_URL } from "../../../shared/OAuth";
 
@@ -11,6 +11,12 @@ const Login = () => {
   const navigate = useNavigate();
   const userIdRef = useRef();
   const passwordRef = useRef();
+
+   // 스크롤을 맨 위로
+  const { pathname } = useLocation();
+  useEffect(()=>{
+    window.scrollTo(0, 0);
+  },[pathname])
 
   useEffect(()=>{
     userIdRef.current.focus();
@@ -51,7 +57,12 @@ const Login = () => {
     // 엔터로 로그인하기
     const handleKeyPress = (e) => {
       if (e.key === "Enter") {
-        onLoginBtnHandler();
+        e.preventDefault();
+        const newUserInfo = {
+            userId: userIdRef.current.value,
+            password: passwordRef.current.value
+        };
+        onLoginBtnHandler(newUserInfo);
       }
     };
 
