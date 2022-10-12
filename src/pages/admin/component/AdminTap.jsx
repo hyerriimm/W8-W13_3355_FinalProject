@@ -59,13 +59,13 @@ export default function BasicTabs({postList, commentList, memberList}) {
     <Box sx={{ width: '90%', margin: 'auto' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-            <Tab label="신고된 게시글" {...a11yProps(0)} />
-            <Tab label="신고된 댓글" {...a11yProps(1)} />
-            <Tab label="신고된 회원" {...a11yProps(2)} />
+          <Tab label="신고된 게시글" {...a11yProps(0)} />
+          <Tab label="신고된 댓글" {...a11yProps(1)} />
+          <Tab label="신고된 회원" {...a11yProps(2)} />
         </Tabs>
       </Box>
 
-
+      {/* 신고된 게시글 */}
       <TabPanel value={value} index={0}>
         <Container>
           <ListContainer>
@@ -85,32 +85,32 @@ export default function BasicTabs({postList, commentList, memberList}) {
                       <TitleWrapper>
                         <span style={{fontSize:'13px', color:'#2196f3'}}>신고사유&nbsp;</span>
                         <Title>{post.content}</Title>
-                      </TitleWrapper>          
+                      </TitleWrapper>
                     </DescContainer>
                   </ImgNDescDiv>
-                    <BtnWrapper>
-                        <WithdrawButton 
-                        type='button'
-                        onClick={()=>{
-                            if (window.confirm('해당 게시글에 대한 신고를 반려하시겠습니까?')) {
-                                dispatch(__withdraw(Number(post.reportId)))
-                            }
-                        }}
-                        >
-                        반려
-                        </WithdrawButton>
-                        <ExecuteButton
-                        type='button'
-                        onClick={()=>{
-                            if (window.confirm('해당 게시글을 제재하시겠습니까?')) {
-                                dispatch(__execute(Number(post.reportId)))
-                            }
-                            return
-                        }}
-                        >
-                        제재
-                        </ExecuteButton>
-                    </BtnWrapper>
+                  <BtnWrapper>
+                    <WithdrawButton
+                      type='button'
+                      onClick={()=>{
+                          if (window.confirm('해당 게시글에 대한 신고를 반려하시겠습니까?')) {
+                              dispatch(__withdraw(Number(post.reportId)))
+                        }
+                      }}
+                    >
+                      반려
+                    </WithdrawButton>
+                    <ExecuteButton
+                      type="button"
+                      onClick={() => {
+                        if (window.confirm("해당 게시글을 제재하시겠습니까?")) {
+                          dispatch(__execute(Number(post.reportId)));
+                        }
+                        return;
+                      }}
+                    >
+                      제재
+                    </ExecuteButton>
+                  </BtnWrapper>
                 </CardWrapper>
               );
             })}
@@ -118,7 +118,7 @@ export default function BasicTabs({postList, commentList, memberList}) {
         </Container>
       </TabPanel>
 
-
+      {/* 신고된 댓글 */}
       <TabPanel value={value} index={1}>
         <Container>
           <ListContainer>
@@ -130,22 +130,53 @@ export default function BasicTabs({postList, commentList, memberList}) {
                     {/* <ImageContainer>
                       <img src={comment.postUrl} alt="" />
                     </ImageContainer> */}
-                    <DescContainer>
-                      <Circle>                   
-                        <div>Comment No.{comment.commentId}&nbsp;</div>
-                      </Circle>
-                      <Circle>
-                        <img src={comment.memberUrl} alt="" />
-                        <div>&nbsp;{comment.nickname}</div>
-                      </Circle>
-                      <Circle>
-                        <div>&nbsp;{comment.reportCommentContent}</div>
-                      </Circle>
-                      <TitleWrapper>
-                        <Title>{comment.content}</Title>
-                      </TitleWrapper>
-                    </DescContainer>
-                  </ImgNDescDiv>
+                      <DescContainer>
+                        <CommentId>
+                          <div
+                            onClick={() => {
+                              navigate(`/detail/${comment.postId}`);
+                            }}
+                          >
+                            Comment No.{comment.commentId}&nbsp;
+                          </div>
+                        </CommentId>
+                        <span
+                          style={{
+                            fontSize: "13px",
+                            color: "#2196f3",
+                            marginTop: "10px",
+                            marginLeft: "10px",
+                          }}
+                        >
+                          신고 댓글
+                        </span>
+                        <Circle>
+                          <img src={comment.memberUrl} alt="" />
+                          <div>{comment.nickname}</div>
+                        </Circle>
+                        <Circle>
+                          <div  style={{fontSize: "15px",
+                                        marginRight: "10px",
+                                        fontFamily: "NotoSansKR"
+                                        }} 
+                                        >
+                         {comment.reportCommentContent}</div>
+                        </Circle>
+                        <span
+                          style={{
+                            fontSize: "13px",
+                            color: "#2196f3",
+                            marginTop: "10px",
+                            marginLeft: "10px",
+                          }}
+                        >
+                          신고 사유
+                        </span>
+                        <CommentTitleWrapper>
+                          <CommentTitle>{comment.content}</CommentTitle>
+                        </CommentTitleWrapper>
+                      </DescContainer>
+                    </ImgNDescDiv>
                     <BtnWrapper>
                       <WithdrawButton
                         type="button"
@@ -164,9 +195,7 @@ export default function BasicTabs({postList, commentList, memberList}) {
                       <ExecuteButton
                         type="button"
                         onClick={() => {
-                          if (
-                            window.confirm("해당 댓글을 제재하시겠습니까?")
-                          ) {
+                          if (window.confirm("해당 댓글을 제재하시겠습니까?")) {
                             dispatch(__execute(Number(comment.reportId)));
                           }
                           return;
@@ -175,14 +204,14 @@ export default function BasicTabs({postList, commentList, memberList}) {
                         제재
                       </ExecuteButton>
                     </BtnWrapper>
-                </CardWrapper>
-              );
-            })}
+                  </CardWrapper>
+                );
+              })}
           </ListContainer>
         </Container>
       </TabPanel>
 
-
+      {/* 신고된 회원 */}
       <TabPanel value={value} index={2}>
         <Container>
           <ListContainer>
@@ -207,35 +236,33 @@ export default function BasicTabs({postList, commentList, memberList}) {
                       </TitleWrapper>
                     </DescContainer>
                   </ImgNDescDiv>
-                    <BtnWrapper>
-                      <WithdrawButton
-                        type="button"
-                        onClick={() => {
-                          if (
-                            window.confirm(
-                              "해당 게시글에 대한 신고를 반려하시겠습니까?"
-                            )
-                          ) {
-                            dispatch(__withdraw(Number(member.reportId)));
-                          }
-                        }}
-                      >
-                        반려
-                      </WithdrawButton>
-                      <ExecuteButton
-                        type="button"
-                        onClick={() => {
-                          if (
-                            window.confirm("해당 게시글을 제재하시겠습니까?")
-                          ) {
-                            dispatch(__execute(Number(member.reportId)));
-                          }
-                          return;
-                        }}
-                      >
-                        제재
-                      </ExecuteButton>
-                    </BtnWrapper>
+                  <BtnWrapper>
+                    <WithdrawButton
+                      type="button"
+                      onClick={() => {
+                        if (
+                          window.confirm(
+                            "해당 게시글에 대한 신고를 반려하시겠습니까?"
+                          )
+                        ) {
+                          dispatch(__withdraw(Number(member.reportId)));
+                        }
+                      }}
+                    >
+                      반려
+                    </WithdrawButton>
+                    <ExecuteButton
+                      type="button"
+                      onClick={() => {
+                        if (window.confirm("해당 게시글을 제재하시겠습니까?")) {
+                          dispatch(__execute(Number(member.reportId)));
+                        }
+                        return;
+                      }}
+                    >
+                      제재
+                    </ExecuteButton>
+                  </BtnWrapper>
                 </CardWrapper>
               );
             })}
@@ -313,6 +340,12 @@ const TitleWrapper = styled.div`
   margin: 13px 0 0 0;
 `;
 
+const CommentTitleWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 const BtnWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -329,10 +362,25 @@ const Title = styled.div`
   font-family: 'NotoSansKR';
 `;
 
+const CommentTitle = styled.div`
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  font-family: "NotoSansKR";
+`;
+
 
 const PostId = styled.div`
   font-size: 13px;
   font-weight: 400;
+`;
+
+const CommentId = styled.div`
+  font-size: 13px;
+  font-weight: 400;
+  margin-left: 10px;
+  margin-top: 5px;
 `;
 
 const WithdrawButton = styled.button`
@@ -374,6 +422,7 @@ const Circle = styled.div`
   width: 100%;
   margin-top: 7px;
   margin-right: 7px;
+  margin-left: 10px; 
   img {
     width: 21px;
     height: 21px;
