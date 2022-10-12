@@ -42,6 +42,7 @@ export const __withdraw = createAsyncThunk(
         alert(data.data.error.message);
       } else {
         alert(data.data.data);
+        window.location.reload();
       }
       return thunkAPI.fulfillWithValue(data.data.data);
     } catch (error) {
@@ -56,7 +57,7 @@ export const __execute = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const data = await axios.post(
-        `${API_URL}/admin/report/execute/${payload.reportId}`,
+        `${API_URL}/admin/report/execute/${payload}`,
         { reportId: payload },
         {
           headers: {
@@ -70,6 +71,7 @@ export const __execute = createAsyncThunk(
         alert(data.data.error.message);
       } else {
         alert(data.data.data);
+        window.location.reload();
       }
       return thunkAPI.fulfillWithValue(data.data.data);
     } catch (error) {
