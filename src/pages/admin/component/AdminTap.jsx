@@ -131,50 +131,22 @@ export default function BasicTabs({postList, commentList, memberList}) {
                       <img src={comment.postUrl} alt="" />
                     </ImageContainer> */}
                       <DescContainer>
-                        <CommentId>
-                          <div
-                            onClick={() => {
-                              navigate(`/detail/${comment.postId}`);
-                            }}
-                          >
-                            Comment No.{comment.commentId}&nbsp;
-                          </div>
-                        </CommentId>
-                        <span
-                          style={{
-                            fontSize: "13px",
-                            color: "#2196f3",
-                            marginTop: "10px",
-                            marginLeft: "10px",
-                          }}
-                        >
-                          신고 댓글
-                        </span>
-                        <Circle>
-                          <img src={comment.memberUrl} alt="" />
-                          <div>{comment.nickname}</div>
-                        </Circle>
-                        <Circle>
-                          <div  style={{fontSize: "15px",
-                                        marginRight: "10px",
-                                        fontFamily: "NotoSansKR"
-                                        }} 
-                                        >
-                         {comment.reportCommentContent}</div>
-                        </Circle>
-                        <span
-                          style={{
-                            fontSize: "13px",
-                            color: "#2196f3",
-                            marginTop: "10px",
-                            marginLeft: "10px",
-                          }}
-                        >
-                          신고 사유
-                        </span>
-                        <CommentTitleWrapper>
-                          <CommentTitle>{comment.content}</CommentTitle>
-                        </CommentTitleWrapper>
+                      <span style={{fontSize:'13px', color:'#2196f3'}}>신고대상&nbsp;</span>
+                        <PostId onClick={() => { navigate(`/detail/${comment.postId}`) }}>Comment No.{comment.commentId}&nbsp; (Post No.{comment.postId})</PostId>
+                      <div style={{backgroundColor:'#f3f3f3', borderRadius:'10px', padding:'0 10px'}}>
+                          <Circle>
+                            <img src={comment.memberUrl} alt="" />
+                            <div style={{fontSize:'13px', display:'flex', alignItems:'center'}}>&nbsp;{comment.nickname}</div>
+                          </Circle>
+                          <Circle>
+                            <div style={{fontSize:'13px', display:'flex', alignItems:'center', fontFamily: "NotoSansKR"}}>
+                          {comment.reportCommentContent}</div>
+                          </Circle>
+                      </div>
+                          <TitleWrapper>
+                            <span style={{fontSize:'13px', color:'#2196f3'}}>신고사유&nbsp;</span>
+                            <Title>{comment.content}</Title>
+                          </TitleWrapper>
                       </DescContainer>
                     </ImgNDescDiv>
                     <BtnWrapper>
@@ -299,7 +271,7 @@ const CardWrapper = styled.div`
   margin: 10px;
   cursor: pointer;
   :hover {
-            filter: brightness(90%);
+            /* filter: brightness(90%); */
             /* box-shadow: 1px 1px 3px 0 #bcd7ff; */
   }
 `;
@@ -309,18 +281,6 @@ display: flex;
 width: 100%;
 align-items: center;
 /* justify-content: flex-start; */
-`;
-
-const ImageContainer = styled.div`
-  display: flex;
-  box-sizing: border-box;
-    img {
-        display: flex;
-        width: 100px;
-        height: 115px;
-        object-fit: cover;
-        border-radius: 4px;
-    }
 `;
 
 const DescContainer = styled.div`
@@ -340,12 +300,6 @@ const TitleWrapper = styled.div`
   margin: 13px 0 0 0;
 `;
 
-const CommentTitleWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
 const BtnWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -362,25 +316,9 @@ const Title = styled.div`
   font-family: 'NotoSansKR';
 `;
 
-const CommentTitle = styled.div`
-  font-size: 15px;
-  font-weight: 600;
-  margin-bottom: 10px;
-  margin-left: 10px;
-  font-family: "NotoSansKR";
-`;
-
-
 const PostId = styled.div`
   font-size: 13px;
   font-weight: 400;
-`;
-
-const CommentId = styled.div`
-  font-size: 13px;
-  font-weight: 400;
-  margin-left: 10px;
-  margin-top: 5px;
 `;
 
 const WithdrawButton = styled.button`
@@ -392,7 +330,7 @@ const WithdrawButton = styled.button`
   border: transparent;
   border-radius: 5px;
   outline: none;
-  background-color: #d9d9d9;
+  background-color: #bbb;
   color: white;
   cursor: pointer;
   :hover {
@@ -409,7 +347,7 @@ const ExecuteButton = styled.button`
   border: transparent;
   border-radius: 5px;
   outline: none;
-  background-color: #2196f3;
+  background-color: #1a399c;
   color: white;
   cursor: pointer;
   :hover {
@@ -421,8 +359,7 @@ const Circle = styled.div`
   display: flex;
   width: 100%;
   margin-top: 7px;
-  margin-right: 7px;
-  margin-left: 10px; 
+  margin-bottom: 7px;
   img {
     width: 21px;
     height: 21px;
