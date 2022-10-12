@@ -39,6 +39,7 @@ const DetailEdit = () => {
     dispatch(__detail(params_id))
   },[])
 
+  const [category, setCategory] = useState('');
   const [title, setTitle] = useState(detail.title);
   const [content, setContent] = useState(detail.content);
   const [maxNum, setMaxNum] = useState(detail.maxNum); 
@@ -66,6 +67,7 @@ const DetailEdit = () => {
   };
 
   const resetAllStates = () => {
+    setCategory('');
     setTitle('');
     setContent('');
     setMaxNum('');
@@ -94,6 +96,7 @@ const DetailEdit = () => {
     if (title.trim() === '' ||
         address.trim() === '' ||
         content.trim() === '' ||
+        category.trim() === '' ||
         maxNum === '' ||
         startDate === null||
         endDate === null ||
@@ -103,6 +106,7 @@ const DetailEdit = () => {
     }
     if (window.confirm('수정사항을 저장하시겠습니까?')) {
       const formData = new FormData();
+      formData.append('category', category);
       formData.append('title', title);
       formData.append('content', content);
       formData.append('maxNum', Number(maxNum));
@@ -189,6 +193,21 @@ const DetailEdit = () => {
           썸네일 사진 재등록
         </StButton>
       </StDiv>
+      <CategoryDiv>
+        <CategorySelect
+          name="category"
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          <option>모임 분류를 선택해주세요.</option>
+          <option value="exerciese">운동</option>
+          <option value="travel">여행</option>
+          <option value="reading">독서</option>
+          <option value="study">공부</option>
+          <option value="religion">종교</option>
+          <option value="online">온라인</option>
+          <option value="etc">기타</option>
+        </CategorySelect>
+      </CategoryDiv>
       <StDiv>
         <StInput
           required
@@ -317,6 +336,7 @@ const Item2 = styled.div`
   /* background-color: yellow; */
   grid-area: b;
   min-width: 375px;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   margin: 0 auto; 
@@ -382,7 +402,7 @@ font-family:'Noto Sans KR', sans-serif;
 
 const StImg = styled.img`
 min-width: 300px;
-max-width: 375px;
+max-width: 410px;
 /* min-height: 200px; */
 `;
 
@@ -392,6 +412,20 @@ const StDiv = styled.div`
   margin-top: 10px;
   display: flex;
   align-items: center;
+`;
+
+const CategoryDiv = styled.div`
+display: inline-block;
+flex-direction: column;
+margin-top: 10px;
+`;
+
+const CategorySelect = styled.select`
+  height: 40px;
+  width: 100%;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid grey;
 `;
 
 const MaxNumDiv = styled.div`
@@ -423,6 +457,9 @@ input {
   margin-bottom:10px;
   width:87%;
   height:35px;
+  @media only screen and (max-width: 720px) {
+  width: 86%;
+  }
   :focus {
       outline: none;
       border-color: #18a0fb;
