@@ -93,7 +93,7 @@ const MainBoard = () => {
           })}
       </ListContainer>
           {/* 인피니티 스크롤 인식 ref */}
-          <div ref={ref} style={{height:'30px', backgroundColor:'red', color:"white"}}>내가 100% 보이면 새 페이지 요청이 감</div>
+          <div ref={ref} style={{height:'30px', color:"white"}}>¯\_(ツ)_/¯</div>
       <div onClick={()=>navigate('/chatlist')}>
         <ChatFloatingBtn />
       </div>
@@ -148,9 +148,11 @@ const Container = styled.div`
 
 const ListContainer = styled.div`
     display: flex;
+    /* justify-content: space-between; */
     flex-wrap: wrap;
     flex-direction: row;
-    width: 1255px;
+    width: 1230px;
+    /* background-color: green; */
 
   @media only screen and (min-width: 854px) and (max-width: 1255px) {
      display: flex;
@@ -162,7 +164,8 @@ const ListContainer = styled.div`
 
   @media only screen and (max-width: 854px) {
     flex-direction: column;
-    align-items: center;    
+    align-items: center;
+    width: 100%;
   }
 `
 
@@ -173,11 +176,11 @@ const CardWrapper = styled.div`
   border: 0.5px solid #E3F2FD;
   width: 100%;
   min-width: 300px;
-  max-width: 380px;
+  max-width: 375px;
   border-radius: 6px;
   padding: 5px;
   box-shadow: 0.5px 0.5px 1px 0 #cce0ff;
-  margin: 10px;
+  margin: 11px;
   cursor: pointer;
   :hover {
             filter: brightness(90%);
