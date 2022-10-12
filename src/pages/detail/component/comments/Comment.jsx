@@ -41,7 +41,7 @@ const Comment = () => {
     getCommentList();
   };
 
-  // 엔터로 채팅하기
+  // 엔터로 댓글달기
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       submit();

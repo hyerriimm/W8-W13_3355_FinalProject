@@ -64,6 +64,8 @@ export default function BasicTabs({postList, commentList, memberList}) {
             <Tab label="신고된 회원" {...a11yProps(2)} />
         </Tabs>
       </Box>
+
+
       <TabPanel value={value} index={0}>
         <Container>
           <ListContainer>
@@ -77,9 +79,9 @@ export default function BasicTabs({postList, commentList, memberList}) {
                     <PostId onClick={() => { navigate(`/detail/${post.postId}`) }}>{post.postId}번 게시물</PostId>
                     <TitleWrapper>
                       <Title>{post.content}</Title>
-                    </TitleWrapper>
+                    </TitleWrapper>          
                     <BtnWrapper>
-                        <button 
+                        <WithdrawButton 
                         type='button'
                         onClick={()=>{
                             if (window.confirm('해당 게시글에 대한 신고를 반려하시겠습니까?')) {
@@ -88,8 +90,8 @@ export default function BasicTabs({postList, commentList, memberList}) {
                         }}
                         >
                         반려
-                        </button>
-                        <button
+                        </WithdrawButton>
+                        <ExecuteButton
                         type='button'
                         onClick={()=>{
                             if (window.confirm('해당 게시글을 제재하시겠습니까?')) {
@@ -99,7 +101,7 @@ export default function BasicTabs({postList, commentList, memberList}) {
                         }}
                         >
                         제재
-                        </button>
+                        </ExecuteButton>
                     </BtnWrapper>
                   </DescContainer>
                 </CardWrapper>
@@ -108,6 +110,7 @@ export default function BasicTabs({postList, commentList, memberList}) {
           </ListContainer>
         </Container>
       </TabPanel>
+
 
       <TabPanel value={value} index={1}>
         <Container>
@@ -115,36 +118,46 @@ export default function BasicTabs({postList, commentList, memberList}) {
             {commentList?.map((comment) => {
               return (
                 <CardWrapper key={uuidv4()}>
-                    {/* onClick={() => { navigate(`/detail/${comment.postId}`) }} */}
+                  {/* onClick={() => { navigate(`/detail/${comment.postId}`) }} */}
                   <ImageContainer>
-                    <img src={comment.imgUrl} alt="" />
+                    <img src={comment.postUrl} alt="" />
                   </ImageContainer>
                   <DescContainer>
+                    <Circle>
+                      <img src={comment.memberUrl} alt="" />
+                    </Circle>
+                    
                     <TitleWrapper>
                       <Title>{comment.content}</Title>
                     </TitleWrapper>
                     <BtnWrapper>
-                        <button 
-                        type='button'
-                        onClick={()=>{
-                            if (window.confirm('해당 게시글에 대한 신고를 반려하시겠습니까?')) {
-                                dispatch(__withdraw(Number(comment.reportId)))
-                            }
+                      <WithdrawButton
+                        type="button"
+                        onClick={() => {
+                          if (
+                            window.confirm(
+                              "해당 댓글에 대한 신고를 반려하시겠습니까?"
+                            )
+                          ) {
+                            dispatch(__withdraw(Number(comment.reportId)));
+                          }
                         }}
-                        >
+                      >
                         반려
-                        </button>
-                        <button
-                        type='button'
-                        onClick={()=>{
-                            if (window.confirm('해당 게시글을 제재하시겠습니까?')) {
-                                dispatch(__execute(Number(comment.reportId)))
-                            }
-                            return
+                      </WithdrawButton>
+                      <ExecuteButton
+                        type="button"
+                        onClick={() => {
+                          if (
+                            window.confirm("해당 댓글을 제재하시겠습니까?")
+                          ) {
+                            dispatch(__execute(Number(comment.reportId)));
+                          }
+                          return;
                         }}
-                        >
+                      >
                         제재
-                        </button>
+                      </ExecuteButton>
                     </BtnWrapper>
                   </DescContainer>
                 </CardWrapper>
@@ -154,12 +167,18 @@ export default function BasicTabs({postList, commentList, memberList}) {
         </Container>
       </TabPanel>
 
+
       <TabPanel value={value} index={2}>
         <Container>
           <ListContainer>
             {memberList?.map((member) => {
               return (
-                <CardWrapper key={uuidv4()} onClick={() => { navigate(`/someonesmypage/${member.memberId}`) }}>
+                <CardWrapper
+                  key={uuidv4()}
+                  onClick={() => {
+                    navigate(`/someonesmypage/${member.memberId}`);
+                  }}
+                >
                   <ImageContainer>
                     <img src={member.imgUrl} alt="" />
                   </ImageContainer>
@@ -168,27 +187,33 @@ export default function BasicTabs({postList, commentList, memberList}) {
                       <Title>{member.content}</Title>
                     </TitleWrapper>
                     <BtnWrapper>
-                        <button 
-                        type='button'
-                        onClick={()=>{
-                            if (window.confirm('해당 게시글에 대한 신고를 반려하시겠습니까?')) {
-                                dispatch(__withdraw(Number(member.reportId)))
-                            }
+                      <WithdrawButton
+                        type="button"
+                        onClick={() => {
+                          if (
+                            window.confirm(
+                              "해당 게시글에 대한 신고를 반려하시겠습니까?"
+                            )
+                          ) {
+                            dispatch(__withdraw(Number(member.reportId)));
+                          }
                         }}
-                        >
+                      >
                         반려
-                        </button>
-                        <button
-                        type='button'
-                        onClick={()=>{
-                            if (window.confirm('해당 게시글을 제재하시겠습니까?')) {
-                                dispatch(__execute(Number(member.reportId)))
-                            }
-                            return
+                      </WithdrawButton>
+                      <ExecuteButton
+                        type="button"
+                        onClick={() => {
+                          if (
+                            window.confirm("해당 게시글을 제재하시겠습니까?")
+                          ) {
+                            dispatch(__execute(Number(member.reportId)));
+                          }
+                          return;
                         }}
-                        >
+                      >
                         제재
-                        </button>
+                      </ExecuteButton>
                     </BtnWrapper>
                   </DescContainer>
                 </CardWrapper>
@@ -234,7 +259,6 @@ const CardWrapper = styled.div`
 const ImageContainer = styled.div`
   display: flex;
   box-sizing: border-box;
-  
     img {
         display: flex;
         width: 100px;
@@ -248,10 +272,10 @@ const DescContainer = styled.div`
   display: flex;
   width: 100%;
   flex-direction: column;
+  align-items: center;
   margin-left: 10px;
-  background-color: #ff9100;
+  /* background-color: #ff9100; */
   /* background-color: antiquewhite; */
-  
 `;
 
 const TitleWrapper = styled.div`
@@ -268,6 +292,7 @@ const BtnWrapper = styled.div`
   margin: 13px 0 0 0;
 `;
 
+
 const Title = styled.div`
   font-size: 15px;
   font-weight: 600;
@@ -275,13 +300,6 @@ const Title = styled.div`
   font-family: 'NotoSansKR';
 `;
 
-const RestDay = styled.div`
-  font-size: 11px;
-  /* background-color: #f0f0f0; */
-  /* border-radius: 1px; */
-  color: #1E88E5;
-  margin: 0 15px 0 0
-`;
 
 const PostId = styled.div`
   font-size: 13px;
@@ -289,8 +307,53 @@ const PostId = styled.div`
   margin: 0 0 2px 10px;
 `;
 
-const Dday = styled.div`
-  font-size: 13px;
-  font-weight: 400;
-  margin: 0 0 10px 10px;
+const WithdrawButton = styled.button`
+  height: 40px;
+  width: 100px;
+  padding: 0 10px;
+  margin-top: px;
+  margin-bottom: 7px;
+  margin-right: 5px;
+  border: transparent;
+  border-radius: 5px;
+  outline: none;
+  background-color: #d9d9d9;
+  color: white;
+  cursor: pointer;
+  :hover {
+    filter: brightness(95%);
+  }
+`;
+
+const ExecuteButton = styled.button`
+  height: 40px;
+  width: 100px;
+  padding: 0 10px;
+  margin-top: px;
+  margin-bottom: 7px;
+  margin-right: 5px;
+  border: transparent;
+  border-radius: 5px;
+  outline: none;
+  background-color: #2196f3;
+  color: white;
+  cursor: pointer;
+  :hover {
+    filter: brightness(95%);
+  }
+`;
+
+const Circle = styled.div`
+  display: flex;
+  width: 21px;
+  height: 21px;
+  margin-top: 7px;
+  margin-right: 7px;
+  border-radius: 100%;
+  border: 1px solid gray;
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+  }
 `;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -14,7 +14,6 @@ import ModalComment from "./ModalComment";
 
 const CommentItem = ({ item, getCommentList }) => {
   const navigate = useNavigate();
-  const { state } = useLocation();
   const { id } = useParams();
   const dispatch = useDispatch();
 
@@ -81,24 +80,22 @@ const CommentItem = ({ item, getCommentList }) => {
   };
 
   //신고 모달
-const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
-const openModal = () => {
-  setModalOpen(true);
-};
-const closeModal = () => {
-  setModalOpen(false);
-};
+  const openModal = () => {
+    setModalOpen(true);
+  };
+  const closeModal = () => {
+    setModalOpen(false);
+  };
 
 
-  //신고 기능
-
+  //댓글 신고 기능
    const initialState = {
      content: "",
    };
    const [content, setContent] = useState(initialState);
 
-   // 게시글 신고 기능
    const ReportCommentBtn = async () => {
      if (item.content.trim() === "") {
        return alert("내용을 입력해야 신고가 가능합니다.");
