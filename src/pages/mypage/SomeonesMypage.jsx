@@ -4,14 +4,18 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 import Header from '../../components/Header';
-import MypageTap from './components/MypageTap';
 import BasicTabs from './components/MypageTap';
 import { RiAlarmWarningFill } from 'react-icons/ri';
+import ModalOfReportMember from './components/ModalOfReportMember';
 
 const SomeonesMypage = () => {
   const navigate = useNavigate();
   const params_id = useParams().idnumber;
   const [someonesInfo, setSomeonesInfo] = useState();
+  const [someonesLeaderInfo, setSomeonesLeaderInfo] = useState();
+
+  // console.log(someonesInfo);
+  // console.log(someonesLeaderInfo);
 
   // 스크롤 맨 위로
   useEffect(() => {
@@ -42,20 +46,91 @@ const SomeonesMypage = () => {
     getSomenesInfo();
   }, []);
 
+  // 다른사람 주최 게시글 정보 가져오기
+  useEffect(() => {
+    const getSomenesLeaderInfo = async() => {        
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_HOST_PORT}/mypage/leader/${params_id}`, {
+                headers: {
+                authorization: localStorage.getItem("ACCESSTOKEN"),
+                refreshtoken: localStorage.getItem("REFRESHTOKEN")
+                }
+            });
+            if (response.data.success === true) {
+              setSomeonesLeaderInfo(response.data.data);
+            };
+            if (response.data.success === false) {
+                alert(response.data.error.message);
+                return
+            };
+        } catch (error) {
+            console.log(error);
+        };
+    };
+    getSomenesLeaderInfo();
+  }, []);
+
+  // 회원 신고 모달 오픈
+  const [isReportMode, setIsReportMode] = useState(false);
+
+  // 신고 내용 담을 State
+  const initialState = {
+    content: "",
+  };
+  const [content, setContent] = useState(initialState);
+
+  // 회원 신고 기능
+  const ReportMemberBtn = async () => {
+    console.log(content);
+    if (content.content.trim() === "") {
+      return alert("내용을 입력해야 신고가 가능합니다.");
+    }
+    if (
+      window.confirm(
+        `${someonesInfo?.nickname}님을 신고하시겠습니까?\n신고 후 취소는 불가능합니다.`
+      )
+    ) {
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_HOST_PORT}/report/member/${params_id}`,
+          content,
+          {
+            headers: {
+              authorization: localStorage.getItem("ACCESSTOKEN"),
+              refreshtoken: localStorage.getItem("REFRESHTOKEN"),
+            },
+          }
+        );
+
+        if (response.data.success === true) {
+          alert(response.data.data);
+          setContent(initialState);
+          return setIsReportMode(false);
+        }
+        if (response.data.success === false) {
+          alert(response.data.error.message);
+          return;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
 
   return (
     <>
       {someonesInfo ? (
       <>
         <Header />
-        <div>
+        <BackSpaceDiv>
           <img
               alt="뒤로가기"
               src={`${process.env.PUBLIC_URL}/img/backspace.png`}
-              style={{ width: "25px", height: "25px", marginRight: "10px", position:'fixed', top:'110px', left:'60px' }}
+              style={{ width: "25px", height: "25px"}}
               onClick={() => navigate(-1)}
             />
-        </div>
+        </BackSpaceDiv>
         <Container>
           <ProfileWrapper>
             <Profile>
@@ -91,12 +166,23 @@ const SomeonesMypage = () => {
             </DescWrapper>
           </ProfileWrapper>
           {/* 신고버튼 */}
-          <ReportBtn>
+          <ReportBtn
+          onClick={()=>setIsReportMode(true)}
+          >
             <RiAlarmWarningFill
                 size='20'
                 color='#1a399c'
             />
           </ReportBtn>
+          {isReportMode ? (
+            <ModalOfReportMember
+            header={someonesInfo?.nickname}
+            isReportMode={isReportMode}
+            setIsReportMode={setIsReportMode}
+            setContent={setContent}
+            ReportMemberBtn={ReportMemberBtn}
+            />
+          ) : (false)}
         </Container>
         {/* <Container>
           <EtcDiv>
@@ -107,7 +193,9 @@ const SomeonesMypage = () => {
         </Container> */}
         <BasicTabs 
         // 탭 조건부렌더링 하려고 내려줌
-        someoneWatchingYourMypage={true}/>
+        someoneWatchingYourMypage={true}
+        someonesLeaderInfo={someonesLeaderInfo !== undefined ? (someonesLeaderInfo) : (false)}
+        />
       </>
       ) : (
         <Loading>
@@ -129,6 +217,13 @@ const Loading = styled.div`
   width: 80%;
 `;
 
+const BackSpaceDiv = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left:5%;
+  height: 40px;
+`;
+
 const Container = styled.div`
 /* background-color: yellow; */
   display: flex;
@@ -137,6 +232,10 @@ const Container = styled.div`
   width: 100vw;
   margin: auto;
   margin-top: 30px;
+  @media only screen and (max-width: 720px) {
+    margin-top: 10px;
+    align-items: flex-start;
+  }
 `;
 
 const EtcDiv = styled.div`
@@ -194,6 +293,12 @@ const StInfoDiv = styled.div`
   align-items: center;
   width: 100%;
   height: 30px;
+  @media only screen and (max-width: 720px) {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    height: 100px;
+  }
 `;
 
 const Stdiv = styled.div`
@@ -205,6 +310,9 @@ background-color: #ddd;
   padding: 0 5px;
   border-radius: 6px;
   margin-right: 10px;
+  @media only screen and (max-width: 720px) {
+    margin: 5px 0;
+  }
 `;
 
 const ImgKakao = styled.img`
