@@ -170,10 +170,13 @@ const Detail = () => {
                   ):(
                     <RestDayBtn disable>마감 {detail.restDay}</RestDayBtn> 
                   )}
-                  {logIn == null ? false : (!isWish ? (
-                    <WishBtn onClick={onClickWishBtn}>🤍</WishBtn>
-                  ):(
-                    <WishBtn onClick={onClickWishBtn}>💗</WishBtn>
+                  {logIn == null ? false : 
+                    (Id === detail.authorId? false : (
+                      !isWish ? (
+                        <WishBtn onClick={onClickWishBtn}>🤍</WishBtn>
+                      ):(
+                        <WishBtn onClick={onClickWishBtn}>💗</WishBtn>
+                      )
                   ))}
                 </StDiv>
               </div>
