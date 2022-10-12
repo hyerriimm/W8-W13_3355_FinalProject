@@ -99,7 +99,7 @@ export default function BasicTabs() {
           <TabPanel value={value} index={0}>
             <Container>
               <ListContainer>
-                {waitlist?.map((waitlist, index) => {
+                {waitlist?.slice().reverse().map((waitlist, index) => {
                   return (
                     <CardWrapper key={index}>
                       <DescContainer>
@@ -155,7 +155,7 @@ export default function BasicTabs() {
           <TabPanel value={value} index={1}>
             <Container>
               <ListContainer>
-                {applylist?.map((applylist) => {
+                {applylist?.slice().reverse().map((applylist) => {
                   return (
                     <CardWrapper key={applylist.postId}>
                       <ImageContainer>
