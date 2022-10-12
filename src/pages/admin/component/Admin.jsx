@@ -12,7 +12,7 @@ const Admin = () => {
 
   useEffect(()=>{
     dispatch( __getReportedList());
-  },[ReportedList.length]);
+  },[ReportedList.memberList?.length, ReportedList.postList?.length, ReportedList.commentList?.length]);
 
 
   return (

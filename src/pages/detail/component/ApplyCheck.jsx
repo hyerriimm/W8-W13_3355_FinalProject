@@ -124,7 +124,7 @@ const ApplyCheck = () => {
           <div>모임명</div>
           <div> {detailTitle} </div>
         </ApplyTitleDiv>
-        {applicants.map((eachApplicant) => 
+        {applicants.slice().reverse().map((eachApplicant) => 
           <Cards key={uuidv4()} eachApplicant={eachApplicant} />
         )}
       </Item1>

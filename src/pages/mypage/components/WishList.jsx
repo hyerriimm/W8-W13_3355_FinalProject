@@ -29,7 +29,7 @@ const WishList = () => {
             </StDiv>
             <Container>
           <ListContainer>
-            {wishlist?.map((wishlist) => {
+            {wishlist?.slice().reverse().map((wishlist) => {
               return (
                 <CardWrapper key={wishlist.postId} onClick={() => { navigate(`/detail/${wishlist.postId}`) }}>
                   <ImageContainer>
