@@ -72,14 +72,17 @@ export default function BasicTabs({postList, commentList, memberList}) {
             {postList?.map((post) => {
               return (
                 <CardWrapper key={uuidv4()}>
-                  <ImageContainer>
-                    <img src={post.imgUrl} alt="" />
-                  </ImageContainer>
-                  <DescContainer>
-                    <PostId onClick={() => { navigate(`/detail/${post.postId}`) }}>{post.postId}번 게시물</PostId>
-                    <TitleWrapper>
-                      <Title>{post.content}</Title>
-                    </TitleWrapper>          
+                  <ImgNDescDiv>
+                    {/* <ImageContainer>
+                      <img src={post.postUrl} alt="" />
+                    </ImageContainer> */}
+                    <DescContainer>
+                      <PostId onClick={() => { navigate(`/detail/${post.postId}`) }}>Post No.{post.postId}</PostId>
+                      <TitleWrapper>
+                        <Title>{post.content}</Title>
+                      </TitleWrapper>          
+                    </DescContainer>
+                  </ImgNDescDiv>
                     <BtnWrapper>
                         <WithdrawButton 
                         type='button'
@@ -103,7 +106,6 @@ export default function BasicTabs({postList, commentList, memberList}) {
                         제재
                         </ExecuteButton>
                     </BtnWrapper>
-                  </DescContainer>
                 </CardWrapper>
               );
             })}
@@ -119,17 +121,26 @@ export default function BasicTabs({postList, commentList, memberList}) {
               return (
                 <CardWrapper key={uuidv4()}>
                   {/* onClick={() => { navigate(`/detail/${comment.postId}`) }} */}
-                  <ImageContainer>
-                    <img src={comment.postUrl} alt="" />
-                  </ImageContainer>
-                  <DescContainer>
-                    <Circle>
-                      <img src={comment.memberUrl} alt="" />
-                    </Circle>
-                    
-                    <TitleWrapper>
-                      <Title>{comment.content}</Title>
-                    </TitleWrapper>
+                  <ImgNDescDiv>
+                    {/* <ImageContainer>
+                      <img src={comment.postUrl} alt="" />
+                    </ImageContainer> */}
+                    <DescContainer>
+                      <Circle>                   
+                        <div>Comment No.{comment.commentId}&nbsp;</div>
+                      </Circle>
+                      <Circle>
+                        <img src={comment.memberUrl} alt="" />
+                        <div>&nbsp;{comment.nickname}</div>
+                      </Circle>
+                      <Circle>
+                        <div>&nbsp;{comment.reportCommentContent}</div>
+                      </Circle>
+                      <TitleWrapper>
+                        <Title>{comment.content}</Title>
+                      </TitleWrapper>
+                    </DescContainer>
+                  </ImgNDescDiv>
                     <BtnWrapper>
                       <WithdrawButton
                         type="button"
@@ -159,7 +170,6 @@ export default function BasicTabs({postList, commentList, memberList}) {
                         제재
                       </ExecuteButton>
                     </BtnWrapper>
-                  </DescContainer>
                 </CardWrapper>
               );
             })}
@@ -175,17 +185,21 @@ export default function BasicTabs({postList, commentList, memberList}) {
               return (
                 <CardWrapper
                   key={uuidv4()}
-                  onClick={() => {
-                    navigate(`/someonesmypage/${member.memberId}`);
-                  }}
-                >
-                  <ImageContainer>
-                    <img src={member.imgUrl} alt="" />
-                  </ImageContainer>
-                  <DescContainer>
-                    <TitleWrapper>
-                      <Title>{member.content}</Title>
-                    </TitleWrapper>
+                  onClick={() => {navigate(`/someonesmypage/${member.memberId}`);}}>
+                  <ImgNDescDiv>
+                    {/* <ImageContainer>
+                      <img src={member.imgUrl} alt="" />
+                    </ImageContainer> */}
+                    <DescContainer>
+                      <Circle>
+                        <img src={member.memberImgUrl} alt="" />
+                        <div>&nbsp;{member.reportNickname}</div>
+                      </Circle>
+                      <TitleWrapper>
+                        <Title>{member.content}</Title>
+                      </TitleWrapper>
+                    </DescContainer>
+                  </ImgNDescDiv>
                     <BtnWrapper>
                       <WithdrawButton
                         type="button"
@@ -215,7 +229,6 @@ export default function BasicTabs({postList, commentList, memberList}) {
                         제재
                       </ExecuteButton>
                     </BtnWrapper>
-                  </DescContainer>
                 </CardWrapper>
               );
             })}
@@ -240,6 +253,8 @@ const ListContainer = styled.div`
 
 const CardWrapper = styled.div`
   display: flex;
+  /* flex-direction: column; */
+  align-items: center;
   border: 0.5px solid #E3F2FD;
   width: 85vw;
   min-width: 320px;
@@ -253,7 +268,13 @@ const CardWrapper = styled.div`
             filter: brightness(90%);
             /* box-shadow: 1px 1px 3px 0 #bcd7ff; */
   }
+`;
 
+const ImgNDescDiv = styled.div`
+display: flex;
+width: 100%;
+align-items: center;
+/* justify-content: flex-start; */
 `;
 
 const ImageContainer = styled.div`
@@ -272,7 +293,6 @@ const DescContainer = styled.div`
   display: flex;
   width: 100%;
   flex-direction: column;
-  align-items: center;
   margin-left: 10px;
   /* background-color: #ff9100; */
   /* background-color: antiquewhite; */
@@ -287,9 +307,10 @@ const TitleWrapper = styled.div`
 
 const BtnWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   /* justify-content: space-between; */
   align-items: center;
-  margin: 13px 0 0 0;
+  margin: 0 5px 0 10px;
 `;
 
 
@@ -304,12 +325,12 @@ const Title = styled.div`
 const PostId = styled.div`
   font-size: 13px;
   font-weight: 400;
-  margin: 0 0 2px 10px;
+  margin: 0 0 0 10px;
 `;
 
 const WithdrawButton = styled.button`
-  height: 40px;
-  width: 100px;
+  height: 30px;
+  width: 50px;
   padding: 0 10px;
   margin-top: px;
   margin-bottom: 7px;
@@ -326,8 +347,8 @@ const WithdrawButton = styled.button`
 `;
 
 const ExecuteButton = styled.button`
-  height: 40px;
-  width: 100px;
+  height: 30px;
+  width: 50px;
   padding: 0 10px;
   margin-top: px;
   margin-bottom: 7px;
@@ -345,15 +366,13 @@ const ExecuteButton = styled.button`
 
 const Circle = styled.div`
   display: flex;
-  width: 21px;
-  height: 21px;
+  width: 100%;
   margin-top: 7px;
   margin-right: 7px;
-  border-radius: 100%;
-  border: 1px solid gray;
   img {
-    width: 100%;
-    height: 100%;
+    width: 21px;
+    height: 21px;
+    border: 1px solid gray;
     border-radius: 100%;
   }
 `;
