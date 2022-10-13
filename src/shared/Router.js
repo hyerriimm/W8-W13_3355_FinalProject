@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainPg from "../pages/main/MainPg";
+import SearchPg from "../pages/search/SearchPg";
 import SignupPg from "../pages/signup/SignupPg";
 import LoginPg from "../pages/login/LoginPg";
 import KaKao from '../pages/login/Kakao';
@@ -23,6 +24,7 @@ const Router = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<MainPg />} />
+          <Route path="/search" element={<SearchPg />} />
           <Route path="signup" element={<SignupPg />} />
           <Route path="login" element={<LoginPg />} />
           <Route path="/oauth/kakao" element={<KaKao />} />{" "}

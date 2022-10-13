@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { __getMyInfo } from '../redux/modules/myinfo';
+import { IoSearchSharp } from 'react-icons/io5';
 
 
 const Header = () => {
@@ -79,6 +80,11 @@ const Header = () => {
                   (
                     <>
                     <AddBtn style={{border:'1px solid #1a399c',backgroundColor:'#1a399c'}} onClick={()=>navigate('/admin')}>신고함</AddBtn>
+                    <AddBtn onClick={()=>navigate('/search')}
+                    style={{display:'flex', alignItems:'center', justifyContent:'center', width:'fit-content'}}
+                    >
+                      <IoSearchSharp color='white' size='20px' />
+                    </AddBtn>
                     <AddBtn onClick={()=>navigate('/form')}>모임등록</AddBtn>
                     <BtnProfile 
                     style={{backgroundSize:'cover',backgroundImage:`url(${myinfo})`, backgroundPosition: 'center'}}
@@ -88,6 +94,11 @@ const Header = () => {
                     </>
                   ): (
                     <>
+                    <AddBtn onClick={()=>navigate('/search')}
+                    style={{display:'flex', alignItems:'center', justifyContent:'center', width:'fit-content'}}
+                    >
+                      <IoSearchSharp color='white' size='20px' />
+                    </AddBtn>
                     <AddBtn onClick={()=>navigate('/form')}>모임등록</AddBtn>
                     <BtnProfile 
                     style={{backgroundSize:'cover',backgroundImage:`url(${myinfo})`, backgroundPosition: 'center'}}
@@ -166,6 +177,9 @@ const AddBtn = styled.button`
     background-color: #2196F3;
     color: white !important;
     cursor: pointer;
+    @media only screen and (max-width: 500px) {
+      margin: 0 10px 0 0;
+    }
 `
 const LoginBtn = styled.button`
     height: 30px;
