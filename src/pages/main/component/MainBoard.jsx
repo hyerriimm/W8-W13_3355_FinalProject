@@ -6,6 +6,10 @@ import { useNavigate } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
 import { __cardlist } from '../../../redux/modules/cardlist';
 import ChatFloatingBtn from '../../../components/ChatFloatingBtn';
+import { BiHeart } from "react-icons/bi";
+import { RiChat3Line } from "react-icons/ri";
+import { CgPin } from "react-icons/cg";
+import { BiCalendarCheck } from "react-icons/bi";
 
 const MainBoard = () => {
 
@@ -75,18 +79,37 @@ const MainBoard = () => {
                 <img src={card.imgUrl} alt=""/>
               </ImageContainer>
               <DescContainer>
+                <ProfileWrapper>
+                  <div style={{display:'flex', alignItems:'center'}}>                    
+                    <ProfileImg 
+                    src={ card.authorImgUrl } 
+                    alt="profile"
+                    />
+                    <h4 style={{width:'100%', margin:'0', display:'inline'}}>{card.authorNickname}</h4>
+                  </div>
+                  <div style={{display:'flex', alignItems:'center'}}>
+                    <div style={{display:'flex', alignItems:'center', marginRight:'8px'}}>
+                      <BiHeart size='17px'/>
+                      <span style={{marginLeft:'2px'}}>{ card.numOfWish } </span>
+                    </div>
+                    <div style={{display:'flex', alignItems:'center', marginRight:'15px'}}>
+                      <RiChat3Line size='17px'/>                   
+                      <span style={{marginLeft:'2px'}}>{ card.numOfComment } </span>
+                    </div>
+                  </div>
+                </ProfileWrapper>
                 <TitleWrapper>
-                <Title>{card.title}</Title>
-                <RestDay>
-                {card.restDay.split("일")[0] == 0 ? (
-                <p style={{ color: '#e51e1e'}}>오늘 마감</p>
-                ):(
-                  <p>마감 {card.restDay}</p>
-                )}
-                </RestDay>
+                  <Title>{card.title}</Title>
+                  <RestDay>
+                  {card.restDay.split("일")[0] == 0 ? (
+                  <p style={{ color: '#e51e1e'}}>오늘 마감</p>
+                  ):(
+                    <p>마감 {card.restDay}</p>
+                  )}
+                  </RestDay>
                 </TitleWrapper>
-                <Address>{card.address}</Address>
-                <Dday>{card.dday}</Dday>
+                <Address><CgPin style={{marginRight:'2px'}}/>{card.address}</Address>
+                <Dday><BiCalendarCheck style={{marginRight:'2px'}}/>{card.dday}</Dday>
               </DescContainer>
             </CardWrapper>
           );
@@ -173,17 +196,21 @@ const ListContainer = styled.div`
 const CardWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  border: 0.5px solid #E3F2FD;
+  /* border: 0.5px solid #E3F2FD; */
   width: 100%;
   min-width: 300px;
   max-width: 375px;
-  border-radius: 6px;
-  padding: 5px;
-  box-shadow: 0.5px 0.5px 1px 0 #cce0ff;
-  margin: 11px;
+  border-radius: 13px;
+  /* padding: 5px; */
+  /* box-shadow: 0.5px 0.5px 1px 0 #cce0ff; */
+  box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.09);
+  transition: 0.2s ease-in;
+  margin: 17px;
   cursor: pointer;
   :hover {
-            filter: brightness(90%);
+            filter: brightness(80%);
+            transform: scale(1.01);
+            box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.2);
             /* box-shadow: 1px 1px 3px 0 #bcd7ff; */
   }
 `;
@@ -197,7 +224,9 @@ const ImageContainer = styled.div`
         width: 100%;
         height: 210px ;
         object-fit: cover;
-        border-radius: 6px;
+        /* border-radius: 15px; */
+        border-top-left-radius: 13px;
+        border-top-right-radius: 13px;
     }
 `;
 
@@ -209,11 +238,27 @@ const DescContainer = styled.div`
   
 `;
 
+const ProfileWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 15px 0 0 15px;
+  height: fit-content;
+`;
+
+const ProfileImg = styled.img`
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  margin-right: 10px;
+  border: 2px solid #bcd7ff;
+`;
+
 const TitleWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 13px 0 0 0;
+  margin: 0 0 0 10px;
 `;
 
 const Title = styled.div`
@@ -222,7 +267,7 @@ const Title = styled.div`
   margin: 0 0 0 10px;
   font-family: 'NotoSansKR';
   width: 72%;
-`;
+  `;
 
 const RestDay = styled.div`
   font-size: 11px;
@@ -235,11 +280,15 @@ const RestDay = styled.div`
 const Address = styled.div`
   font-size: 13px;
   font-weight: 400;
-  margin: 0 0 2px 10px;
+  margin: 0 0 2px 20px;
+  display: flex;
+  align-items: center;
 `;
 
 const Dday = styled.div`
   font-size: 13px;
   font-weight: 400;
-  margin: 0 0 10px 10px;
+  margin: 0 0 20px 20px;
+  display: flex;
+  align-items: center;
 `;
