@@ -77,7 +77,7 @@ const Comment = () => {
             <Input
               onChange={change}
               onKeyPress={handleKeyPress}
-              placeholder="댓글을 입력해주세요"
+              placeholder="댓글을 입력해주세요 (250자 이내)"
               type="text"
               maxLength={250}
             />

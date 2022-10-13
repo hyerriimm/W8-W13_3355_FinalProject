@@ -3,11 +3,14 @@ import * as StompJs from '@stomp/stompjs'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useRef, useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { __getChat } from '../../../redux/modules/chat';
+import { __getChat } from "../../../redux/modules/chat";
+import {__getChatinfo} from "../../../redux/modules/chatinfo";
 import { useDispatch, useSelector } from 'react-redux';
 import { useInView } from 'react-intersection-observer';
 import { MdRefresh } from "react-icons/md";
 import { FaArrowCircleUp } from "react-icons/fa";
+import { GoThreeBars } from "react-icons/go";
+
 
 // 채팅 기능 컴포넌트
 const Chat = () => {
@@ -244,70 +247,162 @@ const Chat = () => {
   // console.log(chatList);
   // console.log(messages);
 
+
+
+  //드롭다운 
+  const dropRef = useRef();
+  const [open, setOpen] = useState(false);
+  const handleDropBtn = () => {
+    setOpen(!open);
+  };
+
+  useEffect(() => {
+    const DropMember = (e) => {
+      if (dropRef.current !== null && !dropRef.current.contains(e.target)) {
+        setOpen(!open);
+      }
+    };
+    if (open) {
+      window.addEventListener("click", DropMember);
+    }
+    return () => {
+      window.removeEventListener("click", DropMember);
+    };
+  });
+
+
+ //채팅방 멤버
+   const logIn = localStorage.getItem("ACCESSTOKEN");
+   const Id = localStorage.getItem("Id");
+  const chatInfo = useSelector((state) => state.chatinfo.chatinfo);
+  console.log(chatInfo)
+  const roomId = useParams()
+
+    useEffect(() => {
+      dispatch(__getChatinfo(roomId.id));}, []);
+      
+      
+
   return (
     <>
       <StDiv>
         <img
-            alt='뒤로가기'
-            src={process.env.PUBLIC_URL + '/img/backspace.png'}
-            style={{ width: '25px', height: '25px', marginRight: '10px' }}
-            onClick={() => navigate('/chatlist')}
+          alt="뒤로가기"
+          src={process.env.PUBLIC_URL + "/img/backspace.png"}
+          style={{ width: "25px", height: "25px", marginRight: "10px" }}
+          onClick={() => navigate("/chatlist")}
         />
         <h3>{chatRoomTitle}</h3>
-    </StDiv>
-      <div style={{padding:"0 4%", border:'1px solid black', marginBottom:'50px', marginTop:'63px', paddingBottom: '15px'}}>
-        
+          <DropBtn>
+            <GoThreeBars
+              ref={dropRef}
+              onClick={handleDropBtn}
+              style={{
+                marginTop: "7px",
+                marginLeft: "7px",
+              }}
+            />
+          </DropBtn>
+      </StDiv>
+
+
+      {open === false ? null : (
+        <Menu>
+       {chatInfo?.slice().reverse().map((chatInfo) => {
+        return (
+          <MenuText>
+            <ProfileImg
+              style={{
+                backgroundSize: "cover",
+                backgroundImage: `url(${chatInfo.imgUrl})`,
+                backgroundPosition: "center",
+                marginRight: "7px",
+              }}
+              onClick={() => {
+                if (logIn && Id === chatInfo.authorId) {
+                  navigate("/mypage");
+                } else if (logIn && Id !== chatInfo.authorId) {
+                  navigate(`/someonesmypage/${chatInfo.memberId}`);
+                } else {
+                  return;
+                }
+              }}
+            />
+            {chatInfo.nickname}
+          </MenuText>
+        );
+            })}
+        </Menu>
+      )}
+      
+
+      <div
+        style={{
+          padding: "0 4%",
+          border: "1px solid black",
+          marginBottom: "50px",
+          marginTop: "63px",
+          paddingBottom: "15px",
+        }}
+      >
         {/* 이전 채팅 내용 불러오기 버튼 조건부 렌더링 */}
         <PrevChatList />
-        
+
         {/* 이전 채팅내용 불러오기 */}
-        {chatList?.chatList?.slice().reverse().map((chat,i)=>{
-          if(chat.message === null){
-            return;
-          }else{
-            if (chat.senderId === localStorage.getItem("Id")) {
-              return (
-                <div key={i}>
+        {chatList?.chatList
+          ?.slice()
+          .reverse()
+          .map((chat, i) => {
+            if (chat.message === null) {
+              return;
+            } else {
+              if (chat.senderId === localStorage.getItem("Id")) {
+                return (
+                  <div key={i}>
                     <ChatMessage
                       style={{ display: "flex", justifyContent: "flex-end" }}
                     >
                       <MyChat>{chat.message}</MyChat>
                     </ChatMessage>
                   </div>
-              )
-            } else {
-              if(i>0&&chatList?.chatList.slice().reverse()[i]?.sender===chatList?.chatList.slice().reverse()[index]?.sender){
-                index=i;
-                return(
-                  <div key={i}>
-                    <ChatMessage>
-                      <Chatting>{chat.message}</Chatting>
-                    </ChatMessage>
-                  </div>
                 );
               } else {
-                index = i;
-                return (
-                  <div key={i}>
-                    <ChatMessage>
-                      <ProfileImg
-                        style={{
-                          backgroundSize: "cover",
-                          backgroundImage: `url(${chat.img})`,
-                          backgroundPosition: "center",
-                        }}
-                      ></ProfileImg>
-                      <NickName>{chat.sender}</NickName>
-                    </ChatMessage>
-                    <ChatMessage>
-                      <Chatting>{chat.message}</Chatting>
-                    </ChatMessage>
-                  </div>
-                );
+                if (
+                  i > 0 &&
+                  chatList?.chatList.slice().reverse()[i]?.sender ===
+                    chatList?.chatList.slice().reverse()[index]?.sender
+                ) {
+                  index = i;
+                  return (
+                    <div key={i}>
+                      <ChatMessage>
+                        <Chatting>{chat.message}</Chatting>
+                      </ChatMessage>
+                    </div>
+                  );
+                } else {
+                  index = i;
+                  return (
+                    <div key={i}>
+                      <ChatMessage>
+                        <ProfileImg
+                          style={{
+                            backgroundSize: "cover",
+                            backgroundImage: `url(${chat.img})`,
+                            backgroundPosition: "center"
+                          }}
+                        ></ProfileImg>
+                        <NickName>{chat.sender}</NickName>
+                      </ChatMessage>
+                      <ChatMessage>
+                        <Chatting>{chat.message}</Chatting>
+                      </ChatMessage>
+                    </div>
+                  );
+                }
               }
             }
-          }
-        })}
+          })}
         {/* 실시간 채팅 불러오기 */}
         {messages.map((msg, i) => {
           // console.log(messages);
@@ -316,13 +411,12 @@ const Chat = () => {
               <div key={i}>
                 <p>{msg.message}</p>
               </div>
-            )
+            );
           } else if (msg.sender === "" || msg.message === "") {
             return;
-          }
-          else {
+          } else {
             if (msg.senderId === localStorage.getItem("Id")) {
-              return(
+              return (
                 <div key={i}>
                   <ChatMessage
                     style={{ display: "flex", justifyContent: "flex-end" }}
@@ -335,18 +429,23 @@ const Chat = () => {
               if (i > 0 && messages[i]?.sender === messages[index2]?.sender) {
                 index2 = i;
                 return (
-                <div key={i}>
-                  <ChatMessage>
-                    <Chatting>{msg.message}</Chatting>
-                  </ChatMessage>
-                </div>
-                )}else{
-                  index2=i;
-                  return (
+                  <div key={i}>
+                    <ChatMessage>
+                      <Chatting>{msg.message}</Chatting>
+                    </ChatMessage>
+                  </div>
+                );
+              } else {
+                index2 = i;
+                return (
                   <div key={i}>
                     <ChatMessage>
                       <ProfileImg
-                      style={{backgroundSize:'cover',backgroundImage:`url(${msg.imgUrl})`, backgroundPosition: 'center'}}
+                        style={{
+                          backgroundSize: "cover",
+                          backgroundImage: `url(${msg.imgUrl})`,
+                          backgroundPosition: "center",
+                        }}
                       ></ProfileImg>
                       <NickName>{msg.sender}</NickName>
                     </ChatMessage>
@@ -354,13 +453,14 @@ const Chat = () => {
                       <Chatting>{msg.message}</Chatting>
                     </ChatMessage>
                   </div>
-                  )}
+                );
               }
+            }
           }
         })}
-      {/* 스크롤 하단 고정 */}
-      <div ref={scrollRef}/>
-      </div >
+        {/* 스크롤 하단 고정 */}
+        <div ref={scrollRef} />
+      </div>
       <StInputDiv>
         <input
           ref={inputRef}
@@ -409,8 +509,9 @@ const AddChatListBtnDiv = styled.div`
 `
 
 const StDiv = styled.div`
-box-sizing: border-box;
-  display: flex;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 3% 89.5% 2%;
   width: 100vw;
   min-width: 320px;
   /* max-width: 640px; */
@@ -419,18 +520,21 @@ box-sizing: border-box;
   position: fixed;
   background-color: white;
   padding-left: 4%;
-`
+`;
+
 
 const ChatMessage = styled.div`
   background-color: white;
   display: flex;
 `;
+
 const MyNick = styled.p`
   margin: 10px 0 3px 0;
   background-color: white;
   margin-right: 10px;
   text-align: right;
 `;
+
 const MyChat = styled.p`
   margin: 3px 0;
   background-color: #18a0fb;
@@ -496,5 +600,50 @@ padding: 10px 0;
   div {
     background-color: white;
     border-radius: 50%;
+  }
+`;
+
+const DropBtn = styled.div`
+  object-fit: contain;
+  min-width: 35px;
+  min-height: 35px;
+  font-size: 20px;
+  border: transparent;
+  background-color: transparent;
+  border-radius: 50%;
+  margin-right: 10px;
+  cursor: pointer;
+  :hover {
+    filter: brightness(110%);
+    box-shadow: 1px 1px 3px 0 #bcd7ff;
+    background-color: #ff8a1d;
+  }
+`; 
+
+const Menu = styled.div`
+  background: #fff;
+  border-radius: 8px;
+  position: fixed;
+  top: 110px;
+  right: 25px;
+  width: 128px;
+  padding: 15px 0 10px 0;
+  text-align: center;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+`;
+
+const MenuText = styled.div`
+  margin-left: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 2px;
+  width: 82.5%;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  :hover {
+    background-color: #ededed;
   }
 `;

@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+
 // 채팅 대화 내용 불러오기 (eventId = 게시글 번호, page = 50개씩 불러오는 인피니티 스크롤)
 export const __getChat = createAsyncThunk(
   "/chat/message/{roomId}",
@@ -60,6 +61,7 @@ export const chat = createSlice({
       chatRoomList: [],
         data: [],
         chatList: [],
+        chatInfo:[],
         chatRoomTitle: null,
         currentPage:0,
         isFirstPage:true,
@@ -73,7 +75,6 @@ export const chat = createSlice({
     reducers:{},
     // 내부에서 동작하는 함수 외 외부에서 선언해준 함수 동작을 보조하는 기능
     extraReducers: (builder) => {
-
       // 대화 내용 불러오기
       builder
         .addCase(__getChat.pending, (state) => {
@@ -82,19 +83,19 @@ export const chat = createSlice({
         .addCase(__getChat.fulfilled, (state, action) => {
           state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
           // 처음으로 데이터 값 불러올때는 배열에 추가식이 아닌 state값 수정
-            if(action.payload.page===0){
-              // console.log('처음 요청하는 페이지', action.payload.page);
-              state.chatList = action.payload.data.chatMessageList;
-              state.chatRoomTitle = action.payload.data.chatRoomTitle;
-              state.currentPage = action.payload.data.currentPage;
-              state.isFirstPage = action.payload.data.isFirstPage;
-              state.hasPreviousPage = action.payload.data.hasPreviousPage;
-              state.totalPage = action.payload.data.totalPage;
-              state.totalMessage = action.payload.data.totalMessage;
-            }else{
-              // 이후 인피니티 스크롤 시 데이터 앞에 저장
-              // console.log('버튼 눌러서 요청하는 페이지',action.payload.page, '서버에서 받은 총 페이지 수', action.payload.data.totalPage );
-            state.chatList.push( ...action.payload.data.chatMessageList);
+          if (action.payload.page === 0) {
+            // console.log('처음 요청하는 페이지', action.payload.page);
+            state.chatList = action.payload.data.chatMessageList;
+            state.chatRoomTitle = action.payload.data.chatRoomTitle;
+            state.currentPage = action.payload.data.currentPage;
+            state.isFirstPage = action.payload.data.isFirstPage;
+            state.hasPreviousPage = action.payload.data.hasPreviousPage;
+            state.totalPage = action.payload.data.totalPage;
+            state.totalMessage = action.payload.data.totalMessage;
+          } else {
+            // 이후 인피니티 스크롤 시 데이터 앞에 저장
+            // console.log('버튼 눌러서 요청하는 페이지',action.payload.page, '서버에서 받은 총 페이지 수', action.payload.data.totalPage );
+            state.chatList.push(...action.payload.data.chatMessageList);
             state.currentPage = action.payload.data.currentPage;
             state.isFirstPage = action.payload.data.isFirstPage;
             state.hasPreviousPage = action.payload.data.hasPreviousPage;
@@ -122,8 +123,8 @@ export const chat = createSlice({
           state.error = action.payload;
           // Promise가 rejected일 때 dispatch
         });
-
-  },
+    },
+    
 });
 
 export default chat.reducer;
