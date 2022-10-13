@@ -262,6 +262,7 @@ const Chat = () => {
         setOpen(!open);
       }
     };
+
     if (open) {
       window.addEventListener("click", DropMember);
     }
@@ -272,10 +273,10 @@ const Chat = () => {
 
 
  //채팅방 멤버
-   const logIn = localStorage.getItem("ACCESSTOKEN");
-   const Id = localStorage.getItem("Id");
+  const logIn = localStorage.getItem("ACCESSTOKEN");
+  const Id = localStorage.getItem("Id");
   const chatInfo = useSelector((state) => state.chatinfo.chatinfo);
-  console.log(chatInfo)
+  //console.log(chatInfo)
   const roomId = useParams()
 
     useEffect(() => {
@@ -293,48 +294,47 @@ const Chat = () => {
           onClick={() => navigate("/chatlist")}
         />
         <h3>{chatRoomTitle}</h3>
-          <DropBtn>
-            <GoThreeBars
-              ref={dropRef}
-              onClick={handleDropBtn}
-              style={{
-                marginTop: "7px",
-                marginLeft: "7px",
-              }}
-            />
-          </DropBtn>
+        <DropBtn ref={dropRef} onClick={handleDropBtn}>
+          <GoThreeBars
+            style={{
+              marginTop: "7px",
+              marginLeft: "7px",
+            }}
+          />
+        </DropBtn>
       </StDiv>
-
 
       {open === false ? null : (
         <Menu>
-       {chatInfo?.slice().reverse().map((chatInfo) => {
-        return (
-          <MenuText>
-            <ProfileImg
-              style={{
-                backgroundSize: "cover",
-                backgroundImage: `url(${chatInfo.imgUrl})`,
-                backgroundPosition: "center",
-                marginRight: "7px",
-              }}
-              onClick={() => {
-                if (logIn && Id === chatInfo.authorId) {
-                  navigate("/mypage");
-                } else if (logIn && Id !== chatInfo.authorId) {
-                  navigate(`/someonesmypage/${chatInfo.memberId}`);
-                } else {
-                  return;
-                }
-              }}
-            />
-            {chatInfo.nickname}
-          </MenuText>
-        );
+          {chatInfo
+            ?.slice()
+            .reverse()
+            .map((chatInfo, index) => {
+              return (
+                <MenuText key={index}>
+                  <ProfileImg
+                    style={{
+                      backgroundSize: "cover",
+                      backgroundImage: `url(${chatInfo.imgUrl})`,
+                      backgroundPosition: "center",
+                      marginRight: "7px",
+                    }}
+                    onClick={() => {
+                      if (logIn && Id === chatInfo.authorId) {
+                        navigate("/mypage");
+                      } else if (logIn && Id !== chatInfo.authorId) {
+                        navigate(`/someonesmypage/${chatInfo.memberId}`);
+                      } else {
+                        return;
+                      }
+                    }}
+                  />
+                  {chatInfo.nickname}
+                </MenuText>
+              );
             })}
         </Menu>
       )}
-      
 
       <div
         style={{
@@ -389,7 +389,7 @@ const Chat = () => {
                           style={{
                             backgroundSize: "cover",
                             backgroundImage: `url(${chat.img})`,
-                            backgroundPosition: "center"
+                            backgroundPosition: "center",
                           }}
                         ></ProfileImg>
                         <NickName>{chat.sender}</NickName>
