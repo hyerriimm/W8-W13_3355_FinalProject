@@ -164,7 +164,7 @@ const Form = () => {
           onChange={(e) => setCategory(e.target.value)}
         >
           <option>모임 분류를 선택해주세요.</option>
-          <option value="exerciese">운동</option>
+          <option value="exercise">운동</option>
           <option value="travel">여행</option>
           <option value="reading">독서</option>
           <option value="study">공부</option>
