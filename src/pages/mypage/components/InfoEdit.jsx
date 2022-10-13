@@ -35,6 +35,35 @@ const InfoEdit = () => {
         setImgFile(null);
       };
 
+      //중복확인
+      const [userId, setUserId] = useState("");
+      const [nickCheckRes, setNickCheckRes] = useState("");
+
+      const nicknameCheckHandler = async () => {
+        if (userId.trim() === "") {
+          return alert("닉네임을 입력해주세요.");
+        }
+        try {
+          const response = await axios.post(`${API_URL}/member/nickname`, {
+            nickCheck: nickname,
+          });
+
+          if (response.data.success === true) {
+            alert(response.data.data);
+            setNickCheckRes(response.data.success);
+            return;
+          }
+          if (response.data.success === false) {
+            alert(response.data.error.message);
+            setNickCheckRes(response.data.success);
+            return;
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+
     const onEditHandler = async (e) => {
         e.preventDefault();
         if (nickname.trim() === '') {
@@ -111,71 +140,85 @@ const InfoEdit = () => {
       };
 
     return (
-        <>
-            <Item2Form onSubmit={onEditHandler}>
-                <StDiv style={{ justifyContent: 'flex-start' }}>
-                    <img
-                        alt='뒤로가기'
-                        src={process.env.PUBLIC_URL + '/img/backspace.png'}
-                        style={{ width: '25px', height: '25px', marginRight: '10px' }}
-                        onClick={() => navigate(-1)}
+      <>
+        <Item2Form onSubmit={onEditHandler}>
+          <StDiv style={{ justifyContent: "flex-start" }}>
+            <img
+              alt="뒤로가기"
+              src={process.env.PUBLIC_URL + "/img/backspace.png"}
+              style={{ width: "25px", height: "25px", marginRight: "10px" }}
+              onClick={() => navigate(-1)}
+            />
+            <h3>계정 정보 수정</h3>
+          </StDiv>
+          <ContainerWrapper>
+            <EditContainer>
+              <Imgwrapper>
+                <StImg
+                  src={previewImg ? previewImg : myinfo.imgUrl}
+                  alt="profileImg"
+                />
+              </Imgwrapper>
+              <Contentwrapper>
+                <StId>{myinfo.userId}</StId>
+                <Div>
+                  <StNickname>
+                    <span style={{ marginRight: "10px" }}>닉네임</span>
+                    <StInput
+                      required
+                      name="nickname"
+                      maxLength={5}
+                      placeholder="닉네임을 입력하세요."
+                      type="text"
+                      value={nickname}
+                      onChange={(e) => setNickname(e.target.value)}
                     />
-                    <h3>계정 정보 수정</h3>
-                </StDiv>
-                <ContainerWrapper>
-                    <EditContainer>
-                        <Imgwrapper>
-                            <StImg
-                                src={previewImg ? previewImg : myinfo.imgUrl}
-                                alt='profileImg'
-                            />
-                        </Imgwrapper>
-                        <Contentwrapper>
-                            <StId>{myinfo.userId}</StId>
-                            <StNickname>
-                                <span style={{ marginRight: '20px' }}>닉네임</span>
-                                <StInput
-                                    required
-                                    name='nickname'
-                                    maxLength={15}
-                                    placeholder='닉네임을 입력하세요.'
-                                    type='text'
-                                    value={nickname}
-                                    onChange={(e) => setNickname(e.target.value)}
-                                />
-                            </StNickname>
-                            <StInput
-                                type='file'
-                                style={{ display: 'none' }}
-                                accept='image/*'
-                                name='imgFile'
-                                onChange={onChangeImgFileInput}
-                                ref={imgFileInputRef}
-                            />
-                            <BtnEdit
-                                style={{ backgroundColor: '#1E88E5' }}
-                                type='button'
-                                ref={imgFileUploadBtnRef}
-                                onClick={() => {
-                                    imgFileInputRef.current.click();
-                                }}
-                            >
-                                프로필 사진 변경
-                            </BtnEdit>
-                            <BtnEdit>비밀번호 변경</BtnEdit>
-                            <BtnEdit
-                                type='button'
-                                onClick={onChangeRemoveInfo}
-                                ref={removeinfoBtnRef}
-                            >회원 탈퇴</BtnEdit>
-                        </Contentwrapper>
-                    </EditContainer>
-                    <StButton type='submit' style={{ width: '200px', backgroundColor: '#038E00', marginTop: '60px' }}>
-                        수정 완료
-                    </StButton>
-                </ContainerWrapper>
-            </Item2Form>
-        </>
+                  </StNickname>
+                  <OverlapButton type="button" onClick={nicknameCheckHandler}>
+                    중복확인
+                  </OverlapButton>
+                </Div>
+                <StInput
+                  type="file"
+                  style={{ display: "none" }}
+                  accept="image/*"
+                  name="imgFile"
+                  onChange={onChangeImgFileInput}
+                  ref={imgFileInputRef}
+                />
+                <BtnEdit
+                  style={{ backgroundColor: "#1E88E5" }}
+                  type="button"
+                  ref={imgFileUploadBtnRef}
+                  onClick={() => {
+                    imgFileInputRef.current.click();
+                  }}
+                >
+                  프로필 사진 변경
+                </BtnEdit>
+                <BtnEdit>비밀번호 변경</BtnEdit>
+                <BtnEdit
+                  type="button"
+                  onClick={onChangeRemoveInfo}
+                  ref={removeinfoBtnRef}
+                >
+                  회원 탈퇴
+                </BtnEdit>
+              </Contentwrapper>
+            </EditContainer>
+            <StButton
+              type="submit"
+              style={{
+                width: "200px",
+                backgroundColor: "#038E00",
+                marginTop: "60px",
+              }}
+            >
+              수정 완료
+            </StButton>
+          </ContainerWrapper>
+        </Item2Form>
+      </>
     );
 };
 
@@ -230,16 +273,16 @@ const Imgwrapper = styled.div`
 `;
 
 const StInput = styled.input`
-    box-sizing: border-box;
-    width: 200px;
+  box-sizing: border-box;
+    width: 100px;
     height: 30px;
     border: transparent;
-    border-bottom: 1px solid grey;
-    padding-left: 10px;
+    border-bottom: 1.5px solid grey;
+    padding-left: 15px;
     :focus {
       outline: none;
       border-color: #18a0fb;
-      box-shadow: 0 0 5px #18a0fb;
+      box-shadow: 0 1 3px #18a0fb;
     }
 `;
 
@@ -286,7 +329,7 @@ border-top: 1px solid #c9c9c9; */
 
 const StNickname = styled.div`
 display: flex;
-width: 100%;
+/* width: 100%; */
 align-items: center;
 font-size: 14px;
 font-family: 'NotoSansKR';
@@ -309,3 +352,24 @@ const StButton = styled.button`
             box-shadow: 1px 1px 3px 0 #bcd7ff;
   }
 `;
+
+const OverlapButton = styled.button`
+  height: 30px;
+  width: 80px;
+  padding: 0 10px;
+  margin-top: 20px;
+  margin-left: 10px;
+  border: transparent;
+  border-radius: 5px;
+  outline: none;
+  color: white;
+  background-color: #d9d9d9;
+  cursor: pointer;
+  :hover {
+    filter: brightness(95%);
+  }
+`;  
+
+const Div = styled.div`
+  display: flex;
+`

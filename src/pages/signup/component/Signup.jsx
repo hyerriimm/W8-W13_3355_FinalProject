@@ -290,9 +290,10 @@ const Signup = () => {
 
             <Item>
               <Input2
-                placeholder="닉네임을 입력하세요"
+                placeholder="닉네임을 입력하세요(5글자이내)"
                 type="text"
                 name="nickname"
+                maxLength={5}
                 onChange={(e) => setNickname(e.target.value)}
               />
               <OverlapButton type="button" onClick={nicknameCheckHandler}>
@@ -461,7 +462,7 @@ const Input = styled.input`
 
 const Input2 = styled.input`
     height: 40px;
-    width: 170px;
+    width: 194px;
     padding: 0 10px;
     margin-top: 7px;
     margin-bottom: 7px;
@@ -495,7 +496,7 @@ const ImgInput = styled.input`
 `
 const OverlapButton = styled.button`
   height: 40px;
-  width: 75px;
+  width: 50px;
   padding: 0 10px;
   margin-left: 5px;
   border: transparent;

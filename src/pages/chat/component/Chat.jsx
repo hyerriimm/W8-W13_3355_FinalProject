@@ -10,6 +10,7 @@ import { useInView } from 'react-intersection-observer';
 import { MdRefresh } from "react-icons/md";
 import { FaArrowCircleUp } from "react-icons/fa";
 import { GoThreeBars } from "react-icons/go";
+import { RiMedalLine } from "react-icons/ri";
 
 
 // 채팅 기능 컴포넌트
@@ -270,29 +271,33 @@ const Chat = () => {
       window.removeEventListener("click", DropMember);
     };
   });
-
+    
 
  //채팅방 멤버
   const logIn = localStorage.getItem("ACCESSTOKEN");
   const Id = localStorage.getItem("Id");
   const chatInfo = useSelector((state) => state.chatinfo.chatinfo);
-  //console.log(chatInfo)
+  console.log(chatInfo)
   const roomId = useParams()
 
     useEffect(() => {
       dispatch(__getChatinfo(roomId.id));}, []);
-      
-      
 
+
+   
+      
   return (
     <>
       <StDiv>
-        <img
-          alt="뒤로가기"
-          src={process.env.PUBLIC_URL + "/img/backspace.png"}
-          style={{ width: "25px", height: "25px", marginRight: "10px" }}
-          onClick={() => navigate("/chatlist")}
-        />
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <img
+            alt="뒤로가기"
+            src={process.env.PUBLIC_URL + "/img/backspace.png"}
+            style={{ width: "25px", height: "25px", marginRight: "10px" }}
+            onClick={() => navigate("/chatlist")}
+          />
+        </div>
+        
         <h3>{chatRoomTitle}</h3>
         <DropBtn ref={dropRef} onClick={handleDropBtn}>
           <GoThreeBars
@@ -307,9 +312,7 @@ const Chat = () => {
       {open === false ? null : (
         <Menu>
           {chatInfo
-            ?.slice()
-            .reverse()
-            .map((chatInfo, index) => {
+            ?.map((chatInfo, index) => {
               return (
                 <MenuText key={index}>
                   <ProfileImg
@@ -329,7 +332,17 @@ const Chat = () => {
                       }
                     }}
                   />
-                  {chatInfo.nickname}
+                  <ChatNickname>{chatInfo.nickname}</ChatNickname>
+                  {chatInfo.leader === true ? (
+                    <RiMedalLine
+                      style={{
+                        fontSize: "17px",
+                        marginLeft: "2px",
+                        marginTop:"3px",
+                        color: "#18a0fb",
+                      }}
+                    />
+                  ) : null}
                 </MenuText>
               );
             })}
@@ -511,7 +524,7 @@ const AddChatListBtnDiv = styled.div`
 const StDiv = styled.div`
   box-sizing: border-box;
   display: grid;
-  grid-template-columns: 3% 89.5% 2%;
+  grid-template-columns: 5vw 90vw 5vw;
   width: 100vw;
   min-width: 320px;
   /* max-width: 640px; */
@@ -519,7 +532,6 @@ const StDiv = styled.div`
   align-items: center;
   position: fixed;
   background-color: white;
-  padding-left: 4%;
 `;
 
 
@@ -560,7 +572,7 @@ const NickName = styled.p`
 
 const Chatting = styled.p`
   margin: 3px 0;
-  background-color: #ddd;
+  background-color: #e5e5e5;
   width: fit-content;
   max-width: 50%;
   padding: 10px;
@@ -626,7 +638,7 @@ const Menu = styled.div`
   position: fixed;
   top: 110px;
   right: 25px;
-  width: 128px;
+  width: 160px;
   padding: 15px 0 10px 0;
   text-align: center;
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
@@ -638,7 +650,7 @@ const MenuText = styled.div`
   margin-top: 5px;
   margin-bottom: 5px;
   padding: 2px;
-  width: 82.5%;
+  width: 85%;
   font-size: 14px;
   display: flex;
   align-items: center;
@@ -646,4 +658,7 @@ const MenuText = styled.div`
   :hover {
     background-color: #ededed;
   }
+`;
+
+const ChatNickname = styled.p`
 `;
