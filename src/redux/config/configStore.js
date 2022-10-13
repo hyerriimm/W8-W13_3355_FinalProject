@@ -7,7 +7,9 @@ import wishlist from "../modules/wishlist";
 import application from "../modules/application";
 import myinfo from "../modules/myinfo";
 import chat from "../modules/chat";
+import chatinfo from "../modules/chatinfo";
 import admin from "../modules/admin";
+
 
 
 
@@ -21,6 +23,7 @@ const store = configureStore({
        application,
        myinfo,
        chat,
+       chatinfo,
        admin
     },
         
