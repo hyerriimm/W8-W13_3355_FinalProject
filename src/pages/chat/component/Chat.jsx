@@ -289,23 +289,15 @@ const Chat = () => {
   return (
     <>
       <StDiv>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <img
-            alt="뒤로가기"
-            src={process.env.PUBLIC_URL + "/img/backspace.png"}
-            style={{ width: "25px", height: "25px", marginRight: "10px" }}
-            onClick={() => navigate("/chatlist")}
-          />
-        </div>
-        
+        <img
+          alt="뒤로가기"
+          src={process.env.PUBLIC_URL + "/img/backspace.png"}
+          style={{ width: "25px", height: "25px", marginRight: "10px" }}
+          onClick={() => navigate("/chatlist")}
+        />
         <h3>{chatRoomTitle}</h3>
         <DropBtn ref={dropRef} onClick={handleDropBtn}>
-          <GoThreeBars
-            style={{
-              marginTop: "7px",
-              marginLeft: "7px",
-            }}
-          />
+          <GoThreeBars size='20px'/>
         </DropBtn>
       </StDiv>
 
@@ -352,7 +344,7 @@ const Chat = () => {
       <div
         style={{
           padding: "0 4%",
-          border: "1px solid black",
+          // border: "1px solid black",
           marginBottom: "50px",
           marginTop: "63px",
           paddingBottom: "15px",
@@ -524,15 +516,28 @@ const AddChatListBtnDiv = styled.div`
 const StDiv = styled.div`
   box-sizing: border-box;
   display: grid;
-  grid-template-columns: 5vw 90vw 5vw;
+  grid-template-columns: 3% 89.5% 2%;
   width: 100vw;
-  min-width: 320px;
+  /* min-width: 280px; */
   /* max-width: 640px; */
   justify-content: flex-start;
   align-items: center;
   position: fixed;
   background-color: white;
+  padding-left: 4%;
 `;
+
+const ChatRoomTitle = styled.h3`
+grid-area: 'b';
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+  @media only screen and (max-width: 300px) {
+  font-size: 1em;
+  font-weight: bold;
+  /* margin: 10px 0; */
+  }
+`
 
 
 const ChatMessage = styled.div`
@@ -578,6 +583,9 @@ const Chatting = styled.p`
   padding: 10px;
   border-radius: 10px;
   margin-left: 40px;
+  @media only screen and (max-width: 300px) {
+    margin-left: 5px;
+  }
 `;
 
 const StInputDiv = styled.div`
@@ -616,14 +624,18 @@ padding: 10px 0;
 `;
 
 const DropBtn = styled.div`
+  grid-area: 'c';
+  display: flex;
+  align-items: center;
+  justify-content: center;
   object-fit: contain;
-  min-width: 35px;
-  min-height: 35px;
-  font-size: 20px;
+  /* min-width: 35px; */
+  /* min-height: 35px; */
+  /* font-size: 20px; */
   border: transparent;
   background-color: transparent;
   border-radius: 50%;
-  margin-right: 10px;
+  /* margin-right: 10px; */
   cursor: pointer;
   :hover {
     filter: brightness(110%);

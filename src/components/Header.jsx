@@ -208,13 +208,9 @@ const BtnProfile = styled.div`
   :hover {
             filter: brightness(110%);
          }          
-
-      /* img {
-          width: 100%;
-          height: 100%;
-          border-radius: 100%;
-          object-fit: cover;
-      } */
+  @media only screen and (max-width: 400px) {
+    margin: 0 10px 0 0;
+  }
 `
 
 const ModalBackdrop = styled.div`
