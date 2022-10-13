@@ -68,7 +68,7 @@ export default function BasicTabs() {
     dispatch(__apply());
   }, []);
 
-
+console.log(waitlist);
 
   return (
     <>
@@ -95,210 +95,218 @@ export default function BasicTabs() {
             </Tabs>
           </Box>
 
+
           {/* 내 모임 관리 탭*/}
           <TabPanel value={value} index={0}>
             <Container>
               <ListContainer>
-                {waitlist?.slice().reverse().map((waitlist, index) => {
-                  return (
-                    <CardWrapper key={index}>
-                      <DescContainer>
-                        <TitleWrapper>
-                          <Circle>
-                            <img src={waitlist.imgUrl} alt="" />
-                          </Circle>
-                          <Title>
-                            <div
-                              style={{
-                                fontWeight: "600",
-                                color: "#2196F3",
+                {waitlist
+                  ?.slice()
+                  .reverse()
+                  .map((waitlist, index) => {
+                    return (
+                      <CardWrapper key={index}>
+                        <DescContainer>
+                          <TitleWrapper>
+                            <Circle>
+                              <img src={waitlist.imgUrl} alt="" />
+                            </Circle>
+                            <Title>
+                              <div
+                                style={{
+                                  fontWeight: "600",
+                                  color: "#2196F3",
+                                }}
+                              >
+                                {waitlist.nickname}
+                              </div>
+                              님이
+                              <div
+                                style={{
+                                  fontWeight: "600",
+                                  color: "#2196F3",
+                                  width: "50px",
+                                  padding: "0 5px",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                  whiteSpace: "nowrap",
+                                }}
+                              >
+                                {waitlist.title}
+                              </div>
+                              모임 참여를 신청하였습니다.
+                            </Title>
+                          </TitleWrapper>
+                          <Btn>
+                            <CheckButton
+                              key={waitlist.postId}
+                              onClick={() => {
+                                navigate(`/detail/${waitlist.postId}`);
                               }}
                             >
-                              {waitlist.nickname}
-                            </div>
-                            님이
-                            <div
-                              style={{
-                                fontWeight: "600",
-                                color: "#2196F3",
-                                width: "50px",
-                                padding: "0 5px",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                                whiteSpace: "nowrap",
-                              }}
-                            >
-                              {waitlist.title}
-                            </div>
-                            모임 참여를 신청하였습니다.
-                          </Title>
-                        </TitleWrapper>
-                        <Btn>
-                          <CheckButton
-                            key={waitlist.postId}
-                            onClick={() => {
-                              navigate(`/detail/${waitlist.postId}`);
-                            }}
-                          >
-                            신청 확인 하기
-                          </CheckButton>
-                        </Btn>
-                      </DescContainer>
-                    </CardWrapper>
-                  );
-                })}
+                              신청 확인 하기
+                            </CheckButton>
+                          </Btn>
+                        </DescContainer>
+                      </CardWrapper>
+                    );
+                  })}
               </ListContainer>
             </Container>
           </TabPanel>
-
+          
+          
           {/* 참여 신청 내역 탭*/}
           <TabPanel value={value} index={1}>
             <Container>
               <ListContainer>
-                {applylist?.slice().reverse().map((applylist) => {
-                  return (
-                    <CardWrapper key={applylist.postId}>
-                      <ImageContainer>
-                        <img
-                          src={applylist.imgUrl}
-                          alt=""
-                          key={applylist.postId}
-                          onClick={() => {
-                            navigate(`/detail/${applylist.postId}`);
-                          }}
-                        />
-                      </ImageContainer>
-                      <ItemContainer>
-                        {applylist.state === "DENIED" ? (
-                          <Div>
-                            <DDiv>
-                              <div
-                                style={{
-                                  fontWeight: "600",
-                                  color: "#ff0000",
-                                  width: "50px",
-                                  padding: "0 5px",
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
-                                  whiteSpace: "nowrap",
+                {applylist
+                  ?.slice()
+                  .reverse()
+                  .map((applylist) => {
+                    return (
+                      <CardWrapper key={applylist.postId}>
+                        <ImageContainer>
+                          <img
+                            src={applylist.imgUrl}
+                            alt=""
+                            key={applylist.postId}
+                            onClick={() => {
+                              navigate(`/detail/${applylist.postId}`);
+                            }}
+                          />
+                        </ImageContainer>
+                        <ItemContainer>
+                          {applylist.state === "DENIED" ? (
+                            <Div>
+                              <DDiv>
+                                <div
+                                  style={{
+                                    fontWeight: "600",
+                                    color: "#ff0000",
+                                    width: "50px",
+                                    padding: "0 5px",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap",
+                                  }}
+                                >
+                                  {applylist.title}
+                                </div>
+                                모임 신청이
+                                <div
+                                  style={{
+                                    color: "#ff0000",
+                                    fontWeight: "600",
+                                  }}
+                                >
+                                  거절
+                                </div>
+                                되었습니다.
+                              </DDiv>
+                              <p
+                                onClick={() => {
+                                  navigate(`/`);
                                 }}
+                                style={{ fontWeight: "600" }}
                               >
-                                {applylist.title}
-                              </div>
-                              모임 신청이
-                              <div
-                                style={{
-                                  color: "#ff0000",
-                                  fontWeight: "600",
-                                }}
-                              >
-                                거절
-                              </div>
-                              되었습니다.
-                            </DDiv>
-                            <p
-                              onClick={() => {
-                                navigate(`/`);
-                              }}
-                              style={{ fontWeight: "600" }}
-                            >
-                              새로운 모임을 찾아보세요!
-                            </p>
-                          </Div>
-                        ) : applylist.state === "APPROVED" ? (
-                          <Div>
-                            <DDiv>
-                              <div
-                                style={{
-                                  fontWeight: "600",
-                                  color: "#2196F3",
-                                  width: "50px",
-                                  padding: "0 5px",
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
-                                  whiteSpace: "nowrap",
-                                }}
-                              >
-                                {applylist.title}
-                              </div>
-                              모임 신청이
-                              <div
-                                style={{
-                                  color: "#2196F3",
-                                  fontWeight: "600",
-                                }}
-                              >
-                                승인
-                              </div>
-                              되었습니다.
-                            </DDiv>
-                            <ChatButton
-                              key={applylist.postId}
-                              onClick={() => {
-                                navigate(`/chatlist/${applylist.postId}`);
-                              }}
-                            >
-                              채팅바로가기
-                            </ChatButton>
-                          </Div>
-                        ) : (
-                          <Div>
-                            <DDiv>
-                              <div
-                                style={{
-                                  fontWeight: "600",
-                                  width: "50px",
-                                  padding: "0 5px",
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
-                                  whiteSpace: "nowrap",
-                                }}
-                              >
-                                {applylist.title}
-                              </div>
-                              모임 신청에
-                              <div
-                                style={{
-                                  fontWeight: "600",
-                                }}
-                              >
-                                신청
-                              </div>
-                              되었습니다.
-                            </DDiv>
-                            <ButtonDiv>
-                              <ConfirmButton
+                                새로운 모임을 찾아보세요!
+                              </p>
+                            </Div>
+                          ) : applylist.state === "APPROVED" ? (
+                            <Div>
+                              <DDiv>
+                                <div
+                                  style={{
+                                    fontWeight: "600",
+                                    color: "#2196F3",
+                                    width: "50px",
+                                    padding: "0 5px",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap",
+                                  }}
+                                >
+                                  {applylist.title}
+                                </div>
+                                모임 신청이
+                                <div
+                                  style={{
+                                    color: "#2196F3",
+                                    fontWeight: "600",
+                                  }}
+                                >
+                                  승인
+                                </div>
+                                되었습니다.
+                              </DDiv>
+                              <ChatButton
                                 key={applylist.postId}
                                 onClick={() => {
-                                  navigate(`/detail/${applylist.postId}`);
+                                  navigate(`/chatlist/${applylist.postId}`);
                                 }}
                               >
-                                모임확인
-                              </ConfirmButton>
-                              <Cancelbutton
-                                onClick={() => {
-                                  if (
-                                    window.confirm("지원을 취소하시겠습니까?")
-                                  ) {
-                                    dispatch(__applycancel(applylist.postId));
-                                    navigate("/mypage/activity");
-                                  }
-                                }}
-                              >
-                                지원취소
-                              </Cancelbutton>
-                            </ButtonDiv>
-                          </Div>
-                        )}
-                      </ItemContainer>
-                    </CardWrapper>
-                  );
-                })}
+                                채팅바로가기
+                              </ChatButton>
+                            </Div>
+                          ) : (
+                            <Div>
+                              <DDiv>
+                                <div
+                                  style={{
+                                    fontWeight: "600",
+                                    width: "50px",
+                                    padding: "0 5px",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap",
+                                  }}
+                                >
+                                  {applylist.title}
+                                </div>
+                                모임 신청에
+                                <div
+                                  style={{
+                                    fontWeight: "600",
+                                  }}
+                                >
+                                  신청
+                                </div>
+                                되었습니다.
+                              </DDiv>
+                              <ButtonDiv>
+                                <ConfirmButton
+                                  key={applylist.postId}
+                                  onClick={() => {
+                                    navigate(`/detail/${applylist.postId}`);
+                                  }}
+                                >
+                                  모임확인
+                                </ConfirmButton>
+                                <Cancelbutton
+                                  onClick={() => {
+                                    if (
+                                      window.confirm("지원을 취소하시겠습니까?")
+                                    ) {
+                                      dispatch(__applycancel(applylist.postId));
+                                      navigate("/mypage/activity");
+                                    }
+                                  }}
+                                >
+                                  지원취소
+                                </Cancelbutton>
+                              </ButtonDiv>
+                            </Div>
+                          )}
+                        </ItemContainer>
+                      </CardWrapper>
+                    );
+                  })}
               </ListContainer>
             </Container>
           </TabPanel>
         </Box>
-        <div onClick={()=>navigate('/chatlist')}>
+        <div onClick={() => navigate("/chatlist")}>
           <ChatFloatingBtn />
         </div>
       </Stcontainer>
