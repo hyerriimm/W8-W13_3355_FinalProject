@@ -23,7 +23,7 @@ const ChatList = () => {
                     alt='뒤로가기'
                     src={process.env.PUBLIC_URL + '/img/backspace.png'}
                     style={{ width: '25px', height: '25px', marginRight: '10px' }}
-                    onClick={() => navigate(-1)}
+                    onClick={() => navigate("/")}
                 />
                 <h3>채팅 전체보기</h3>
             </StDiv>

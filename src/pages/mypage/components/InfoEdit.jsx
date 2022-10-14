@@ -36,11 +36,12 @@ const InfoEdit = () => {
       };
 
       //중복확인
-      const [userId, setUserId] = useState("");
       const [nickCheckRes, setNickCheckRes] = useState("");
+      const [idCheckRes, setIdCheckRes] = useState("");
+
 
       const nicknameCheckHandler = async () => {
-        if (userId.trim() === "") {
+        if (nickname.trim() === "") {
           return alert("닉네임을 입력해주세요.");
         }
         try {
@@ -65,44 +66,59 @@ const InfoEdit = () => {
 
 
     const onEditHandler = async (e) => {
-        e.preventDefault();
-        if (nickname.trim() === '') {
-          return alert('모든 항목을 입력해야 수정 가능합니다.')
+      e.preventDefault();
+      if (nickname.trim() === "") {
+        return alert("모든 항목을 입력해야 수정 가능합니다.");
+      }
+      if (nickCheckRes === "") {
+        return alert("닉네임 중복검사는 필수입니다.");
+      }
+      if (idCheckRes === false) {
+        alert(
+          "이미 존재하는 아이디입니다.\n새로운 아이디를 입력 후 중복검사 바랍니다."
+        );
+        return setIdCheckRes("");
+      }
+      if (nickCheckRes === false) {
+        alert(
+          "이미 존재하는 닉네임입니다.\n새로운 아이디를 입력 후 중복검사 바랍니다."
+        );
+        return setNickCheckRes("");
+      }
+      if (window.confirm("수정 사항을 저장하시겠습니까?")) {
+        const formData = new FormData();
+        formData.append("nickname", nickname);
+        if (imgFile !== null) {
+          formData.append("imgFile", imgFile);
         }
-        if (window.confirm('수정 사항을 저장하시겠습니까?')) {
-          const formData = new FormData();
-          formData.append('nickname', nickname);
-          if (imgFile!==null) {
-            formData.append('imgFile', imgFile);
+
+        try {
+          const response = await axios.put(`${API_URL}/member`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: ACCESSTOKEN,
+              RefreshToken: REFRESHTOKEN,
+            },
+          });
+
+          if (response.data.success === true) {
+            alert(response.data.data);
+            // console.log(response)
+            resetAllStates();
+            localStorage.setItem("ACCESSTOKEN", response.headers.authorization);
+            localStorage.setItem("REFRESHTOKEN", response.headers.refreshtoken);
+            localStorage.setItem("ImgURL", response.headers.imgurl);
+            return navigate("/mypage");
           }
-      
-          try {
-            const response = await axios.put(`${API_URL}/member`, formData, {
-              headers: {
-                "Content-Type":"multipart/form-data",
-                "Authorization":ACCESSTOKEN,
-                "RefreshToken":REFRESHTOKEN,
-              }
-            });
-                
-            if (response.data.success === true) {
-                alert(response.data.data);
-                // console.log(response)
-                resetAllStates();
-                localStorage.setItem("ACCESSTOKEN", response.headers.authorization);
-                localStorage.setItem("REFRESHTOKEN", response.headers.refreshtoken);
-                localStorage.setItem("ImgURL", response.headers.imgurl);
-                return navigate('/mypage');
-            };
-            if (response.data.success === false) {
-                alert(response.data.error.message);
-                return
-            };
+          if (response.data.success === false) {
+            alert(response.data.error.message);
+            return;
+          }
         } catch (error) {
-            console.log(error);
+          console.log(error);
         }
-        }
-      };
+      }
+    };;
 
     const onChangeImgFileInput = (e) => {
         setImgFile(e.target.files[0]);
