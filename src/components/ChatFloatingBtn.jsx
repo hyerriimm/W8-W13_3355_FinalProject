@@ -3,11 +3,13 @@ import styled from 'styled-components';
 import { BsFillChatDotsFill } from "react-icons/bs";
 
 const ChatFloatingBtn = () => {
-  return (
-    <FloatingBtn>
-      <BsFillChatDotsFill style={{ fontSize: '25px', color: 'white' }} />
-    </FloatingBtn>
-  );
+  if (localStorage.getItem("ACCESSTOKEN")) {
+    return (
+      <FloatingBtn>
+        <BsFillChatDotsFill style={{ fontSize: '25px', color: 'white' }} />
+      </FloatingBtn>
+    );
+  }
 };
 
 export default ChatFloatingBtn;

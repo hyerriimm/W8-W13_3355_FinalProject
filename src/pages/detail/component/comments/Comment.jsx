@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { createComment, getComments } from "../../../../redux/modules/comment";
 import CommentItem from "./CommentItem";
+import axios from 'axios';
 
 const Comment = () => {
   const { id } = useParams();
@@ -12,51 +13,64 @@ const Comment = () => {
   const [comment, setComment] = useState();
   const [commentList, setCommentList] = useState([]);
 
-  const getCommentList = async () => {
-    const _commentList = await dispatch(getComments(id));
+  // console.log(comment);
 
-    if (_commentList.payload?.data?.length > 0) {
-      setCommentList(_commentList.payload.data);
+// console.log('댓글렌더링');
+  // const getCommentList = async () => {
+  //   const _commentList = await dispatch(getComments(id));
+
+  //   if (_commentList.payload?.data?.length > 0) {
+  //     setCommentList(_commentList.payload.data);
+  //   }
+  // };
+
+// 댓글 리스트 가져오기-----------------------------------------------------------------------
+  const GetCommentList =useCallback( async() => {
+    try {
+      const data = await axios.get(`${process.env.REACT_APP_HOST_PORT}/comment/${id}`, {
+        headers: {
+          authorization: localStorage.getItem("ACCESSTOKEN"),
+          refreshtoken: localStorage.getItem("REFRESHTOKEN"),
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      // console.log('리스트 불러와', data.data.data);
+      if (data.data.data) {
+        setCommentList(data.data.data);
+      } else {
+        setCommentList([]);
+      }
+    } catch (error) {
+      console.log(error);
     }
-  };
+  },[]);
 
   useEffect(() => {
-    getCommentList();
+    GetCommentList();
   }, []);
+// -----------------------------------------------------------------------------------------
 
-  const submit = async () => {
+// 댓글 달기-----------------------------------------------------------------------
+  const submit = async() => {
     if (!comment) {
       alert("댓글을 입력해주세요.");
       return false;
     }
 
-    commentClear();
-    await dispatch(
-      createComment({
-        postId: id,
-        comment,
-      })
-    );
+    await dispatch(createComment({ postId: id, comment:comment }));
+    setComment();
 
-    getCommentList();
+    GetCommentList();
   };
 
-  // 엔터로 댓글달기
+// 엔터로 댓글달기
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       submit();
     }
   };
+// ------------------------------------------------------------------------------
 
-  const change = (e) => {
-    const { value } = e.target;
-
-    setComment(value);
-  };
-
-  const commentClear = () => {
-    setComment({ commentId: "", comment: "" });
-  };
 
   const commentItems = commentList.map((item) => {
     return (
@@ -64,7 +78,7 @@ const Comment = () => {
         item={item}
         key={item.commentId}
         onKeyPress={handleKeyPress}
-        getCommentList={getCommentList}
+        getCommentList={GetCommentList}
       ></CommentItem>
     );
   });
@@ -75,7 +89,8 @@ const Comment = () => {
         <div>
           <Stcontainer>
             <Input
-              onChange={change}
+              value={comment || ''}
+              onChange={(e)=>setComment(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="댓글을 입력해주세요 (250자 이내)"
               type="text"
@@ -86,7 +101,9 @@ const Comment = () => {
               등록
             </Button>
           </Stcontainer>
-          <Comments>{commentItems}</Comments>
+          {commentList === null ? false : (
+            <Comments>{commentItems}</Comments>
+          )}
         </div>
       </Layout>
     </>

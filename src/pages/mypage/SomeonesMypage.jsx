@@ -3,7 +3,7 @@ import {  } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
-import Header from '../../components/Header';
+// import Header from '../../components/Header';
 import BasicTabs from './components/MypageTap';
 import { RiAlarmWarningFill } from 'react-icons/ri';
 import ModalOfReportMember from './components/ModalOfReportMember';
@@ -64,7 +64,7 @@ const SomeonesMypage = () => {
                 return
             };
         } catch (error) {
-            console.log(error);
+            console.log(error.message);
         };
     };
     getSomenesLeaderInfo();
@@ -122,7 +122,7 @@ const SomeonesMypage = () => {
     <>
       {someonesInfo ? (
       <>
-        <Header />
+        {/* <Header /> */}
         <BackSpaceDiv>
           <img
               alt="뒤로가기"

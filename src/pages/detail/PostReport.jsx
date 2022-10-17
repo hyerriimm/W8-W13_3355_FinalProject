@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
-import Header from '../../components/Header';
+// import Header from '../../components/Header';
 import { RiAlarmWarningFill } from 'react-icons/ri';
 
 
@@ -51,7 +51,7 @@ const PostReport = () => {
 
   return (
     <div>
-      <Header />
+      {/* <Header /> */}
       <StDiv>
         <img
           alt='뒤로가기'
