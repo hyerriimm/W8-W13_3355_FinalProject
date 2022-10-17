@@ -68,7 +68,7 @@ export default function BasicTabs() {
     dispatch(__apply());
   }, []);
 
-console.log(waitlist);
+// console.log(waitlist);
 
   return (
     <>
