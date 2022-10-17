@@ -12,6 +12,7 @@ import ModalComment from "./ModalComment";
 
 
 
+
 const CommentItem = ({ item, getCommentList }) => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -141,9 +142,13 @@ const CommentItem = ({ item, getCommentList }) => {
     <Item>
       <First>
         <Left>
-          <Circle>
-            <img src={item.memberImage} alt=''/>
-          </Circle>
+          <ProfileImg
+            style={{
+              backgroundSize: "cover",
+              backgroundImage: `url(${item.memberImage})`,
+              backgroundPosition: "center",
+            }}
+          />
           <Nickname>{item.memberNickname}</Nickname>
         </Left>
         {Id === item.memberId ? (
@@ -245,18 +250,12 @@ const RightButton = styled.div`
   font-size: 10px;
 `;
 
-const Circle = styled.div`
+const ProfileImg = styled.div`
   display: flex;
   width: 21px;
   height: 21px;
   border-radius: 100%;
   border: 1px solid gray;
-
-  img {
-    width: 100%;
-    height: 100%;
-    border-radius: 100%;
-  }
 `;
 
 const Nickname = styled.div`
