@@ -64,10 +64,10 @@ const CommentItem = ({ item, getCommentList }) => {
     await dispatch(
       deleteComment({
         commentId: item.commentId,
-        comment: "test",
+        // comment: "test",
       })
     );
-    window.location.reload();
+    // window.location.reload();
 
     getCommentList();
   };
@@ -102,7 +102,7 @@ const CommentItem = ({ item, getCommentList }) => {
      }
      if (
        window.confirm(
-         "게시글을 신고하시겠습니까?\n신고 후 취소는 불가능합니다."
+         "댓글을 신고하시겠습니까?\n신고 후 취소는 불가능합니다."
        )
      ) {
        try {
@@ -142,7 +142,7 @@ const CommentItem = ({ item, getCommentList }) => {
       <First>
         <Left>
           <Circle>
-            <img src={item.memberImage} />
+            <img src={item.memberImage} alt=''/>
           </Circle>
           <Nickname>{item.memberNickname}</Nickname>
         </Left>
