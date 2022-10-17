@@ -217,7 +217,7 @@ const Search = () => {
               }}
             >
               <option value='ALL'>전체</option>
-              <option value='EXERCIESE'>운동</option>
+              <option value='EXERCISE'>운동</option>
               <option value='TRAVEL'>여행</option>
               <option value='READING'>독서</option>
               <option value='STUDY'>공부</option>
