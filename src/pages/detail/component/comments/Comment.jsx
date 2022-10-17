@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -25,7 +25,7 @@ const Comment = () => {
   // };
 
 // 댓글 리스트 가져오기-----------------------------------------------------------------------
-  const GetCommentList = async() => {
+  const GetCommentList =useCallback( async() => {
     try {
       const data = await axios.get(`${process.env.REACT_APP_HOST_PORT}/comment/${id}`, {
         headers: {
@@ -43,7 +43,7 @@ const Comment = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  },[]);
 
   useEffect(() => {
     GetCommentList();
