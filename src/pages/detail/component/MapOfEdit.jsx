@@ -76,8 +76,17 @@ const MapOfEdit = ({ placeX, placeY, searchPlace, setAddress, setPlaceName, setP
   }, [searchPlace]);
 
   return (
-    <div id='myMap' style={{width: '400px', height: '400px'}}></div>
+    <MapDiv id='myMap'></MapDiv>
   );
 };
 
 export default MapOfEdit;
+
+const MapDiv = styled.div`
+box-sizing: border-box;
+width: 400px;
+height: 400px;
+@media only screen and (max-width: 720px) {
+  width: 100%;
+  }
+`;

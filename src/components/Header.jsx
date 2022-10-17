@@ -1,13 +1,29 @@
 import { React, useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { __getMyInfo } from '../redux/modules/myinfo';
+import { IoSearchSharp } from 'react-icons/io5';
+
+import SSE from './SSE';
 
 
 const Header = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const ACCESSTOKEN = localStorage.getItem('ACCESSTOKEN');
+    const myinfo = useSelector((state)=>state.myinfo.myinfo);
+
+    useEffect(()=>{
+        dispatch(__getMyInfo())
+      },[ACCESSTOKEN])
+
+    // console.log(myinfo);
+
     const [accesstoken,setAccesstoken] = useState(undefined);
-    const [profileImg,setProfileImg] = useState(undefined);
-    const profile = `${profileImg}` // "https://avatars.dicebear.com/api/adventurer-neutral/:seed.svg"
+    // const [profileImg,setProfileImg] = useState(undefined);
+    // const profile = `${profileImg}` // "https://avatars.dicebear.com/api/adventurer-neutral/:seed.svg"
 
     const modalRef = useRef();
     const [isOpen, setIsOpen] = useState(false);
@@ -23,12 +39,11 @@ const Header = () => {
       return ()=>{clearTimeout(timeout);}
     },[window.location.reload, accesstoken, navigate]);
 
-    useEffect(()=>{
+    useEffect(() => {
       setAccesstoken(localStorage.getItem("ACCESSTOKEN"));
-      setProfileImg(localStorage.getItem("ImgURL"));
-    });
-
-
+      // setProfileImg(localStorage.getItem("ImgURL"));
+    }, [accesstoken]);
+    
     useEffect(() => {
       const onClickOutside = (e) => {
           if (modalRef.current !== null && !modalRef.current.contains(e.target)) {
@@ -47,29 +62,56 @@ const Header = () => {
       if (window.confirm("로그아웃 하시겠습니까?")) {
         setAccesstoken(localStorage.removeItem("ACCESSTOKEN"));
         setAccesstoken(localStorage.removeItem("REFRESHTOKEN"));
-        setProfileImg(localStorage.removeItem("ImgURL"));
+        localStorage.removeItem("Role");
+        localStorage.removeItem("ImgURL");
+        // setProfileImg(localStorage.removeItem("ImgURL"));
         localStorage.removeItem("Id");
         alert('로그아웃 되었습니다.')
-        navigate('/')
+        window.location.replace('/')
       } else {
-          console.log("로그인 유지");
+          // console.log("로그인 유지");
       }
   };
-    
+
+
     return (
         <>
         <HdContainer>
             <Logo onClick={()=>navigate('/')}>3355</Logo>
             <BtnWrapper>            
                 { accesstoken ? 
-                ( <>
-                  <AddBtn onClick={()=>navigate('/form')}>모임등록</AddBtn>
-                  <BtnProfile 
-                  style={{backgroundSize:'cover',backgroundImage:`url(${profile})`, backgroundPosition: 'center'}}
-                  ref={modalRef} onClick={handleModal}>
-                      {/* <img src={ profile } alt="profile"/> */}
-                  </BtnProfile>
-                  </>
+                ( localStorage.getItem("Role") === "ROLE_ADMIN" ?
+                  (
+                    <>
+                    <AddBtn style={{border:'1px solid #1a399c',backgroundColor:'#1a399c'}} onClick={()=>navigate('/admin')}>신고함</AddBtn>
+                    <AddBtn onClick={()=>navigate('/search')}
+                    style={{display:'flex', alignItems:'center', justifyContent:'center', width:'fit-content'}}
+                    >
+                      <IoSearchSharp color='white' size='20px' />
+                    </AddBtn>
+                    <AddBtn onClick={()=>navigate('/form')}>모임등록</AddBtn>
+                    <BtnProfile 
+                    style={{backgroundSize:'cover',backgroundImage:`url(${myinfo?.imgUrl})`, backgroundPosition: 'center'}}
+                    ref={modalRef} onClick={handleModal}>
+                        {/* <img src={ profile } alt="profile"/> */}
+                    </BtnProfile>
+                    </>
+                  ): (
+                    <>
+                    <AddBtn onClick={()=>navigate('/search')}
+                    style={{display:'flex', alignItems:'center', justifyContent:'center', width:'fit-content'}}
+                    >
+                      <IoSearchSharp color='white' size='20px' />
+                    </AddBtn>
+                    <AddBtn onClick={()=>navigate('/form')}>모임등록</AddBtn>
+                    <SSE />
+                    <BtnProfile 
+                    style={{backgroundSize:'cover',backgroundImage:`url(${myinfo?.imgUrl})`, backgroundPosition: 'center'}}
+                    ref={modalRef} onClick={handleModal}>
+                        {/* <img src={ profile } alt="profile"/> */}
+                    </BtnProfile>
+                    </>
+                  )
                 )
                 :
                 ( <><LoginBtn onClick={()=>navigate('/login')}>로그인</LoginBtn></>
@@ -140,6 +182,9 @@ const AddBtn = styled.button`
     background-color: #2196F3;
     color: white !important;
     cursor: pointer;
+    @media only screen and (max-width: 500px) {
+      margin: 0 10px 0 0;
+    }
 `
 const LoginBtn = styled.button`
     height: 30px;
@@ -168,13 +213,9 @@ const BtnProfile = styled.div`
   :hover {
             filter: brightness(110%);
          }          
-
-      /* img {
-          width: 100%;
-          height: 100%;
-          border-radius: 100%;
-          object-fit: cover;
-      } */
+  @media only screen and (max-width: 400px) {
+    margin: 0 10px 0 0;
+  }
 `
 
 const ModalBackdrop = styled.div`

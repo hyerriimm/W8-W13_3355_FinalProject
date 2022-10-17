@@ -28,9 +28,10 @@ const Kakao = () => {
 
       localStorage.setItem('ACCESSTOKEN', response.headers.authorization);
       localStorage.setItem('REFRESHTOKEN', response.headers.refreshtoken);
+      localStorage.setItem("Role", response.headers.role);
       localStorage.setItem("ImgURL", response.headers.imgurl);
       localStorage.setItem("Id", response.headers.id);
-      console.log(response);
+      // console.log(response);
 
       if(response.data.success === true) {
         alert(`카카오 로그인: ${response.data.data}`);

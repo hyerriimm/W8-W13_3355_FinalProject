@@ -43,7 +43,7 @@ function a11yProps(index) {
   };
 }
 
-export default function BasicTabs() {
+export default function BasicTabs({someoneWatchingYourMypage, someonesLeaderInfo}) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -68,43 +68,83 @@ export default function BasicTabs() {
     <Box sx={{ width: '90%', margin: 'auto' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="내가 만든 모임" {...a11yProps(0)} />
+          {someoneWatchingYourMypage ? (
+            <Tab label="작성한 모임" {...a11yProps(0)} />
+            ) : (
+            <Tab label="내가 만든 모임" {...a11yProps(0)} />
+          )}
+          {someoneWatchingYourMypage ? (false) : (
           <Tab label="내가 참여한 모임" {...a11yProps(1)} />
+          )}
         </Tabs>
       </Box>
-      <TabPanel value={value} index={0}>
-        <Container>
-          <ListContainer>
-            {leadlist?.map((leadlist) => {
-              return (
-                <CardWrapper key={leadlist.postId} onClick={() => { navigate(`/detail/${leadlist.postId}`) }}>
-                  <ImageContainer>
-                    <img src={leadlist.imgUrl} alt="" />
-                  </ImageContainer>
-                  <DescContainer>
-                    <TitleWrapper>
-                      <Title>{leadlist.title}</Title>
-                      <RestDay>
-                        {leadlist.restDay.split("일")[0] <= 0 ? (
-                          <div style={{ color: '#e51e1e' }}>마감 완료</div>
-                        ) : (
-                          <div>마감 {leadlist.restDay}</div>
-                        )}
-                      </RestDay>
-                    </TitleWrapper>
-                    <Address>{leadlist.address}</Address>
-                    <Dday>{leadlist.dday}</Dday>
-                  </DescContainer>
-                </CardWrapper>
-              );
-            })}
-          </ListContainer>
-        </Container>
-      </TabPanel>
+      {someoneWatchingYourMypage ? (
+        someonesLeaderInfo !== false ? (
+        <TabPanel value={value} index={0}>
+            <Container>
+              <ListContainer>
+                {someonesLeaderInfo?.slice().reverse().map((leadlist) => {
+                  return (
+                    <CardWrapper key={leadlist.postId} onClick={() => { navigate(`/detail/${leadlist.postId}`) }}>
+                      <ImageContainer>
+                        <img src={leadlist.imgUrl} alt="" />
+                      </ImageContainer>
+                      <DescContainer>
+                        <TitleWrapper>
+                          <Title>{leadlist.title}</Title>
+                          <RestDay>
+                            {leadlist.restDay.split("일")[0] <= 0 ? (
+                              <div style={{ color: '#e51e1e' }}>마감 완료</div>
+                            ) : (
+                              <div>마감 {leadlist.restDay}</div>
+                            )}
+                          </RestDay>
+                        </TitleWrapper>
+                        <Address>{leadlist.address}</Address>
+                        <Dday>{leadlist.dday}</Dday>
+                      </DescContainer>
+                    </CardWrapper>
+                  );
+                })}
+              </ListContainer>
+            </Container>
+        </TabPanel>
+        ): (false)
+      ): (
+        <TabPanel value={value} index={0}>
+          <Container>
+            <ListContainer>
+              {leadlist?.slice().reverse().map((leadlist) => {
+                return (
+                  <CardWrapper key={leadlist.postId} onClick={() => { navigate(`/detail/${leadlist.postId}`) }}>
+                    <ImageContainer>
+                      <img src={leadlist.imgUrl} alt="" />
+                    </ImageContainer>
+                    <DescContainer>
+                      <TitleWrapper>
+                        <Title>{leadlist.title}</Title>
+                        <RestDay>
+                          {leadlist.restDay.split("일")[0] <= 0 ? (
+                            <div style={{ color: '#e51e1e' }}>마감 완료</div>
+                          ) : (
+                            <div>마감 {leadlist.restDay}</div>
+                          )}
+                        </RestDay>
+                      </TitleWrapper>
+                      <Address>{leadlist.address}</Address>
+                      <Dday>{leadlist.dday}</Dday>
+                    </DescContainer>
+                  </CardWrapper>
+                );
+              })}
+            </ListContainer>
+          </Container>
+        </TabPanel>
+      )}
       <TabPanel value={value} index={1}>
         <Container>
           <ListContainer>
-            {partilist?.map((partilist) => {
+            {partilist?.slice().reverse().map((partilist) => {
               return (
                 <CardWrapper key={partilist.postId} onClick={() => { navigate(`/detail/${partilist.postId}`) }}>
                   <ImageContainer>

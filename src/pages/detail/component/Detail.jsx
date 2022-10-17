@@ -5,9 +5,11 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { FiTrash2 } from "react-icons/fi";
 import { FiEdit } from "react-icons/fi";
+import { RiAlarmWarningFill } from "react-icons/ri";
 import MapOfDetail from './MapOfDetail'
+import ChatFloatingBtn from '../../../components/ChatFloatingBtn';
 
-import { __detail, __delete, __addWish, __removeWish } from '../../../redux/modules/detail';
+import { __detail, __delete, __addWish, __removeWish, __recruitDone } from '../../../redux/modules/detail';
 
 const Detail = () => {
   const navigate = useNavigate();
@@ -37,6 +39,8 @@ const Detail = () => {
 //   currentNum 현재 모집된 인원
 //   wishPeople: [] 게시물 찜한 사람들 아이디
 //   wish 찜 했는지 아닌지 boolean
+//   memeberId 회원 고유 아이디
+//   status 게시글 상태 (모집중, 마감)
 
   // wishBoolean: 찜명단에서 내 아이디과 일치하는 게 있으면 true, 아니면 false
   // const wishBoolean = detail_wishPeople?.includes(Id);
@@ -54,7 +58,7 @@ const Detail = () => {
       dispatch(__removeWish(params_id));
     }
   };
-
+  
   // 게시글 삭제 기능
   const onDeleteBtn = () => {
     if (window.confirm('게시글을 삭제하시겠습니까?')) {
@@ -62,6 +66,22 @@ const Detail = () => {
       navigate('/');
     }
   };
+
+  // 게시글 신고하러 이동
+  const goToReportBtn = () => {
+    navigate(
+    '/detail/postreport', 
+    {state: {
+      postId: params_id, 
+      title:detail.title, 
+      authorNickname: detail.authorNickname, 
+      memberImgUrl:detail.memberImgUrl, 
+      postImgUrl: detail.postImgUrl, 
+      content:detail.content  
+    }}
+    );
+  };
+
 
   useEffect(()=>{
     setIsWish(detail.wish);
@@ -97,7 +117,8 @@ const Detail = () => {
               <FiTrash2 size='20' color='#fff' />
             </StEditnDeleteBtn>
           </>
-        ) : false )}
+        ) : ( false ) 
+        )}
         </EditnDeleteDiv>
       <Container>
         <Item1>
@@ -109,22 +130,58 @@ const Detail = () => {
             <div>
               <TitleDiv>
                 <h3>{detail.title}</h3>
+                { logIn == null ? false : 
+                (Id === detail.authorId ? ( false ) : 
+                (
+                  <ReportBtn
+                  onClick={goToReportBtn}
+                  >
+                    <RiAlarmWarningFill size='20' color='#1a399c' />
+                  </ReportBtn>
+                )   
+                )}
               </TitleDiv>
               <div style={{display:'flex', alignItems: 'center', justifyContent:'space-between'}}>
                 <div style={{display:'flex', alignItems: 'center'}}>
-                  <ProfileImg src={ detail.memberImgUrl } alt="profile"/>
-                  <h4 style={{width:'150px'}}>{detail.authorNickname}</h4>
+                  <ProfileImg 
+                  src={ detail.memberImgUrl } 
+                  alt="profile"
+                  onClick={()=>{
+                    if (logIn && Id === detail.authorId) {
+                      navigate('/mypage')
+                    } else if (logIn && Id !== detail.authorId) {
+                      navigate(`/someonesmypage/${detail.memberId}`)
+                    } else { return }
+                  }}
+                  />
+                  <h4 
+                  style={{width:'150px'}}
+                  onClick={()=>{
+                    if (logIn && Id === detail.authorId) {
+                      navigate('/mypage')
+                    } else if (logIn && Id !== detail.authorId) {
+                      navigate(`/someonesmypage/${detail.memberId}`)
+                    } else { return }
+                  }}
+                  >{detail.authorNickname}</h4>
                 </div>
                 <StDiv>
-                  {detail.restDay?.split("일")[0] == 0 ? ( 
-                    <h4 style={{color:'#e51e1e'}}>오늘 마감</h4>
-                  ):(
-                    <RestDayBtn disable>마감 {detail.restDay}</RestDayBtn> 
+                  {detail.status === 'RECRUIT' ? (
+                    detail.restDay?.split("일")[0] == 0 ? ( 
+                      <h4 style={{color:'#e51e1e'}}>오늘 마감</h4>
+                    ):(
+                      <RestDayBtn disable>마감 {detail.restDay}</RestDayBtn> 
+                    )
+                    ):(
+                    <RestDayBtn disable>마감 완료</RestDayBtn>
                   )}
-                  {logIn == null ? false : (!isWish ? (
-                    <WishBtn onClick={onClickWishBtn}>🤍</WishBtn>
-                  ):(
-                    <WishBtn onClick={onClickWishBtn}>💗</WishBtn>
+                  {logIn == null ? false : 
+                    (Id === detail.authorId? false : (
+                      !isWish ? (
+                        <WishBtn onClick={onClickWishBtn}>🤍</WishBtn>
+                      ):(
+                        <WishBtn onClick={onClickWishBtn}>💗</WishBtn>
+                      )
                   ))}
                 </StDiv>
               </div>
@@ -147,17 +204,25 @@ const Detail = () => {
                style={{color:'#18A0FB', fontStyle:'oblique', cursor:'pointer', width:'fit-content'}} 
                onClick={()=>window.open(detail.placeUrl, '_blank')}
               >{detail.placeName}</div>
-              <div>( {detail.address} {detail.detailAddress} )</div>
+             <div>( {detail.address} {detail.detailAddress === 'undefined' ? false : detail.detailAddress} )</div>
             </div>
             <BtnsDiv>
               { logIn == null ? false : 
               (Id === detail.authorId ? 
                 (
-                  <StBtn
-                  onClick={()=>navigate(`/detail/${detail.id}/check`)}
-                  >
-                  지원확인
-                  </StBtn>
+                  <>
+                    <StBtn
+                    style={{backgroundColor:'grey', marginRight:'10px'}}
+                    onClick={()=>dispatch(__recruitDone(params_id))}
+                    >
+                    모집마감
+                    </StBtn>
+                    <StBtn
+                    onClick={()=>navigate(`/detail/${detail.id}/check`)}
+                    >
+                    지원확인
+                    </StBtn>
+                  </>
                 ):(
                   <StBtn
                   onClick={()=>navigate(`/detail/${detail.id}/apply`)}
@@ -179,6 +244,9 @@ const Detail = () => {
           />
         </Item2Map>
       </Container>
+        <div onClick={()=>navigate('/chatlist')}>
+          <ChatFloatingBtn />
+        </div>
     </div>
   );
 };
@@ -224,7 +292,8 @@ const Item1 = styled.div`
   display: flex;
   height: fit-content;
   /* max-height: 60vh; */
-  max-height: 600px;
+  max-height: 750px;
+  align-items: center;
   @media only screen and (max-width: 720px) {
     // 720보다 작을 때 나오는 화면
     flex-direction: column;
@@ -236,7 +305,8 @@ const Img = styled.img`
   /* background-color: orange; */
   object-fit: contain;
   width: 50%;
-  max-height: 70%;    
+  /* max-height: 70%;     */
+  max-height: 500px;    
   @media only screen and (max-width: 720px) {
     width: 100%;
     max-height: 500px;
@@ -257,12 +327,13 @@ box-sizing: border-box;
 
 const TitleDiv = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  @media only screen and (max-width: 720px) {
+  /* flex-direction: column; */
+  justify-content: space-between;
+  align-items: center;
+  /* @media only screen and (max-width: 720px) {
     display: flex;
     flex-direction: column;
-  }
+  } */
 `;
 
 const StDiv = styled.div`
@@ -308,7 +379,7 @@ height: 35px;
 const BtnsDiv = styled.div`
 object-fit: contain;
 display: flex;
-justify-content: space-around;
+justify-content: center;
 flex-wrap: wrap;
 margin: 10px 0;
 `;
@@ -345,6 +416,23 @@ object-fit: contain;
   :hover {
             filter: brightness(90%);
             box-shadow: 1px 1px 3px 0 #bcd7ff;
+  }
+`; 
+
+const ReportBtn = styled.button`
+object-fit: contain;
+  min-width: 35px;
+  min-height: 35px;
+  border: transparent;
+  background-color: transparent;
+  border-radius: 50%;
+  margin-top: 10px;
+  margin-right: 10px;
+  cursor: pointer;
+  :hover {
+  filter: brightness(110%);
+  box-shadow: 1px 1px 3px 0 #bcd7ff;
+  background-color: #ff8a1d;
   }
 `; 
 

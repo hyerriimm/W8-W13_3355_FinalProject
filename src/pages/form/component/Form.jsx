@@ -11,6 +11,7 @@ const API_URL = process.env.REACT_APP_HOST_PORT;
 
 const Form = () => {
   const navigate = useNavigate();
+  const [category, setCategory] = useState('');
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [maxNum, setMaxNum] = useState(""); 
@@ -23,7 +24,7 @@ const Form = () => {
   const imgFileUploadBtnRef = useRef();
 
   const [address, setAddress] = useState("주소를 선택해주세요");
-  const [detailAddress, setDetailAddress] = useState(undefined);
+  const [detailAddress, setDetailAddress] = useState("");
   const [placeName, setPlaceName] = useState("");
   const [placeUrl, setPlaceUrl] = useState(null);
   const [placeX, setPlaceX] = useState("");
@@ -38,6 +39,7 @@ const Form = () => {
   };
 
   const resetAllStates = () => {
+    setCategory('');
     setTitle('');
     setContent('');
     setMaxNum('');
@@ -66,15 +68,17 @@ const Form = () => {
     if (title.trim() === '' ||
         address.trim() === '' ||
         content.trim() === '' ||
+        category.trim() === '' ||
         maxNum.trim() === '' ||
         startDate === null||
         endDate === null ||
-        dDay === null ||
-        imgFile === null
+        dDay === null
+        // imgFile === null
     ) {
       return alert('모든항목을 입력해야 등록 가능합니다.')
     }
     const formData = new FormData();
+    formData.append('category', category);
     formData.append('title', title);
     formData.append('content', content);
     formData.append('maxNum', Number(maxNum));
@@ -154,6 +158,21 @@ const Form = () => {
           썸네일 사진 등록
         </StButton>
       </StDiv>
+      <CategoryDiv>
+        <CategorySelect
+          name="category"
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          <option>모임 분류를 선택해주세요.</option>
+          <option value="exercise">운동</option>
+          <option value="travel">여행</option>
+          <option value="reading">독서</option>
+          <option value="study">공부</option>
+          <option value="religion">종교</option>
+          <option value="online">온라인</option>
+          <option value="etc">기타</option>
+        </CategorySelect>
+      </CategoryDiv>
       <StDiv>
         <StInput
           required
@@ -182,7 +201,7 @@ const Form = () => {
           required
           name='maxNum'
           type='text'
-          placeholder='3~5명'
+          placeholder='3~5'
           value={maxNum}
           maxLength={1}
           onChange={(e) =>
@@ -197,9 +216,9 @@ const Form = () => {
         <div style={{fontWeight:'bold'}}>모집 기간</div>
         <div style={{marginTop:'10px'}}>
         <RangeDatePicker
-            startText='Start'
-            endText='End'
-            startPlaceholder=" 모집 시작일 "
+            startText='시작'
+            endText='끝'
+            startPlaceholder=" 모집 시작일"
             endPlaceholder=" 모집 종료일 "
             // locale='ko'
             clear
@@ -223,10 +242,8 @@ const Form = () => {
         </div>
       </DatePickerDiv>
       <hr style={{width:'100%', marginTop:'15px'}}/>
-      <AddressDiv>
         <div style={{fontWeight:'bold'}}>모임 장소</div>
-        <div style={{marginTop:'10px',color:'#18a0fb'}}><strong>{placeName}</strong></div>
-        <div style={{margin:'10px 0',color:'#18a0fb'}}>{address}</div>
+      <AddressDiv>
         <form className="inputForm" onSubmit={handleSubmit}>
           <input
           placeholder='주소 찾기 (키워드, 도로명 주소, 지번 주소 입력 가능)'
@@ -234,14 +251,6 @@ const Form = () => {
           value={inputText}
           />
           <button type="submit">검색</button>
-          <DetailAddressInput
-            name='detailAddress'
-            maxLength={30}
-            placeholder='(선택) 상세 주소를 입력해주세요.'
-            type='text'
-            value={detailAddress || ''}
-            onChange={(e) => setDetailAddress(e.target.value)}
-          />
           <div style={{fontWeight:'bold', color:'grey', marginBottom:'10px'}}>※ 검색 후 지도의 핀을 눌러 선택해주세요.</div>
         </form>
         <MapContainer 
@@ -252,7 +261,17 @@ const Form = () => {
         setPlaceX={setPlaceX}
         setPlaceY={setPlaceY}
         />
+        <div style={{marginTop:'10px',color:'#18a0fb'}}><strong>{placeName}</strong></div>
+        <div style={{margin:'10px 0',color:'#18a0fb'}}>{address}</div>
       </AddressDiv>
+          <DetailAddressInput
+            name='detailAddress'
+            maxLength={30}
+            placeholder='(선택) 상세 주소를 입력해주세요.'
+            type='text'
+            value={detailAddress || ''}
+            onChange={(e) => setDetailAddress(e.target.value)}
+          />
       <StButton type='button' style={{ backgroundColor: '#038E00' }}
       onClick={onSubmitHandler}>
         모임 등록하기
@@ -278,6 +297,7 @@ const Item2 = styled.div`
   /* background-color: yellow; */
   grid-area: b;
   min-width: 375px;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   margin: 0 auto; 
@@ -343,7 +363,7 @@ font-family:'Noto Sans KR', sans-serif;
 
 const StImg = styled.img`
 min-width: 300px;
-max-width: 400px;
+max-width: 410px;
 /* min-height: 200px; */
 `;
 
@@ -353,6 +373,20 @@ const StDiv = styled.div`
   margin-top: 10px;
   display: flex;
   align-items: center;
+`;
+
+const CategoryDiv = styled.div`
+display: inline-block;
+flex-direction: column;
+margin-top: 10px;
+`;
+
+const CategorySelect = styled.select`
+  height: 40px;
+  width: 100%;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid grey;
 `;
 
 const MaxNumDiv = styled.div`
@@ -384,6 +418,9 @@ input {
   margin-bottom:10px;
   width:87%;
   height:35px;
+  @media only screen and (max-width: 720px) {
+  width: 86%;
+  }
   :focus {
       outline: none;
       border-color: #18a0fb;

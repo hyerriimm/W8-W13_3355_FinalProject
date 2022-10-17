@@ -11,9 +11,7 @@ const MypageProfile = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const myinfo = useSelector((state) => state.myinfo.myinfo);
-
-    console.log(myinfo)
-
+    
     useEffect(() => {
         window.scrollTo(0, 0); // 스크롤 맨 위로
         dispatch(__getMyInfo());
@@ -33,7 +31,11 @@ const MypageProfile = () => {
                         <StNickName>{myinfo.nickname}</StNickName>
                         <StId>{myinfo.userId}
                             {myinfo.root == 'normal' ? (
-                                <Sttag style={{ fontSize: "10px" }}>일반계정</Sttag>
+                                localStorage.getItem("Role") === "ROLE_ADMIN" ? (
+                                    <Sttag style={{ fontSize: "10px" }}>관리자 계정</Sttag>
+                                ):(
+                                    <Sttag style={{ fontSize: "10px" }}>일반계정</Sttag>
+                                )
                             ) : (
                                 <ImgKakao
                                     src='img/kakao_login_small.png'

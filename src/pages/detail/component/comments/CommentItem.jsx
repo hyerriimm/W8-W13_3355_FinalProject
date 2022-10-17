@@ -1,28 +1,42 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import axios from "axios";
 import {
   deleteComment,
   updateComment,
 } from "../../../../redux/modules/comment";
+import ModalComment from "./ModalComment";
+
+
+
 
 const CommentItem = ({ item, getCommentList }) => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const dispatch = useDispatch();
 
   const [isUpdate, setIsUpdate] = useState(false);
   const [comment, setComment] = useState({});
 
+  const Id = localStorage.getItem("Id");
+
+
+  //등록
   const setUpdate = () => {
     if (!isUpdate) {
       setComment(item.content);
     }
     setIsUpdate(!isUpdate);
   };
+  
+  
 
-  const handleUpdate = async (ev) => {
-    if (ev.key === "Enter") {
+  //수정
+  const handleUpdate = async (e) => {
+    if (e.key === "Enter") {
       if (!comment) {
         alert("댓글을 입력해주세요.");
         return false;
@@ -38,8 +52,11 @@ const CommentItem = ({ item, getCommentList }) => {
       setIsUpdate(false);
       getCommentList();
     }
+    
   };
+  
 
+  //삭제
   const handleDelete = async () => {
     if (!window.confirm("댓글을 삭제하시겠습니까?")) {
       return;
@@ -48,37 +65,118 @@ const CommentItem = ({ item, getCommentList }) => {
     await dispatch(
       deleteComment({
         commentId: item.commentId,
-        comment: "test",
+        // comment: "test",
       })
     );
+    // window.location.reload();
 
     getCommentList();
   };
 
-  const change = (ev) => {
-    const { value } = ev.target;
+  const change = (e) => {
+    const { value } = e.target;
 
     setComment(value);
+
   };
+
+  //신고 모달
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
+
+  //댓글 신고 기능
+   const initialState = {
+     content: "",
+   };
+   const [content, setContent] = useState(initialState);
+
+   const ReportCommentBtn = async () => {
+     if (item.content.trim() === "") {
+       return alert("내용을 입력해야 신고가 가능합니다.");
+     }
+     if (
+       window.confirm(
+         "댓글을 신고하시겠습니까?\n신고 후 취소는 불가능합니다."
+       )
+     ) {
+       try {
+         const response = await axios.post(
+           `${process.env.REACT_APP_HOST_PORT}/report/comment/${item.commentId}`,
+           content,
+           {
+             headers: {
+               authorization: localStorage.getItem("ACCESSTOKEN"),
+               refreshtoken: localStorage.getItem("REFRESHTOKEN"),
+             },
+           }
+         );
+
+         if (response.data.success === true) {
+           alert(response.data.data);
+           setContent(initialState);
+           navigate(`/detail/${item.postId}`);
+           return closeModal();
+         }
+         if (response.data.success === false) {
+           alert(response.data.error.message);
+           return;
+         }
+       } catch (error) {
+         console.log(error);
+       }
+       navigate(`/detail/${item.postId}`);
+       
+     }
+   };
+
+
 
   return (
     <Item>
       <First>
         <Left>
-          <Circle>
-            <img src={item.memberImage} />
-          </Circle>
+          <ProfileImg
+            style={{
+              backgroundSize: "cover",
+              backgroundImage: `url(${item.memberImage})`,
+              backgroundPosition: "center",
+            }}
+          />
           <Nickname>{item.memberNickname}</Nickname>
         </Left>
-        {isUpdate ? (
-          <RightButton onClick={setUpdate}>취소</RightButton>
+        {Id === item.memberId ? (
+          isUpdate ? (
+            <RightButton onClick={setUpdate}>취소</RightButton>
+          ) : (
+            <Right>
+              <RightButton onClick={setUpdate}>수정</RightButton>
+              <RightButton onClick={handleDelete}>삭제</RightButton>
+            </Right>
+          )
         ) : (
           <Right>
-            <RightButton onClick={setUpdate}>수정</RightButton>
-            <RightButton onClick={handleDelete}>삭제</RightButton>
+            <RightButton onClick={openModal}>신고</RightButton>
+            <ModalComment
+              open={modalOpen}
+              close={closeModal}
+              header={`${item.memberNickname}님 신고하기`}
+              comment={`${item.content}`}
+              ReportCommentBtn={ReportCommentBtn}
+              setContent={setContent}
+            >
+              {/* Modal.js의  <main> {props.children} </main>에 내용이 입력된다.  */}
+            </ModalComment>
           </Right>
         )}
       </First>
+
       {isUpdate ? (
         <Stcontainer>
           <Input
@@ -152,18 +250,12 @@ const RightButton = styled.div`
   font-size: 10px;
 `;
 
-const Circle = styled.div`
+const ProfileImg = styled.div`
   display: flex;
   width: 21px;
   height: 21px;
   border-radius: 100%;
   border: 1px solid gray;
-
-  img {
-    width: 100%;
-    height: 100%;
-    border-radius: 100%;
-  }
 `;
 
 const Nickname = styled.div`

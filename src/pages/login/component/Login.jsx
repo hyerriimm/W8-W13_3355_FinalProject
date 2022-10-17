@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useRef } from 'react';
 // import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { KAKAO_AUTH_URL } from "../../../shared/OAuth";
 
@@ -12,13 +12,19 @@ const Login = () => {
   const userIdRef = useRef();
   const passwordRef = useRef();
 
+   // 스크롤을 맨 위로
+  const { pathname } = useLocation();
+  useEffect(()=>{
+    window.scrollTo(0, 0);
+  },[pathname])
+
   useEffect(()=>{
     userIdRef.current.focus();
   },[])
 
   const onLoginBtnHandler = async (newUserInfo) => {
     if (newUserInfo.userId.trim() === '' || newUserInfo.password.trim() === '') {
-      return alert('이메일과 비밀번호를 입력하세요.');
+      return alert('아이디와 비밀번호를 입력하세요.');
     }
     try {
         const data = await axios.post(`${API_URL}/member/login`, newUserInfo);
@@ -28,6 +34,7 @@ const Login = () => {
             localStorage.setItem("REFRESHTOKEN", data.headers.refreshtoken);
             localStorage.setItem("ImgURL", data.headers.imgurl);
             localStorage.setItem("Id", data.headers.id);
+            localStorage.setItem("Role", data.headers.role); //관리자면 'ROLE_ADMIN', 회원이면 'ROLE_MEMBER'
             alert(data.data.data);
             return navigate('/');
         };
@@ -47,24 +54,39 @@ const Login = () => {
     }
   };
 
+    // 엔터로 로그인하기
+    const handleKeyPress = (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const newUserInfo = {
+            userId: userIdRef.current.value,
+            password: passwordRef.current.value
+        };
+        onLoginBtnHandler(newUserInfo);
+      }
+    };
+
   return (
-    <Container>
+    <ContainerForm>
       <Item1>
         <input 
         ref={userIdRef}
         type='email'
         name='userId'
-        placeholder='example@gmail.com'
+        placeholder='아이디를 입력하세요'
         />
         <input 
         ref={passwordRef}
         type='password'
         name='password'
         placeholder='비밀번호를 입력하세요.' 
+        onKeyPress={handleKeyPress}
         />
         <StButton
+        onkey
           style={{ backgroundColor: '#18A0FB' }}
-          onClick={()=>{
+          onClick={(e)=>{
+            e.preventDefault();
             const newUserInfo = {
                 userId: userIdRef.current.value,
                 password: passwordRef.current.value
@@ -86,13 +108,13 @@ const Login = () => {
          onClick={()=>navigate('/signup')}
          >회원가입</StButton>
       </Item2>
-    </Container>
+    </ContainerForm>
   );
 };
 
 export default Login;
 
-const Container = styled.div`
+const ContainerForm = styled.form`
   display: grid;
   align-items: center;
   justify-content: center;

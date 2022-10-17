@@ -6,6 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { __getMyInfo } from '../../../redux/modules/myinfo';
 
+const API_URL = process.env.REACT_APP_HOST_PORT;
+const ACCESSTOKEN = localStorage.getItem('ACCESSTOKEN');
+const REFRESHTOKEN = localStorage.getItem('REFRESHTOKEN');
 
 const InfoEdit = () => {
 
@@ -24,6 +27,7 @@ const InfoEdit = () => {
 
     const imgFileInputRef = useRef();
     const imgFileUploadBtnRef = useRef();
+    const removeinfoBtnRef = useRef();
 
     const resetAllStates = () => {
         setNickname('');
@@ -31,114 +35,206 @@ const InfoEdit = () => {
         setImgFile(null);
       };
 
-    const onEditHandler = async (e) => {
-        e.preventDefault();
-        if (nickname.trim() === '') {
-          return alert('모든 항목을 입력해야 수정 가능합니다.')
+      //중복확인
+      const [nickCheckRes, setNickCheckRes] = useState("");
+      const [idCheckRes, setIdCheckRes] = useState("");
+
+
+      const nicknameCheckHandler = async () => {
+        if (nickname.trim() === "") {
+          return alert("닉네임을 입력해주세요.");
         }
-        if (window.confirm('수정 사항을 저장하시겠습니까?')) {
-          const formData = new FormData();
-          formData.append('nickname', nickname);
-          if (imgFile!==null) {
-            formData.append('imgFile', imgFile);
+        try {
+          const response = await axios.post(`${API_URL}/member/nickname`, {
+            nickCheck: nickname,
+          });
+
+          if (response.data.success === true) {
+            alert(response.data.data);
+            setNickCheckRes(response.data.success);
+            return;
           }
-      
-          try {
-            const ACCESSTOKEN = localStorage.getItem('ACCESSTOKEN');
-            const REFRESHTOKEN = localStorage.getItem('REFRESHTOKEN');
-            const response = await axios.put('http://13.125.229.126:8080/member', formData, {
-              headers: {
-                "Content-Type":"multipart/form-data",
-                "Authorization":ACCESSTOKEN,
-                "RefreshToken":REFRESHTOKEN,
-              }
-            });
-                
-            if (response.data.success === true) {
-                alert(response.data.data);
-                console.log(response)
-                localStorage.setItem("ACCESSTOKEN", response.headers.authorization);
-                localStorage.setItem("REFRESHTOKEN", response.headers.refreshtoken);
-                localStorage.setItem("ImgURL", response.headers.imgurl);
-                resetAllStates();
-                return navigate('/mypage');
-            };
-            if (response.data.success === false) {
-                alert(response.data.error.message);
-                return
-            };
+          if (response.data.success === false) {
+            alert(response.data.error.message);
+            setNickCheckRes(response.data.success);
+            return;
+          }
         } catch (error) {
-            console.log(error);
-        }
+          console.log(error);
         }
       };
+
+
+    const onEditHandler = async (e) => {
+      e.preventDefault();
+      if (nickname.trim() === "") {
+        return alert("모든 항목을 입력해야 수정 가능합니다.");
+      }
+      if (nickCheckRes === "") {
+        return alert("닉네임 중복검사는 필수입니다.");
+      }
+      if (idCheckRes === false) {
+        alert(
+          "이미 존재하는 아이디입니다.\n새로운 아이디를 입력 후 중복검사 바랍니다."
+        );
+        return setIdCheckRes("");
+      }
+      if (nickCheckRes === false) {
+        alert(
+          "이미 존재하는 닉네임입니다.\n새로운 아이디를 입력 후 중복검사 바랍니다."
+        );
+        return setNickCheckRes("");
+      }
+      if (window.confirm("수정 사항을 저장하시겠습니까?")) {
+        const formData = new FormData();
+        formData.append("nickname", nickname);
+        if (imgFile !== null) {
+          formData.append("imgFile", imgFile);
+        }
+
+        try {
+          const response = await axios.put(`${API_URL}/member`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: ACCESSTOKEN,
+              RefreshToken: REFRESHTOKEN,
+            },
+          });
+
+          if (response.data.success === true) {
+            alert(response.data.data);
+            // console.log(response)
+            resetAllStates();
+            localStorage.setItem("ACCESSTOKEN", response.headers.authorization);
+            localStorage.setItem("REFRESHTOKEN", response.headers.refreshtoken);
+            localStorage.setItem("ImgURL", response.headers.imgurl);
+            return navigate("/mypage");
+          }
+          if (response.data.success === false) {
+            alert(response.data.error.message);
+            return;
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };;
 
     const onChangeImgFileInput = (e) => {
         setImgFile(e.target.files[0]);
         setPreviewImg(URL.createObjectURL(e.target.files[0]));
       };
 
+    const onChangeRemoveInfo = async (e) => { 
+        e.preventDefault();
+        if (window.confirm("정말로 삼삼오오를 탈퇴하시겠습니까?")) {
+          try {
+            const deletedata = await axios.put(`${API_URL}/member/signout`, {data: '탈퇴요청' } , {
+              headers: {
+                "Authorization": ACCESSTOKEN,
+                "RefreshToken": REFRESHTOKEN,
+              }
+            });
+            // console.log(deletedata)
+            
+            if (deletedata.data.success === true) {
+              localStorage.removeItem("ACCESSTOKEN");
+              localStorage.removeItem("REFRESHTOKEN");
+              localStorage.removeItem("ImgURL");
+              resetAllStates();
+              alert('회원 탈퇴가 완료되었습니다.')
+              return navigate('/');
+            };
+            if (deletedata.data.success === false) {
+              alert(deletedata.data.error.message);
+              return
+            };
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      };
+
     return (
-        <>
-            <Item2Form onSubmit={onEditHandler}>
-                <StDiv style={{ justifyContent: 'flex-start' }}>
-                    <img
-                        alt='뒤로가기'
-                        src={process.env.PUBLIC_URL + '/img/backspace.png'}
-                        style={{ width: '25px', height: '25px', marginRight: '10px' }}
-                        onClick={() => navigate(-1)}
+      <>
+        <Item2Form onSubmit={onEditHandler}>
+          <StDiv style={{ justifyContent: "flex-start" }}>
+            <img
+              alt="뒤로가기"
+              src={process.env.PUBLIC_URL + "/img/backspace.png"}
+              style={{ width: "25px", height: "25px", marginRight: "10px" }}
+              onClick={() => navigate(-1)}
+            />
+            <h3>계정 정보 수정</h3>
+          </StDiv>
+          <ContainerWrapper>
+            <EditContainer>
+              <Imgwrapper>
+                <StImg
+                  src={previewImg ? previewImg : myinfo.imgUrl}
+                  alt="profileImg"
+                />
+              </Imgwrapper>
+              <Contentwrapper>
+                <StId>{myinfo.userId}</StId>
+                <Div>
+                  <StNickname>
+                    <span style={{ marginRight: "10px" }}>닉네임</span>
+                    <StInput
+                      required
+                      name="nickname"
+                      maxLength={5}
+                      placeholder="닉네임을 입력하세요."
+                      type="text"
+                      value={nickname}
+                      onChange={(e) => setNickname(e.target.value)}
                     />
-                    <h3>계정 정보 수정</h3>
-                </StDiv>
-                <ContainerWrapper>
-                    <EditContainer>
-                        <Imgwrapper>
-                            <StImg
-                                src={previewImg ? previewImg : myinfo.imgUrl}
-                                alt='profileImg'
-                            />
-                        </Imgwrapper>
-                        <Contentwrapper>
-                            <StId>{myinfo.userId}</StId>
-                            <StNickname>
-                                <span style={{ marginRight: '20px' }}>닉네임</span>
-                                <StInput
-                                    required
-                                    name='nickname'
-                                    maxLength={15}
-                                    placeholder='닉네임을 입력하세요.'
-                                    type='text'
-                                    value={nickname}
-                                    onChange={(e) => setNickname(e.target.value)}
-                                />
-                            </StNickname>
-                            <StInput
-                                type='file'
-                                style={{ display: 'none' }}
-                                accept='image/*'
-                                name='imgFile'
-                                onChange={onChangeImgFileInput}
-                                ref={imgFileInputRef}
-                            />
-                            <BtnEdit
-                                style={{ backgroundColor: '#1E88E5' }}
-                                type='button'
-                                ref={imgFileUploadBtnRef}
-                                onClick={() => {
-                                    imgFileInputRef.current.click();
-                                }}
-                            >
-                                프로필 사진 변경
-                            </BtnEdit>
-                            <BtnEdit>비밀번호 변경</BtnEdit>
-                        </Contentwrapper>
-                    </EditContainer>
-                    <StButton type='submit' style={{ width: '200px', backgroundColor: '#038E00', marginTop: '60px' }}>
-                        수정 완료
-                    </StButton>
-                </ContainerWrapper>
-            </Item2Form>
-        </>
+                  </StNickname>
+                  <OverlapButton type="button" onClick={nicknameCheckHandler}>
+                    중복확인
+                  </OverlapButton>
+                </Div>
+                <StInput
+                  type="file"
+                  style={{ display: "none" }}
+                  accept="image/*"
+                  name="imgFile"
+                  onChange={onChangeImgFileInput}
+                  ref={imgFileInputRef}
+                />
+                <BtnEdit
+                  style={{ backgroundColor: "#1E88E5" }}
+                  type="button"
+                  ref={imgFileUploadBtnRef}
+                  onClick={() => {
+                    imgFileInputRef.current.click();
+                  }}
+                >
+                  프로필 사진 변경
+                </BtnEdit>
+                <BtnEdit>비밀번호 변경</BtnEdit>
+                <BtnEdit
+                  type="button"
+                  onClick={onChangeRemoveInfo}
+                  ref={removeinfoBtnRef}
+                >
+                  회원 탈퇴
+                </BtnEdit>
+              </Contentwrapper>
+            </EditContainer>
+            <StButton
+              type="submit"
+              style={{
+                width: "200px",
+                backgroundColor: "#038E00",
+                marginTop: "60px",
+              }}
+            >
+              수정 완료
+            </StButton>
+          </ContainerWrapper>
+        </Item2Form>
+      </>
     );
 };
 
@@ -193,16 +289,16 @@ const Imgwrapper = styled.div`
 `;
 
 const StInput = styled.input`
-    box-sizing: border-box;
-    width: 200px;
+  box-sizing: border-box;
+    width: 100px;
     height: 30px;
     border: transparent;
-    border-bottom: 1px solid grey;
-    padding-left: 10px;
+    border-bottom: 1.5px solid grey;
+    padding-left: 15px;
     :focus {
       outline: none;
       border-color: #18a0fb;
-      box-shadow: 0 0 5px #18a0fb;
+      box-shadow: 0 1 3px #18a0fb;
     }
 `;
 
@@ -249,7 +345,7 @@ border-top: 1px solid #c9c9c9; */
 
 const StNickname = styled.div`
 display: flex;
-width: 100%;
+/* width: 100%; */
 align-items: center;
 font-size: 14px;
 font-family: 'NotoSansKR';
@@ -272,3 +368,24 @@ const StButton = styled.button`
             box-shadow: 1px 1px 3px 0 #bcd7ff;
   }
 `;
+
+const OverlapButton = styled.button`
+  height: 30px;
+  width: 80px;
+  padding: 0 10px;
+  margin-top: 20px;
+  margin-left: 10px;
+  border: transparent;
+  border-radius: 5px;
+  outline: none;
+  color: white;
+  background-color: #d9d9d9;
+  cursor: pointer;
+  :hover {
+    filter: brightness(95%);
+  }
+`;  
+
+const Div = styled.div`
+  display: flex;
+`

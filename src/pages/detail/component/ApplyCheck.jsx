@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import {__getApplication, __refuse, __accept } from '../../../redux/modules/application';
 import ModalOfApplyCheck from './ModalOfApplyCheck';
+import ChatFloatingBtn from '../../../components/ChatFloatingBtn';
 
 
 const ApplyCheck = () => {
@@ -123,10 +124,13 @@ const ApplyCheck = () => {
           <div>모임명</div>
           <div> {detailTitle} </div>
         </ApplyTitleDiv>
-        {applicants.map((eachApplicant) => 
+        {applicants.slice().reverse().map((eachApplicant) => 
           <Cards key={uuidv4()} eachApplicant={eachApplicant} />
         )}
       </Item1>
+      <div onClick={()=>navigate('/chatlist')}>
+        <ChatFloatingBtn />
+      </div>
     </StContainer>
   );
 };
