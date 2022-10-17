@@ -6,18 +6,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { __getMyInfo } from '../redux/modules/myinfo';
 import { IoSearchSharp } from 'react-icons/io5';
 
+import SSE from './SSE';
+
 
 const Header = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
-    const myinfo = useSelector((state)=>state.myinfo.myinfo.imgUrl);
+    const ACCESSTOKEN = localStorage.getItem('ACCESSTOKEN');
+    const myinfo = useSelector((state)=>state.myinfo.myinfo);
 
     useEffect(()=>{
         dispatch(__getMyInfo())
-      },[])
+      },[ACCESSTOKEN])
 
-    // console.log(myinfo)
+    // console.log(myinfo);
 
     const [accesstoken,setAccesstoken] = useState(undefined);
     // const [profileImg,setProfileImg] = useState(undefined);
@@ -60,6 +62,8 @@ const Header = () => {
       if (window.confirm("로그아웃 하시겠습니까?")) {
         setAccesstoken(localStorage.removeItem("ACCESSTOKEN"));
         setAccesstoken(localStorage.removeItem("REFRESHTOKEN"));
+        localStorage.removeItem("Role");
+        localStorage.removeItem("ImgURL");
         // setProfileImg(localStorage.removeItem("ImgURL"));
         localStorage.removeItem("Id");
         alert('로그아웃 되었습니다.')
@@ -87,7 +91,7 @@ const Header = () => {
                     </AddBtn>
                     <AddBtn onClick={()=>navigate('/form')}>모임등록</AddBtn>
                     <BtnProfile 
-                    style={{backgroundSize:'cover',backgroundImage:`url(${myinfo})`, backgroundPosition: 'center'}}
+                    style={{backgroundSize:'cover',backgroundImage:`url(${myinfo?.imgUrl})`, backgroundPosition: 'center'}}
                     ref={modalRef} onClick={handleModal}>
                         {/* <img src={ profile } alt="profile"/> */}
                     </BtnProfile>
@@ -100,8 +104,9 @@ const Header = () => {
                       <IoSearchSharp color='white' size='20px' />
                     </AddBtn>
                     <AddBtn onClick={()=>navigate('/form')}>모임등록</AddBtn>
+                    <SSE />
                     <BtnProfile 
-                    style={{backgroundSize:'cover',backgroundImage:`url(${myinfo})`, backgroundPosition: 'center'}}
+                    style={{backgroundSize:'cover',backgroundImage:`url(${myinfo?.imgUrl})`, backgroundPosition: 'center'}}
                     ref={modalRef} onClick={handleModal}>
                         {/* <img src={ profile } alt="profile"/> */}
                     </BtnProfile>

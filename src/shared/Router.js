@@ -19,16 +19,19 @@ import ChatListPg from "../pages/chat/ChatListPg";
 import ChatDetailPg from "../pages/chat/ChatDetailPg";
 import AdminPg from "../pages/admin/AdminPg";
 
+import Header from '../components/Header';
+
 const Router = () => {
+
     return (
       <BrowserRouter>
+          <Header />
         <Routes>
           <Route path="/" element={<MainPg />} />
           <Route path="/search" element={<SearchPg />} />
           <Route path="signup" element={<SignupPg />} />
           <Route path="login" element={<LoginPg />} />
-          <Route path="/oauth/kakao" element={<KaKao />} />{" "}
-          {/* 리다이렉트 되는 화면 */}
+          <Route path="/oauth/kakao" element={<KaKao />} /> {/* 리다이렉트 되는 화면 */}
           <Route path="/detail/:id" element={<DetailPg />} />
           <Route path="/detail/:id/edit" element={<DetailEditPg />} />
           <Route path="/detail/:id/apply" element={<ApplyFormPg />} />
@@ -43,7 +46,7 @@ const Router = () => {
           <Route path="/chatlist" element={<ChatListPg />} />
           <Route path="/chatlist/:id" element={<ChatDetailPg />} />
           <Route path="/admin" element={<AdminPg />} />
-          <Route path="*" element={<div>404 error 없는페이지입니다</div>} />
+          <Route path="*" element={<div>404 error 존재하지 않는 페이지입니다.</div>} />
         </Routes>
       </BrowserRouter>
     );

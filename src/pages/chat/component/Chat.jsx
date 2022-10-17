@@ -277,7 +277,7 @@ const Chat = () => {
   const logIn = localStorage.getItem("ACCESSTOKEN");
   const Id = localStorage.getItem("Id");
   const chatInfo = useSelector((state) => state.chatinfo.chatinfo);
-  console.log(chatInfo)
+  // console.log(chatInfo)
   const roomId = useParams()
 
     useEffect(() => {
