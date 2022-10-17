@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from '../../components/Header';
+// import Header from '../../components/Header';
 import MypageProfile from './components/MypageProfile';
 import MypageTap from './components/MypageTap';
 import ChatFloatingBtn from '../../components/ChatFloatingBtn';
@@ -10,7 +10,7 @@ const MypagePg = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <MypageProfile />
       <MypageTap />
       <div onClick={() => navigate('/chatlist')}>

@@ -1,14 +1,14 @@
 import React from 'react';
-import Header from "../../components/Header"
+// import Header from "../../components/Header"
 import WishList from './components/WishList';
 
 const WishPg = () => {
-    return (
-        <>
-        <Header/>
-        <WishList/>
-        </>
-    );
-}
+  return (
+    <>
+      {/* <Header/> */}
+      <WishList />
+    </>
+  );
+};
 
 export default WishPg;
