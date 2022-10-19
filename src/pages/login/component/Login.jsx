@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react';
 // import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { KAKAO_AUTH_URL } from "../../../shared/OAuth";
+// import { KAKAO_AUTH_URL } from "../../../shared/OAuth";
 
 const API_URL = process.env.REACT_APP_HOST_PORT;
 
@@ -98,7 +98,7 @@ const Login = () => {
         <KakaoLogin
         src='img/kakao_login_medium_wide.png'
         alt='카카오 로그인 버튼'
-        onClick={()=>{window.location.href = KAKAO_AUTH_URL}}
+        onClick={()=>{window.location.href = process.env.REACT_APP_KAKAO_AUTH_URL}}
         />
       </Item1>
       <Item2>

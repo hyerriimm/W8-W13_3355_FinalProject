@@ -2,7 +2,6 @@ import { React, useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { __getMyInfo } from '../redux/modules/myinfo';
 import { IoSearchSharp } from 'react-icons/io5';
 
@@ -171,7 +170,7 @@ const BtnWrapper = styled.div`
 
 const AddBtn = styled.button`
     height: 30px;
-    width: 69px;
+    width: 70px;
     margin: 0 25px 0 0;
     text-align: center;
     border-radius: 4px;
