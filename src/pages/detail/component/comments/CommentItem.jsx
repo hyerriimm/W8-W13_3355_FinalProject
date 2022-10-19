@@ -229,7 +229,7 @@ const Item = styled.div`
 const First = styled.div`
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: 10px;
 `;
 
 const Left = styled.div`
@@ -248,6 +248,9 @@ const Right = styled.div`
 const RightButton = styled.div`
   cursor: pointer;
   font-size: 10px;
+  :hover {
+    color: #2196f3;
+  }
 `;
 
 const ProfileImg = styled.div`
@@ -261,6 +264,7 @@ const ProfileImg = styled.div`
 const Nickname = styled.div`
   font-size: 14px;
   font-weight: bold;
+  width: 70px;
 `;
 
 const Content = styled.div`
