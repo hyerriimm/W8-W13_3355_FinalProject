@@ -71,45 +71,72 @@ const MainBoard = () => {
       <Container>
       <ListContainer>
         {cardList.map((card) => {
-          return ( 
-            <CardWrapper 
-            key={uuidv4()} 
-            onClick={() => navigate(`/detail/${card.id}`)}>
+          return (
+            <CardWrapper
+              key={uuidv4()}
+              onClick={() => navigate(`/detail/${card.id}`)}
+            >
               <ImageContainer>
-                <img src={card.imgUrl} alt=""/>
+                <img src={card.imgUrl} alt="" />
               </ImageContainer>
               <DescContainer>
                 <ProfileWrapper>
-                  <div style={{display:'flex', alignItems:'center'}}>                    
-                    <ProfileImg 
-                    src={ card.authorImgUrl } 
-                    alt="profile"
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <ProfileImg
+                      src={card.authorImgUrl}
+                      alt="profile"
                     />
-                    <h4 style={{width:'100%', margin:'0', display:'inline'}}>{card.authorNickname}</h4>
+                    <h4
+                      style={{ width: "100%", margin: "0", display: "inline" }}
+                    >
+                      {card.authorNickname}
+                    </h4>
                   </div>
-                  <div style={{display:'flex', alignItems:'center'}}>
-                    <div style={{display:'flex', alignItems:'center', marginRight:'8px'}}>
-                      <BiHeart size='17px'/>
-                      <span style={{marginLeft:'2px'}}>{ card.numOfWish } </span>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginRight: "8px",
+                      }}
+                    >
+                      <BiHeart size="17px" />
+                      <span style={{ marginLeft: "2px" }}>
+                        {card.numOfWish}{" "}
+                      </span>
                     </div>
-                    <div style={{display:'flex', alignItems:'center', marginRight:'15px'}}>
-                      <RiChat3Line size='17px'/>                   
-                      <span style={{marginLeft:'2px'}}>{ card.numOfComment } </span>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginRight: "15px",
+                      }}
+                    >
+                      <RiChat3Line size="17px" />
+                      <span style={{ marginLeft: "2px" }}>
+                        {card.numOfComment}{" "}
+                      </span>
                     </div>
                   </div>
                 </ProfileWrapper>
                 <TitleWrapper>
                   <Title>{card.title}</Title>
                   <RestDay>
-                  {card.restDay.split("일")[0] == 0 ? (
-                  <p style={{ color: '#e51e1e'}}>오늘 마감</p>
-                  ):(
-                    <p>마감 {card.restDay}</p>
-                  )}
+                    {card.restDay.split("일")[0] == 0 ? (
+                      <p style={{ color: "#e51e1e" }}>오늘 마감</p>
+                    ) : (
+                      <p>마감 {card.restDay}</p>
+                    )}
                   </RestDay>
                 </TitleWrapper>
-                <Address><CgPin style={{marginRight:'2px'}}/>{card.address}</Address>
-                <Dday><BiCalendarCheck style={{marginRight:'2px'}}/>{card.dday}</Dday>
+                <Address>
+                  <CgPin style={{ marginRight: "2px" }} />
+                  {card.address}
+                </Address>
+                <Dday>
+                  <BiCalendarCheck style={{ marginRight: "2px" }} />
+                  {card.dday}
+                </Dday>
               </DescContainer>
             </CardWrapper>
           );
