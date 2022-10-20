@@ -17,11 +17,12 @@ const CommentItem = ({ item, getCommentList }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const dispatch = useDispatch();
+  const Id = localStorage.getItem("Id");
 
   const [isUpdate, setIsUpdate] = useState(false);
   const [comment, setComment] = useState({});
 
-  const Id = localStorage.getItem("Id");
+
 
 
   //등록
@@ -31,8 +32,8 @@ const CommentItem = ({ item, getCommentList }) => {
     }
     setIsUpdate(!isUpdate);
   };
-  
-  
+
+
 
   //수정
   const handleUpdate = async (e) => {
@@ -52,9 +53,8 @@ const CommentItem = ({ item, getCommentList }) => {
       setIsUpdate(false);
       getCommentList();
     }
-    
   };
-  
+
 
   //삭제
   const handleDelete = async () => {
@@ -77,8 +77,8 @@ const CommentItem = ({ item, getCommentList }) => {
     const { value } = e.target;
 
     setComment(value);
-
   };
+
 
   //신고 모달
   const [modalOpen, setModalOpen] = useState(false);
@@ -90,52 +90,48 @@ const CommentItem = ({ item, getCommentList }) => {
     setModalOpen(false);
   };
 
-
+  
   //댓글 신고 기능
-   const initialState = {
-     content: "",
-   };
-   const [content, setContent] = useState(initialState);
+  const initialState = {
+    content: "",
+  };
+  const [content, setContent] = useState(initialState);
 
-   const ReportCommentBtn = async () => {
-     if (item.content.trim() === "") {
-       return alert("내용을 입력해야 신고가 가능합니다.");
-     }
-     if (
-       window.confirm(
-         "댓글을 신고하시겠습니까?\n신고 후 취소는 불가능합니다."
-       )
-     ) {
-       try {
-         const response = await axios.post(
-           `${process.env.REACT_APP_HOST_PORT}/report/comment/${item.commentId}`,
-           content,
-           {
-             headers: {
-               authorization: localStorage.getItem("ACCESSTOKEN"),
-               refreshtoken: localStorage.getItem("REFRESHTOKEN"),
-             },
-           }
-         );
+  const ReportCommentBtn = async () => {
+    if (item.content.trim() === "") {
+      return alert("내용을 입력해야 신고가 가능합니다.");
+    }
+    if (
+      window.confirm("댓글을 신고하시겠습니까?\n신고 후 취소는 불가능합니다.")
+    ) {
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_HOST_PORT}/report/comment/${item.commentId}`,
+          content,
+          {
+            headers: {
+              authorization: localStorage.getItem("ACCESSTOKEN"),
+              refreshtoken: localStorage.getItem("REFRESHTOKEN"),
+            },
+          }
+        );
 
-         if (response.data.success === true) {
-           alert(response.data.data);
-           setContent(initialState);
-           navigate(`/detail/${item.postId}`);
-           return closeModal();
-         }
-         if (response.data.success === false) {
-           alert(response.data.error.message);
-           return;
-         }
-       } catch (error) {
-         console.log(error);
-       }
-       navigate(`/detail/${item.postId}`);
-       
-     }
-   };
-
+        if (response.data.success === true) {
+          alert(response.data.data);
+          setContent(initialState);
+          navigate(`/detail/${item.postId}`);
+          return closeModal();
+        }
+        if (response.data.success === false) {
+          alert(response.data.error.message);
+          return;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+      navigate(`/detail/${item.postId}`);
+    }
+  };
 
 
   return (
@@ -176,6 +172,7 @@ const CommentItem = ({ item, getCommentList }) => {
           </Right>
         )}
       </First>
+      
 
       {isUpdate ? (
         <Stcontainer>
@@ -194,14 +191,18 @@ const CommentItem = ({ item, getCommentList }) => {
   );
 };
 
+
+
+
+
 export default CommentItem;
 
 const Stcontainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
-  padding: 0 10px;
+  /* padding: 0 10px; */
 `;
 
 const Input = styled.input`
@@ -229,7 +230,7 @@ const Item = styled.div`
 const First = styled.div`
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: 10px;
 `;
 
 const Left = styled.div`
@@ -248,6 +249,9 @@ const Right = styled.div`
 const RightButton = styled.div`
   cursor: pointer;
   font-size: 10px;
+  :hover {
+    color: #2196f3;
+  }
 `;
 
 const ProfileImg = styled.div`
@@ -261,6 +265,7 @@ const ProfileImg = styled.div`
 const Nickname = styled.div`
   font-size: 14px;
   font-weight: bold;
+  width: 70px;
 `;
 
 const Content = styled.div`
