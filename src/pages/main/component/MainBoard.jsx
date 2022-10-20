@@ -80,19 +80,19 @@ const MainBoard = () => {
               </ImageContainer>
               <DescContainer>
                 <ProfileWrapper>
-                  <div style={{display:'flex', alignItems:'center'}}>                    
-                    <ProfileImg 
-                    src={ card.authorImgUrl } 
+                  <div style={{display:'flex', alignItems:'center', width: '150px'}}>                    
+                    <ProfileImg
+                    style={{ backgroundSize:'cover', backgroundImage:`url(${card.authorImgUrl})`, backgroundPosition: 'center'}} 
                     alt="profile"
                     />
-                    <h4 style={{width:'100%', margin:'0', display:'inline'}}>{card.authorNickname}</h4>
+                    <h4 style={{width:'100%', marginLeft:'10px', display:'inline-block'}}>{card.authorNickname}</h4>
                   </div>
                   <div style={{display:'flex', alignItems:'center'}}>
                     <div style={{display:'flex', alignItems:'center', marginRight:'8px'}}>
                       <BiHeart size='17px'/>
                       <span style={{marginLeft:'2px'}}>{ card.numOfWish } </span>
                     </div>
-                    <div style={{display:'flex', alignItems:'center', marginRight:'15px'}}>
+                    <div style={{display:'flex', alignItems:'center', marginRight:'0px'}}>
                       <RiChat3Line size='17px'/>                   
                       <span style={{marginLeft:'2px'}}>{ card.numOfComment } </span>
                     </div>
@@ -244,15 +244,18 @@ const ProfileWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 15px 0 0 15px;
-  height: fit-content;
+  width: 340px;
+  /* margin: 0 auto; */
+  box-sizing: border-box;
+  padding: 10px 15px 0px 15px;
+  /* height: fit-content; */
+  
 `;
 
-const ProfileImg = styled.img`
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-  margin-right: 10px;
+const ProfileImg = styled.div`
+  width: 40px;
+  height: 30px;
+  border-radius: 100%;
   border: 2px solid #bcd7ff;
 `;
 
