@@ -161,9 +161,10 @@ const Empty = styled.h1`
 const Container = styled.div`
     display: flex;
     margin-top: 20px;
-    /* justify-content: center; */
+    justify-content: center;
     flex-direction: column;
     align-items: center;
+    width: 100vw;
     /* background-color: antiquewhite; */
     /* border: 1px solid black; */
     
@@ -171,21 +172,22 @@ const Container = styled.div`
 
 const ListContainer = styled.div`
     display: flex;
-    /* justify-content: space-between; */
+    /* display: inline-block; */
+    /* justify-content: center; */
     flex-wrap: wrap;
     flex-direction: row;
-    width: 1230px;
+    width: 1110px;
     /* background-color: green; */
 
-  @media only screen and (min-width: 854px) and (max-width: 1255px) {
+  @media only screen and (min-width: 768px) and (max-width: 1129px) {
      display: flex;
      flex-direction: row;
      flex-wrap: wrap;
-     width: 825px;
+     width: 745px;
      /* background-color: #704d1e; */
   }
 
-  @media only screen and (max-width: 854px) {
+  @media only screen and (max-width: 767px) {
     flex-direction: column;
     align-items: center;
     width: 100%;
@@ -198,14 +200,14 @@ const CardWrapper = styled.div`
   flex-direction: column;
   /* border: 0.5px solid #E3F2FD; */
   width: 100%;
-  min-width: 300px;
-  max-width: 375px;
+  /* min-width: 300px; */
+  max-width: 340px;
   border-radius: 13px;
   /* padding: 5px; */
   /* box-shadow: 0.5px 0.5px 1px 0 #cce0ff; */
   box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.09);
   transition: 0.2s ease-in;
-  margin: 17px;
+  margin: 15px;
   cursor: pointer;
   :hover {
             filter: brightness(80%);

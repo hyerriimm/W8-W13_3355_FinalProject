@@ -46,9 +46,9 @@ const Banner = () => {
       }
       window.addEventListener('resize', handleResize);
       handleResize();
-      if (windowSize.width < 1255) {
+      if (windowSize.width < 1129) {
         setIsMobile(true);
-      } else if (windowSize.width >= 1255) {
+      } else if (windowSize.width >= 1129) {
         setIsMobile(false);
       }
       return () => window.removeEventListener('resize', handleResize);
@@ -84,18 +84,17 @@ const Banner = () => {
   export default Banner;
 
 const SliderWrapper = styled.div`
-
-  width: 1200px;
+  width: 1100px;
   margin: 0 auto;
   margin-top: 20px;
   overflow: hidden;
   border-radius: 10px;
-  @media only screen and (min-width: 854px) and (max-width: 1255px) {
-    width: 790px;
+  @media only screen and (min-width: 768px) and (max-width: 1129px) {
+    width: 760px;
   }
 
-  @media only screen and (max-width: 854px) {
-    width: 390px;
+  @media only screen and (max-width: 767px) {
+    width: 360px;
   }
 `
 
