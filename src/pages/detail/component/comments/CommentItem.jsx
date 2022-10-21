@@ -18,6 +18,7 @@ const CommentItem = ({ item, getCommentList }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const Id = localStorage.getItem("Id");
+  const logIn = localStorage.getItem("ACCESSTOKEN");
 
   const [isUpdate, setIsUpdate] = useState(false);
   const [comment, setComment] = useState({});
@@ -134,6 +135,7 @@ const CommentItem = ({ item, getCommentList }) => {
   };
 
 
+
   return (
     <Item>
       <First>
@@ -143,6 +145,15 @@ const CommentItem = ({ item, getCommentList }) => {
               backgroundSize: "cover",
               backgroundImage: `url(${item.memberImage})`,
               backgroundPosition: "center",
+            }}
+            onClick={() => {
+              if (logIn && Id === item.memberId) {
+                navigate("/mypage");
+              } else if (logIn && Id !== item.memberId) {
+                navigate(`/someonesmypage/${item.commentMemberId}`);
+              } else {
+                return;
+              }
             }}
           />
           <Nickname>{item.memberNickname}</Nickname>
@@ -172,7 +183,6 @@ const CommentItem = ({ item, getCommentList }) => {
           </Right>
         )}
       </First>
-      
 
       {isUpdate ? (
         <Stcontainer>
