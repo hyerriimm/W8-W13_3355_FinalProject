@@ -85,7 +85,9 @@ const Form = () => {
     formData.append('startDate', new Date(+startDate + 3240 * 10000).toISOString().split("T")[0]);
     formData.append('endDate', new Date(+endDate + 3240 * 10000).toISOString().split("T")[0]);
     formData.append('dDay', new Date(+dDay + 3240 * 10000).toISOString().split("T")[0]);
-    formData.append('imgFile', imgFile);
+    if (imgFile !== null) {
+      formData.append('imgFile', imgFile);
+    }
     formData.append('address', address);
     formData.append('detailAddress', detailAddress);
     formData.append('placeName', placeName);

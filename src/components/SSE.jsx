@@ -1,23 +1,43 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
 import styled from 'styled-components';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 
-import { VscBellDot } from "react-icons/vsc";
+// import { VscBellDot } from "react-icons/vsc";
 import { VscBell } from "react-icons/vsc";
 import { BsFillTrashFill } from "react-icons/bs";
 import { TiDelete } from "react-icons/ti";
 
-const SSE = () => {
-  const dispatch = useDispatch();
+
+const SSE = ({basicSSE, chatSSE}) => {
+  // const dispatch = useDispatch();
   const ref = useRef(null);
   const ACCESSTOKEN = localStorage.getItem('ACCESSTOKEN');
   const EventSource = EventSourcePolyfill || NativeEventSource;
   const [alertOpen, setAlertOpen] = useState(false);
   const [getList, setGetList] = useState([]);
   const [getCount, setGetCount] = useState(0); // 안 읽은 숫자
+  const [getChatList, setGetChatList] = useState([]);
+  const [isNewChatStatus, setIsNewChatStatus] = useState(false);
+
+  // 새로운 채팅 있는지 없는지 확인----------------------------------------------
+const IsNewChat = async() => {
+  await axios.get(`${process.env.REACT_APP_HOST_PORT}/notifications/chat`, {
+    headers: {
+      authorization: localStorage.getItem("ACCESSTOKEN"),
+      refreshtoken: localStorage.getItem("REFRESHTOKEN"),
+    },
+  }).then((res)=>{
+    console.log(res.data.unreadMessage);
+    if (res.data.unreadMessage === true) {
+      setIsNewChatStatus(true);
+    } else {
+      setIsNewChatStatus(false);
+    }
+  }).catch((error)=>{});
+};
 
 // 종알림 누를때마다 알림list, 안 읽은 숫자 가져오기-------------------------------
 const GetList = useCallback(async() => {
@@ -55,6 +75,7 @@ const GetCount = useCallback(async() => {
     if (ACCESSTOKEN) {
       GetList();
       GetCount();
+      IsNewChat();
     }
   }, [alertOpen, ACCESSTOKEN]);
 // -----------------------------------------------------------------------------
@@ -78,39 +99,39 @@ const GetCount = useCallback(async() => {
           );
 
           /*--------------- EVENTSOURCE ONOPEN --------------- */
-          eventSource.addEventListener('open', async (e) => {
-            if (e) {
-              console.log('EVENTSOURCE ONOPEN')
-              // eventSource.close();
-            }
-          });
+          // eventSource.addEventListener('open', async (e) => {
+          //   if (e) {
+          //     console.log('EVENTSOURCE ONOPEN')
+          //   }
+          // });
 
           /*--------------- EVENTSOURCE ONMESSAGE --------------- */
           eventSource.addEventListener('message', async (e) => {
             if (e.type === 'message' && e.data.startsWith('{')) {
               const data = await JSON.parse(e.data);
-              if (data.id !== null) {
-                // console.log(data);
+              // console.log(data);
+              if (data.id !== null && data.notificationType !== 'CHAT') {
                 setGetList((prev) => [data, ...prev]);
                 setGetCount((prev) => prev+1);
-              }
+              } 
+              if (data.id !== null && data.notificationType === 'CHAT') {
+                setGetChatList((prev) => [data, ...prev]);
+              } 
             }
           });
 
           /*--------------- EVENTSOURCE ONERROR --------------- */
           eventSource.addEventListener('error', async (e) => {
             if (e) {
-              console.log('EVENTSOURCE ONERROR')
-              // eventSource.close();
+              // console.log('EVENTSOURCE ONERROR')
+              eventSource.close();
             }
           });
-
-          // console.log(eventSource);
         } catch (error) {}
       };
       fetchSse();
       return () => {
-        console.log('CLOSE; 페이지 이동')
+        // console.log('CLOSE; 페이지 이동')
         eventSource.close();
       }
     }
@@ -129,6 +150,7 @@ const GetCount = useCallback(async() => {
       setAlertOpen(false);
     }
   };
+
   useEffect(() => {
     if (alertOpen) document.addEventListener('mousedown', clickOutSide);
     return () => {
@@ -147,7 +169,7 @@ const GetCount = useCallback(async() => {
     }).then((res)=>{
       if (res.data.success === false) alert(res.data.error.message);
       else {
-        alert(res.data.msg);
+        // alert(res.data.msg);
         setGetList(getList.filter((a, idx) => a.id !== id)); //알림내역에서 id가 일치하지 않는 것들만 다시 담기(=일치하는 거 빼기)
         if (getCount && status === false) {
           setGetCount((prev)=> prev-1);
@@ -168,17 +190,7 @@ const GetCount = useCallback(async() => {
 
 // 알림 1개 지우는 함수 
   const messageDelete = async (id, status) => {
-    // setGetList(getList.filter((a, idx) => a.id !== id)); //알림내역에서 id가 일치하지 않는 것들만 다시 담기(=일치하는 거 빼기)
     DeleteOneNoti(id, status);
-
-    // if (getCount && status === false) {
-    //   setGetCount(getCount - 1);
-    //   return;
-    // }
-    // if (!getCount) {
-    //   setGetCount();
-    //   return;
-    // }
   };
 //-----------------------------------------------------------------------
 
@@ -193,7 +205,6 @@ const GetCount = useCallback(async() => {
     }).then((res)=>{
       if (res.data.success === false) alert(res.data.error.message);
       else {
-        alert(res.data.msg);
         setGetList([]); //알림내역에서 id가 일치하지 않는 것들만 다시 담기(=일치하는 거 빼기)
         setGetCount(0);
       };
@@ -202,9 +213,7 @@ const GetCount = useCallback(async() => {
 
 // 모든 알림 지우는 함수
   const messageAllDelete = async () => {
-    // setGetList([]); //알림내역에서 id가 일치하지 않는 것들만 다시 담기(=일치하는 거 빼기)
     DeleteAllNoti();
-    // setGetCount();
   };
 //-----------------------------------------------------------------------
 
@@ -218,55 +227,32 @@ const ReadNoti = async(id, url) => {
     },
   }).then((res)=>{
     if (res.status === 200) {
-      // console.log('알림 읽음');
       window.location.href = url;
-    } else {
-      console.log('FAIL; 알림 읽기')
-    }
+    };
   }).catch((error)=>{});
 };
 
 //  알림 눌러서 읽음처리 및 알림으로 온 댓글 or 지원확인 or 지원결과(마이페이지) 로 이동
   const messageRead = async (id, url,status) => {
-    // window.location.href = url; // 크롬이 자동으로 https로 연결해버림...ㅠ 엥 지금 https로 들어오는데??
-
-    if (status === false) {
       ReadNoti(id, url);
-    }
   };
 //-----------------------------------------------------------------------
-
-
-//안 읽은 숫자가 undefined이면 null
-  // if (getCount === undefined) {
-  //   return null;
-  // }
 
 
 
   return (
     <>
+    {basicSSE? (
       <Wrap ref={ref}>
         {getList?.length === 0 ||  getCount == 0 ? (
-          <div style={{width:'40px', height:'50px', display:'flex', alignItems:'center'}}>
-            <VscBell onClick={openAlert} 
-            size='25px'/>
-          </div>
+          <BellDiv>
+            <VscBell onClick={openAlert} size='25px'/>
+          </BellDiv>
         ) : (
-          <div style={{width:'40px', height:'50px', display:'flex', alignItems:'center'}}>
-          <button
-          style={{backgroundColor:'red', width:'fit-content', height:'20px', border:'none', borderRadius:'50%', color:'white', 
-          display:'flex', alignItems:'center', justifyContent:'center',boxShadow:'0 0 5px 0 red',
-          position:'absolute', top:'3px', right:'0px'}}
-          >{getCount}</button>
-          <VscBell onClick={openAlert} 
-          size='25px'
-          style={{color:'red'}}
-          />
-          {/* <VscBellDot onClick={openAlert} 
-          size='25px'/> */}
-          {/* <span>{getCount}</span> */}
-          </div>
+          <BellDiv>
+            <RedCountBtn>{getCount}</RedCountBtn>
+            <VscBell onClick={openAlert}  size='25px' style={{color:'red'}}/>
+          </BellDiv>
         )}
 
         {alertOpen && (
@@ -310,6 +296,16 @@ const ReadNoti = async(id, url) => {
           </AlertContent>
         )}
       </Wrap>
+    ):(false)}
+
+    {chatSSE? (
+      <>
+      {/* { getChatList?.length === 0 ? (null) : (<RedLight></RedLight>)} */}
+      {/* 이렇게 짜면 안됨 내가 쓴 채팅은 반영하면 안됨 */}
+      { isNewChatStatus || getChatList?.length !== 0 ? (<RedLight></RedLight>) : (false)}
+
+      </>
+    ):(false)}
     </>
   );
 };
@@ -324,6 +320,44 @@ const Wrap = styled.div`
   align-items: center;
   justify-content: center;
   margin-right: 10px;
+`;
+
+const BellDiv = styled.div`
+  display: flex;
+  align-items: center;
+  width: 40px;
+  height: 50px;
+`;
+
+const RedCountBtn = styled.button`
+  background-color: red;
+  box-shadow: 0 0 5px 0 red;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 3px;
+  right: 0px;
+  width: fit-content;
+  height: 20px;
+  border: none;
+  border-radius: 50%;
+`;
+
+const RedLight = styled.div`
+  background-color: red;
+  box-shadow: 0 0 5px 0 red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 15px;
+  height: 15px;
+  border: none;
+  border-radius: 50%;
 `;
 
 const AlertContent = styled.div`

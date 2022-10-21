@@ -31,17 +31,17 @@ const Header = () => {
     };
 
 
-    useEffect(()=>{
-      const timeout = setTimeout(()=>{
-        setAccesstoken(localStorage.getItem("ACCESSTOKEN"));
-    },1000);
-      return ()=>{clearTimeout(timeout);}
-    },[window.location.reload, accesstoken, navigate]);
+    // useEffect(()=>{
+    //   const timeout = setTimeout(()=>{
+    //     setAccesstoken(localStorage.getItem("ACCESSTOKEN"));
+    // },1000);
+    //   return ()=>{clearTimeout(timeout);}
+    // },[window.location.reload, accesstoken, navigate]);
 
-    useEffect(() => {
-      setAccesstoken(localStorage.getItem("ACCESSTOKEN"));
-      // setProfileImg(localStorage.getItem("ImgURL"));
-    }, [accesstoken]);
+    // useEffect(() => {
+    //   setAccesstoken(localStorage.getItem("ACCESSTOKEN"));
+    //   // setProfileImg(localStorage.getItem("ImgURL"));
+    // }, [accesstoken]);
     
     useEffect(() => {
       const onClickOutside = (e) => {
@@ -78,7 +78,7 @@ const Header = () => {
         <HdContainer>
             <Logo onClick={()=>navigate('/')}>3355</Logo>
             <BtnWrapper>            
-                { accesstoken ? 
+                { ACCESSTOKEN ? 
                 ( localStorage.getItem("Role") === "ROLE_ADMIN" ?
                   (
                     <>
@@ -103,7 +103,7 @@ const Header = () => {
                       <IoSearchSharp color='white' size='20px' />
                     </AddBtn>
                     <AddBtn onClick={()=>navigate('/form')}>모임등록</AddBtn>
-                    <SSE />
+                    <SSE basicSSE={true}/>
                     <BtnProfile 
                     style={{backgroundSize:'cover',backgroundImage:`url(${myinfo?.imgUrl})`, backgroundPosition: 'center'}}
                     ref={modalRef} onClick={handleModal}>
