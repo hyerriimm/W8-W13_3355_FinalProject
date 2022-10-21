@@ -41,7 +41,7 @@ const Comment = () => {
         setCommentList([]);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   },[]);
 
@@ -84,33 +84,49 @@ const Comment = () => {
   });
 
   return (
-    <>
       <Layout>
-        <div>
-          <Stcontainer>
-            <Input
-              value={comment || ''}
-              onChange={(e)=>setComment(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="댓글을 입력해주세요 (250자 이내)"
-              type="text"
-              maxLength={250}
-            />
+        {localStorage.getItem("ACCESSTOKEN") ? 
+        (
+          <div>
+            <Stcontainer>
+              <Input
+                value={comment || ''}
+                onChange={(e)=>setComment(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="댓글을 입력해주세요 (250자 이내)"
+                type="text"
+                maxLength={250}
+              />
 
-            <Button type="button" onClick={submit}>
-              등록
-            </Button>
-          </Stcontainer>
-          {commentList === null ? false : (
-            <Comments>{commentItems}</Comments>
-          )}
-        </div>
+              <Button type="button" onClick={submit}>
+                등록
+              </Button>
+            </Stcontainer>
+            {commentList === null ? false : (
+              <Comments>{commentItems}</Comments>
+            )}
+          </div>
+        ):
+        (
+          <GuestAlertDiv>
+            로그인 후 댓글을 확인해보세요.
+          </GuestAlertDiv>
+        )}
       </Layout>
-    </>
   );
 };
 
 export default Comment;
+
+const GuestAlertDiv = styled.div`
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+color: grey;
+height: 100px;
+width: fit-content;
+`
 
 const Comments = styled.div`
   background-color: white;

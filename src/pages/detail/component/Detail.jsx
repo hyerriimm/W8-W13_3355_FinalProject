@@ -155,7 +155,7 @@ const Detail = () => {
                   }}
                   />
                   <h4 
-                  style={{width:'150px'}}
+                  style={{width:'150px', cursor:'pointer'}}
                   onClick={()=>{
                     if (logIn && Id === detail.authorId) {
                       navigate('/mypage')
@@ -356,6 +356,7 @@ const ProfileImg = styled.img`
   border-radius: 100%;
   margin-right: 20px;
   border: 2px solid #bcd7ff;
+  cursor: pointer;
 `;
 
 const WishBtn = styled.button`

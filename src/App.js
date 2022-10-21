@@ -1,10 +1,10 @@
 import React from "react";
-import Router from "./shared/Router";
+import RouterPg from "./shared/RouterPg";
 import './App.css'
 
 function App() {
   return (
-    <Router />
+    <RouterPg />
   );
 }
 

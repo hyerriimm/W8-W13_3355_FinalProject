@@ -41,6 +41,9 @@ const ChatList = () => {
                           {chatroom.numOfMember === 0 ? 
                           (<Title style={{color: 'grey'}}>{chatroom.numOfMember}</Title>):
                           (<Title style={{color: '#1E88E5'}}>{chatroom.numOfMember}</Title>)}
+                          {chatroom.numOfUnread === 0 ? 
+                          (false) : 
+                          (<RedCountBtn>{chatroom.numOfUnread}</RedCountBtn>)}
                         </TitleWrapper>
                         <Address>{chatroom.address}</Address>
                         <Dday>{chatroom.dday}</Dday>
@@ -125,6 +128,7 @@ const TitleWrapper = styled.div`
   display: flex;
   align-items: center;
   margin: 13px 0 0 0;
+  position: relative;
 `;
 
 const Title = styled.div`
@@ -132,6 +136,22 @@ const Title = styled.div`
   font-weight: 600;
   margin: 0 0 0 10px;
   font-family: 'NotoSansKR';
+`;
+
+const RedCountBtn = styled.button`
+  background-color: red;
+  box-shadow: 0 0 5px 0 red;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  /* top: 10px; */
+  right: 10px;
+  width: fit-content;
+  height: 20px;
+  border: none;
+  border-radius: 50%;
 `;
 
 const Address = styled.div`
