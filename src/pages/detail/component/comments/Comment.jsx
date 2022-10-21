@@ -41,7 +41,7 @@ const Comment = () => {
         setCommentList([]);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   },[]);
 
