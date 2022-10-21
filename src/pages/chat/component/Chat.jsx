@@ -11,6 +11,7 @@ import { MdRefresh } from "react-icons/md";
 import { FaArrowCircleUp } from "react-icons/fa";
 import { GoThreeBars } from "react-icons/go";
 import { RiMedalLine } from "react-icons/ri";
+import axios from 'axios';
 
 
 // 채팅 기능 컴포넌트
@@ -109,7 +110,7 @@ const Chat = () => {
   // 웹소켓 서버와 연결 
   const connect = () => {
     client.current = new StompJs.Client({
-      brokerURL: `ws://${process.env.REACT_APP_CHAT_HOST}/ws-stomp/websocket`,
+      brokerURL: `wss://${process.env.REACT_APP_CHAT_HOST}/ws-stomp/websocket`,
       connectHeaders: {
         Authorization: localStorage.getItem("ACCESSTOKEN"),
         RefreshToken: localStorage.getItem("REFRESHTOKEN"),
@@ -165,18 +166,25 @@ const Chat = () => {
 
    // 구독하기
   const subscribe = () => {
-    client.current.subscribe(`/sub/chat/room/${id}`, function (chat) {
-      let content = JSON.parse(chat.body);
-      // console.log(content);
-      setMessages((_messages) => [
-        ..._messages,
-        { message: content.message, 
-          sender: content.sender, 
-          senderId:content.senderId, 
-          imgUrl: content.imgUrl },
-      ]);
-      // page.current = totalPage;
-    });
+    client.current.subscribe(`/sub/chat/room/${id}`, async(chat) => {
+        let content = JSON.parse(chat.body);
+        // console.log(content);
+        setMessages((_messages) => [
+          ..._messages,
+          {
+            message: content.message,
+            sender: content.sender,
+            senderId: content.senderId,
+            imgUrl: content.imgUrl
+          },
+        ]);
+        await axios.post(`${process.env.REACT_APP_HOST_PORT}/chat/read`, {messageId:Number(content.messageId)}, {
+          headers: {
+            authorization: localStorage.getItem("ACCESSTOKEN"),
+          },
+        }).then((res) => { }).catch((error) => { });
+        // page.current = totalPage;
+      });
   };
   
 
