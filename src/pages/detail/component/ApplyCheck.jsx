@@ -21,6 +21,7 @@ const ApplyCheck = () => {
   // nickname
   // state "WAIT" "APPROVED" "DENIED"
   // console.log(detailTitle);
+  // applicationMemberId 회원 고유 아이디
 
   useEffect(() => {
     dispatch(__getApplication(params_id));
@@ -57,18 +58,18 @@ const ApplyCheck = () => {
           eachApplicant.state !== "APPROVED" ? (
         <DENIEDCard onClick={openModal}>
           <Body>
-            <ProfileImg src={eachApplicant.imgUrl} alt='profile' />
+            <ProfileImg src={eachApplicant.imgUrl} alt='profile' onClick={()=>{navigate(`/someonesmypage/${eachApplicant.applicationMemberId}`)}}/>
             <StP>
-              <span style={{color:'#ff0000'}}>{eachApplicant.nickname}</span> 님의 신청이 <span style={{color:'#ff0000'}}>거절</span>되었습니다.
+              <span style={{color:'#ff0000'}} onClick={()=>{navigate(`/someonesmypage/${eachApplicant.applicationMemberId}`)}}>{eachApplicant.nickname}</span> 님의 신청이 <span style={{color:'#ff0000'}}>거절</span>되었습니다.
             </StP>
           </Body>
         </DENIEDCard>
           ): (
           <APPROVEDCard onClick={openModal}>
             <Body>
-              <ProfileImg src={eachApplicant.imgUrl} alt='profile' />
+              <ProfileImg src={eachApplicant.imgUrl} alt='profile' onClick={()=>{navigate(`/someonesmypage/${eachApplicant.applicationMemberId}`)}}/>
               <StP>
-                <span>{eachApplicant.nickname}</span> 님의 신청이 <span>승인</span>되었습니다.
+                <span onClick={()=>{navigate(`/someonesmypage/${eachApplicant.applicationMemberId}`)}}>{eachApplicant.nickname}</span> 님의 신청이 <span>승인</span>되었습니다.
               </StP>
             </Body>
           </APPROVEDCard>
@@ -76,9 +77,9 @@ const ApplyCheck = () => {
         ) : (
           <Card>
           <Body>
-            <ProfileImg src={eachApplicant.imgUrl} alt='profile' />
+            <ProfileImg src={eachApplicant.imgUrl} alt='profile' onClick={()=>{navigate(`/someonesmypage/${eachApplicant.applicationMemberId}`)}}/>
             <StP>
-              <span>{eachApplicant.nickname}</span> 님이  <span>{detailTitle}</span>
+              <span onClick={()=>{navigate(`/someonesmypage/${eachApplicant.applicationMemberId}`)}}>{eachApplicant.nickname}</span> 님이  <span>{detailTitle}</span>
               모임에 참여를 신청했습니다.
             </StP>
           </Body>
@@ -218,9 +219,11 @@ box-sizing: border-box;
   padding: 0 10px;
   display: flex;
   align-items: center;
+  cursor: pointer;
 `;
 
 const StP = styled.p`
+  cursor: pointer;
   font-size: 15px;
   span {
     color: #008cff;
