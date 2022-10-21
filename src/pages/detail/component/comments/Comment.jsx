@@ -87,7 +87,7 @@ const Comment = () => {
       <Layout>
         {localStorage.getItem("ACCESSTOKEN") ? 
         (
-          <>
+          <div>
             <Stcontainer>
               <Input
                 value={comment || ''}
@@ -105,7 +105,7 @@ const Comment = () => {
             {commentList === null ? false : (
               <Comments>{commentItems}</Comments>
             )}
-          </>
+          </div>
         ):
         (
           <GuestAlertDiv>
