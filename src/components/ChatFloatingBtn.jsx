@@ -1,13 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
-import { BsFillChatDotsFill } from "react-icons/bs";
+import { BsFillChatDotsFill } from 'react-icons/bs';
+import SSE from './SSE';
 
 const ChatFloatingBtn = () => {
-  if (localStorage.getItem("ACCESSTOKEN")) {
+  if (localStorage.getItem('ACCESSTOKEN')) {
     return (
-      <FloatingBtn>
-        <BsFillChatDotsFill style={{ fontSize: '25px', color: 'white' }} />
-      </FloatingBtn>
+      <>
+        <FloatingBtn>
+          <BsFillChatDotsFill style={{ fontSize: '25px', color: 'white' }} />
+          <SSE chatSSE={true} />
+        </FloatingBtn>
+      </>
     );
   }
 };
@@ -26,7 +30,7 @@ const FloatingBtn = styled.div`
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background-color: #1E88E5;
+  background-color: #1e88e5;
   cursor: pointer;
   &:hover {
     box-shadow: 1px 1px 10px #b8b8b8;
