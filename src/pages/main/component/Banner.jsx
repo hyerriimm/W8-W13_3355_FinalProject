@@ -1,4 +1,5 @@
 import React, { Component, useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -13,6 +14,8 @@ import tutorialPC from '../../../assets/img/TutoriaBanner_L.png'
 import tutorialMobile from '../../../assets/img/TutoriaBanner_S.png';
 
 const Banner = () => {
+  const navigate = useNavigate();
+
     const settings = {
       dots: false,
       infinite: true,
@@ -78,7 +81,7 @@ const Banner = () => {
            <div onClick={()=>window.location.href = 'https://forms.gle/QhmPUGo9REbZ77Kg6'}>
                <Image src={isMobile ? bannerMobileGift : banner_gift} alt=""/>
            </div>
-           <div >
+           <div onClick={()=>navigate('/tutorial')}>
                <Image src={isMobile ? tutorialMobile : tutorialPC} alt=""/>
            </div>
      </StSlider>
