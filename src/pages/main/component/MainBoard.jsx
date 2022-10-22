@@ -10,6 +10,7 @@ import { BiHeart } from "react-icons/bi";
 import { RiChat3Line } from "react-icons/ri";
 import { CgPin } from "react-icons/cg";
 import { BiCalendarCheck } from "react-icons/bi";
+import Footer from '../../../components/Footer';
 
 const MainBoard = () => {
   const navigate = useNavigate();
@@ -78,69 +79,36 @@ const MainBoard = () => {
                   <img src={card.imgUrl} alt="" />
                 </ImageContainer>
                 <DescContainer>
-                  <ProfileWrapper>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        width: "150px",
-                      }}
-                    >
-                      <ProfileImg
-                        style={{
-                          backgroundSize: "cover",
-                          backgroundImage: `url(${card.authorImgUrl})`,
-                          backgroundPosition: "center",
-                        }}
-                        alt="profile"
-                      />
-                      <h4
-                        style={{
-                          width: "100%",
-                          marginLeft: "10px",
-                          display: "inline-block",
-                        }}
-                      >
-                        {card.authorNickname}
-                      </h4>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          marginRight: "8px",
-                        }}
-                      >
+                  <Des1Wrapper>
+                    <ProfileDiv>
+                      <ProfileImgDiv style={{backgroundImage: `url(${card.authorImgUrl})`}}/>
+                      <AuthorNicknameH4>{card.authorNickname}</AuthorNicknameH4>
+                    </ProfileDiv>
+                    <CountDiv>
+                      <CountDiv style={{ marginRight: "8px"}}>
                         <BiHeart size="17px" />
-                        <span style={{ marginLeft: "2px" }}>
-                          {card.numOfWish}{" "}
-                        </span>
-                      </div>
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          marginRight: "0px",
-                        }}
-                      >
+                        <CountNumSpan>{card.numOfWish}{" "}</CountNumSpan>
+                      </CountDiv>
+                      <CountDiv style={{marginRight: "0px"}}>
                         <RiChat3Line size="17px" />
-                        <span style={{ marginLeft: "2px" }}>
-                          {card.numOfComment}{" "}
-                        </span>
-                      </div>
-                    </div>
-                  </ProfileWrapper>
-                  <TitleWrapper>
+                        <CountNumSpan>{card.numOfComment}{" "}</CountNumSpan>
+                      </CountDiv>
+                    </CountDiv>
+                  </Des1Wrapper>
+                  <Des2TitleWrapper>
                     <Title>{card.title}</Title>
                     <RestDay>
                       {card.restDay.split("일")[0] == 0 ? (
-                        <p style={{ color: "#e51e1e" }}>오늘 마감</p>
+                        <div style={{ color: '#e51e1e' }}>오늘 마감</div>
                       ) : (
-                        <p>마감 {card.restDay}</p>
+                        card.restDay.split("일")[0] < 0 ? ( 
+                          <div style={{ color: '#e51e1e' }}>마감 완료</div> 
+                        ):( 
+                          <div>마감 {card.restDay}</div> 
+                        )
                       )}
                     </RestDay>
-                  </TitleWrapper>
+                  </Des2TitleWrapper>
                   <Address>
                     <CgPin style={{ marginRight: "2px" }} />
                     {card.address}
@@ -153,11 +121,20 @@ const MainBoard = () => {
               </CardWrapper>
             );
           })}
+          {/* {isLoading? (
+            <Loading>
+            <img alt='로딩중'
+          src='https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif?20151024034921'
+          />
+            </Loading>
+          ):(false)} */}
         </ListContainer>
         {/* 인피니티 스크롤 인식 ref */}
         <div ref={ref} style={{ height: "30px", color: "white" }}>
           ¯\_(ツ)_/¯
         </div>
+        <div style={{ height: "30px"}}></div>
+        {/* <Footer/> */}
         <div onClick={() => navigate("/chatlist")}>
           <ChatFloatingBtn />
         </div>
@@ -172,7 +149,7 @@ const Loading = styled.div`
   display: flex;
   justify-content: center;
   margin: 0 auto;
-  height: 40px;
+  height: 100px;
   /* width: 80%; */
   /* display: flex;
   justify-content: center;
@@ -205,7 +182,8 @@ const Container = styled.div`
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  width: 100vw;
+  /* width: 100vw; */
+  width: 100%;
   /* background-color: antiquewhite; */
   /* border: 1px solid black; */
 `;
@@ -278,25 +256,49 @@ const DescContainer = styled.div`
   /* background-color: antiquewhite; */
 `;
 
-const ProfileWrapper = styled.div`
+const Des1Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 340px;
+  padding: 10px 15px 0px 15px;
   /* margin: 0 auto; */
   box-sizing: border-box;
-  padding: 10px 15px 0px 15px;
   /* height: fit-content; */
 `;
 
-const ProfileImg = styled.div`
+const ProfileDiv = styled.div`
+display: flex;
+align-items: center;
+width: 150px;
+height: 40px;
+`;
+
+const ProfileImgDiv = styled.div`
   width: 40px;
   height: 30px;
   border-radius: 100%;
   border: 2px solid #bcd7ff;
+  background-size: cover;
+  background-position: center;
 `;
 
-const TitleWrapper = styled.div`
+const AuthorNicknameH4 = styled.h4`
+width: 100%;
+margin-left: 10px;
+display: inline-block;
+`;
+
+const CountDiv = styled.div`
+display: flex;
+align-items: center;
+`;
+
+const CountNumSpan = styled.span`
+margin-left: 2px;
+`;
+
+const Des2TitleWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -309,6 +311,9 @@ const Title = styled.div`
   margin: 0 0 0 10px;
   font-family: "NotoSansKR";
   width: 72%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 
 const RestDay = styled.div`
