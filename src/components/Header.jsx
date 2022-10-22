@@ -4,8 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { __getMyInfo } from '../redux/modules/myinfo';
 import { IoSearchSharp } from 'react-icons/io5';
+import { MdAddCircle } from "react-icons/md";
 
 import SSE from './SSE';
+
+import Logo3355 from '../assets/img/3355logo_simple.png';
 
 
 const Header = () => {
@@ -56,6 +59,7 @@ const Header = () => {
           window.removeEventListener("click", onClickOutside);
       };
     });
+    
 
     const siteLogout = () => {
       if (window.confirm("로그아웃 하시겠습니까?")) {
@@ -76,7 +80,9 @@ const Header = () => {
     return (
         <>
         <HdContainer>
-            <Logo onClick={()=>navigate('/')}>3355</Logo>
+            <Logo onClick={()=>navigate('/')}>
+              <img src={Logo3355} alt=''/>
+            </Logo>
             <BtnWrapper>            
                 { ACCESSTOKEN ? 
                 ( localStorage.getItem("Role") === "ROLE_ADMIN" ?
@@ -88,7 +94,7 @@ const Header = () => {
                     >
                       <IoSearchSharp color='white' size='20px' />
                     </AddBtn>
-                    <AddBtn onClick={()=>navigate('/form')}>모임등록</AddBtn>
+                    <AddBtn onClick={()=>navigate('/form')}><MdAddCircle size='15px' style={{marginRight:'3px'}}/>등록</AddBtn>
                     <BtnProfile 
                     style={{backgroundSize:'cover',backgroundImage:`url(${myinfo?.imgUrl})`, backgroundPosition: 'center'}}
                     ref={modalRef} onClick={handleModal}>
@@ -102,7 +108,7 @@ const Header = () => {
                     >
                       <IoSearchSharp color='white' size='20px' />
                     </AddBtn>
-                    <AddBtn onClick={()=>navigate('/form')}>모임등록</AddBtn>
+                    <AddBtn onClick={()=>navigate('/form')}><MdAddCircle size='15px' style={{marginRight:'3px'}}/>등록</AddBtn>
                     <SSE basicSSE={true}/>
                     <BtnProfile 
                     style={{backgroundSize:'cover',backgroundImage:`url(${myinfo?.imgUrl})`, backgroundPosition: 'center'}}
@@ -137,15 +143,19 @@ const HdContainer = styled.div`
     align-items: center;
     position: sticky;
     top: 0;
-    opacity: 0.94;
+    /* opacity: 0.94; */
     backdrop-filter: blur(60px);
     width: 100%;
     margin: 0 auto;
-    height: 55px;
+    height: 70px;
     z-index: 100;
+    box-shadow: 0 1px 10px -4px gray;
+    @media only screen and (max-width: 767px) {
+    height: 55px;
+  }
 `
 
-const Logo = styled.span`
+const Logo = styled.div`
   padding: 0 0 0 30px;
   text-align: center;
   font-size: 20px;
@@ -153,6 +163,15 @@ const Logo = styled.span`
   font-weight: 800;
   color: #102442;
   cursor: pointer;
+  @media only screen and (max-width: 767px) {
+    padding: 0 0 0 10px;
+    }
+  img {
+    height: 70px;
+    @media only screen and (max-width: 767px) {
+      height: 55px;
+    }
+  }
 `
 const BtnWrapper = styled.div`
   display: flex;
@@ -169,9 +188,12 @@ const BtnWrapper = styled.div`
 // `
 
 const AddBtn = styled.button`
+display: flex;
+align-items: center;
+justify-content: center;
     height: 30px;
-    width: 70px;
-    margin: 0 25px 0 0;
+    /* width: 70px; */
+    margin: 0 15px 0 0;
     text-align: center;
     border-radius: 4px;
     font-size: 12.5px;
