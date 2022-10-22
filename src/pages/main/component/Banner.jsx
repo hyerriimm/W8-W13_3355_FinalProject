@@ -5,10 +5,12 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 
-import banner from '../../../assets/img/nw_banner_pc01.png';
-import banner_gift from '../../../assets/img/nw_banner_pc03.png';
-import bannerMobile from '../../../assets/img/nw_banner01.png';
-import bannerMobileGift from '../../../assets/img/nw_banner03.png';
+import bannerPC from '../../../assets/img/3355banner1_L.png';
+import bannerMobile from '../../../assets/img/3355banner1_S.png';
+import banner_gift from '../../../assets/img/nw_banner_pc01.png';
+import bannerMobileGift from '../../../assets/img/nw_banner01.png';
+import tutorialPC from '../../../assets/img/TutoriaBanner_L.png'
+import tutorialMobile from '../../../assets/img/TutoriaBanner_S.png';
 
 const Banner = () => {
     const settings = {
@@ -71,10 +73,13 @@ const Banner = () => {
      <SliderWrapper>
      <StSlider {...settings}>
            <div >
-               <Image src={isMobile ? bannerMobile : banner} alt=""/>
+               <Image src={isMobile ? bannerMobile : bannerPC} alt=""/>
+           </div>
+           <div onClick={()=>window.location.href = 'https://forms.gle/QhmPUGo9REbZ77Kg6'}>
+               <Image src={isMobile ? bannerMobileGift : banner_gift} alt=""/>
            </div>
            <div >
-               <Image src={isMobile ? bannerMobileGift : banner_gift} alt=""/>
+               <Image src={isMobile ? tutorialMobile : tutorialPC} alt=""/>
            </div>
      </StSlider>
  </SliderWrapper>
@@ -84,17 +89,17 @@ const Banner = () => {
   export default Banner;
 
 const SliderWrapper = styled.div`
-  width: 1100px;
+  width: 1085px;
   margin: 0 auto;
   margin-top: 20px;
   overflow: hidden;
   border-radius: 10px;
   @media only screen and (min-width: 768px) and (max-width: 1129px) {
-    width: 760px;
+    width: 715px;
   }
 
   @media only screen and (max-width: 767px) {
-    width: 360px;
+    width: 345px;
   }
 `
 
