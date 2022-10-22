@@ -30,7 +30,7 @@ const IsNewChat = async() => {
       refreshtoken: localStorage.getItem("REFRESHTOKEN"),
     },
   }).then((res)=>{
-    console.log(res.data.unreadMessage);
+    // console.log(res.data.unreadMessage);
     if (res.data.unreadMessage === true) {
       setIsNewChatStatus(true);
     } else {
@@ -98,10 +98,13 @@ const GetCount = useCallback(async() => {
             }
           );
 
+          // console.log(eventSource.readyState);
+
           /*--------------- EVENTSOURCE ONOPEN --------------- */
           // eventSource.addEventListener('open', async (e) => {
           //   if (e) {
-          //     console.log('EVENTSOURCE ONOPEN')
+          //     console.log('EVENTSOURCE ONOPEN', e);
+          //     console.log(eventSource.readyState);
           //   }
           // });
 
@@ -133,6 +136,7 @@ const GetCount = useCallback(async() => {
       return () => {
         // console.log('CLOSE; 페이지 이동')
         eventSource.close();
+        // console.log(eventSource.readyState);
       }
     }
   }, [ACCESSTOKEN]);
@@ -249,10 +253,10 @@ const ReadNoti = async(id, url) => {
             <VscBell onClick={openAlert} size='25px'/>
           </BellDiv>
         ) : (
-          <BellDiv>
+          <RedBellDiv>
             <RedCountBtn>{getCount}</RedCountBtn>
             <VscBell onClick={openAlert}  size='25px' style={{color:'red'}}/>
-          </BellDiv>
+          </RedBellDiv>
         )}
 
         {alertOpen && (
@@ -325,6 +329,12 @@ const Wrap = styled.div`
 const BellDiv = styled.div`
   display: flex;
   align-items: center;
+  height: 50px;
+`;
+
+const RedBellDiv = styled.div`
+  display: flex;
+  align-items: center;
   width: 40px;
   height: 50px;
 `;
@@ -365,7 +375,7 @@ const AlertContent = styled.div`
   display: flex;
   flex-direction: column;
   position: absolute;
-  top: 35px;
+  top: 55px;
   right: -30px;
   border-radius: 8px;
   width: 260px;
