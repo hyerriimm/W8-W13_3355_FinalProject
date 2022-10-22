@@ -55,7 +55,20 @@ const CommentItem = ({ item, getCommentList }) => {
       getCommentList();
     }
   };
+  
+  //수정완료
+    const submit = async () => {
+      if (!comment) {
+        alert("댓글을 입력해주세요.");
+        return false;
+      }
 
+      await dispatch(updateComment({ commentId: item.commentId, comment }));
+      setComment();
+
+      setIsUpdate(false);
+      getCommentList();
+    };
 
   //삭제
   const handleDelete = async () => {
@@ -193,6 +206,9 @@ const CommentItem = ({ item, getCommentList }) => {
             placeholder="댓글을 입력 후 Enter를 눌러주세요"
             type="text"
           />
+          <Button type="button" onClick={submit}>
+            수정완료
+          </Button>
         </Stcontainer>
       ) : (
         <Content>{item.content}</Content>
@@ -280,4 +296,22 @@ const Nickname = styled.div`
 
 const Content = styled.div`
   font-size: 12px;
+`;
+
+const Button = styled.button`
+  height: 40px;
+  width: 113px;
+  padding: 0 10px;
+  margin-top: 6px;
+  margin-bottom: 7px;
+  margin-left: 5px;
+  border: transparent;
+  border-radius: 5px;
+  outline: none;
+  background-color: #2196f3;
+  color: white;
+  cursor: pointer;
+  :hover {
+    filter: brightness(95%);
+  }
 `;
