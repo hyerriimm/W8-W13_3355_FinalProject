@@ -72,16 +72,17 @@ const Comment = () => {
 // ------------------------------------------------------------------------------
 
 
-  const commentItems = commentList.map((item) => {
-    return (
-      <CommentItem
-        item={item}
-        key={item.commentId}
-        onKeyPress={handleKeyPress}
-        getCommentList={GetCommentList}
-      ></CommentItem>
-    );
-  });
+  const commentItems = commentList
+    .slice().reverse().map((item) => {
+      return (
+        <CommentItem
+          item={item}
+          key={item.commentId}
+          onKeyPress={handleKeyPress}
+          getCommentList={GetCommentList}
+        ></CommentItem>
+      );
+    });
 
   return (
       <Layout>
