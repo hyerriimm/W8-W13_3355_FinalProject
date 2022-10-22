@@ -62,15 +62,15 @@ const RouterPg = () => {
           })
           .catch((error) => {
             // ... 로그인 실패 처리
-            clearTimeout(refreshTimeoutId1);
-            clearTimeout(refreshTimeoutId2);
-            alert("로그인에 실패했습니다. 다시 로그인 해주세요.");
-            localStorage.removeItem("ACCESSTOKEN");
-            localStorage.removeItem("REFRESHTOKEN");
-            localStorage.removeItem("Role");
-            localStorage.removeItem("ImgURL");
-            localStorage.removeItem("Id");
-            navigate('/');
+            // clearTimeout(refreshTimeoutId1);
+            // clearTimeout(refreshTimeoutId2);
+            // alert("로그인에 실패했습니다. 다시 로그인 해주세요.");
+            // localStorage.removeItem("ACCESSTOKEN");
+            // localStorage.removeItem("REFRESHTOKEN");
+            // localStorage.removeItem("Role");
+            // localStorage.removeItem("ImgURL");
+            // localStorage.removeItem("Id");
+            // navigate('/');
             // console.log(error);
             // reToken();
             return
