@@ -42,7 +42,11 @@ const WishList = () => {
                         {wishlist.restDay.split("일")[0] == 0 ? (
                           <div style={{ color: '#e51e1e' }}>오늘 마감</div>
                         ) : (
-                          <div>마감 {wishlist.restDay}</div>
+                          wishlist.restDay.split("일")[0] < 0 ? ( 
+                            <div style={{ color: '#e51e1e' }}>마감 완료</div> 
+                          ):( 
+                            <div>마감 {wishlist.restDay}</div> 
+                          )
                         )}
                       </RestDay>
                     </TitleWrapper>
