@@ -364,6 +364,7 @@ const CategoryDiv = styled.div`
   flex-direction: column;
   width: 100px;
   /* margin-top: 10px; */
+z-index: 1;
 `;
 
 const CategorySelect = styled.select`
