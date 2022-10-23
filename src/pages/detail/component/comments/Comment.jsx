@@ -155,11 +155,13 @@ const Stcontainer = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  width: 1240px;
+  margin: 0 auto;
 `;
 
 const Input = styled.input`
+width: 745px;
   height: 40px;
-  width: 237px;
   padding: 0 10px;
   margin-top: 30px;
   margin-bottom: 7px;
@@ -173,11 +175,19 @@ const Input = styled.input`
     border-color: #18a0fb;
     box-shadow: 0 0 5px #18a0fb;
   }
+  @media only screen and (min-width: 768px) and (max-width: 1129px) {
+    width: 400px;
+  }
+
+  @media only screen and (max-width: 767px) {
+    width: 237px;
+  }
 `;
 
 const Button = styled.button`
   height: 40px;
-  width: 113px;
+  /* width: 113px; */
+  width: fit-content;
   padding: 0 10px;
   margin-top: 30px;
   margin-bottom: 7px;
