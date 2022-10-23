@@ -17,7 +17,7 @@ const Banner = () => {
   const navigate = useNavigate();
 
     const settings = {
-      dots: false,
+      dots: true,
       infinite: true,
       speed: 500,
       slidesToShow: 1,
@@ -93,16 +93,30 @@ const Banner = () => {
 
 const SliderWrapper = styled.div`
   width: 1085px;
+  height: 333px;
   margin: 0 auto;
-  margin-top: 20px;
+  margin-top: 40px;
   overflow: hidden;
   border-radius: 10px;
   @media only screen and (min-width: 768px) and (max-width: 1129px) {
     width: 715px;
+    height: 324px;
   }
 
   @media only screen and (max-width: 767px) {
     width: 345px;
+    height: 171px;
+  }
+
+  .slick-dots {
+    .slick-active {
+      button::before {
+        color: #b1b1b1;
+      }
+    }
+    button::before {
+      color: #cccccc;
+    }
   }
 `
 

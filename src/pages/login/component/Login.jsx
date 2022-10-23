@@ -71,7 +71,7 @@ const Login = () => {
       <Item1>
         <input 
         ref={userIdRef}
-        type='email'
+        type='text'
         name='userId'
         placeholder='아이디를 입력하세요'
         />

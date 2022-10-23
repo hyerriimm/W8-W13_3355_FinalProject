@@ -73,7 +73,8 @@ const Signup = () => {
 
 
     //유효성검사
-    const regexuserId = /^[a-z]+[a-z0-9]{5,19}$/g;
+    const regexuserId = /^[a-zA-Z][a-zA-Z0-9]{4,11}$/;
+    // const regexuserId =   /^[a-z0-9]{5,12}$/;
     // const regexuserId =  /(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/
     const regexPassword = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
     // const regexPassword = /^(?=.*?[a-zA-z])(?=.*?[0-9]).{4,12}$/;
@@ -250,8 +251,22 @@ const Signup = () => {
                 중복확인
               </OverlapButton>
             </Item>
+
+            {
+              userId &&
+                (regexuserId.test(userId) ? (
+                  <div style={{ color: "green", fontSize: "8px" }}>
+                    사용가능한 아이디 입니다
+                  </div>
+                ) : (
+                  <div style={{ color: "red", fontSize: "8px" }}>
+                    영문자로 시작하여, 영문자 또는 숫자를 사용한 5~12자리 아이디를 입력해주세요
+                  </div>
+                ))
+            }
+
             <Input
-              placeholder="비밀번호를 입력하세요"
+              placeholder="비밀번호"
               type="password"
               name="password"
               onChange={(e) => setPassword(e.target.value)}
@@ -272,7 +287,7 @@ const Signup = () => {
             }
 
             <Input
-              placeholder="비밀번호를 다시 한번 입력하세요"
+              placeholder="비밀번호 재확인"
               type="password"
               name="passwordCheck"
               onChange={(e) => setPasswordCheck(e.target.value)}
@@ -290,7 +305,7 @@ const Signup = () => {
 
             <Item>
               <Input2
-                placeholder="닉네임을 입력하세요(5글자이내)"
+                placeholder="닉네임(5자 이내)"
                 type="text"
                 name="nickname"
                 maxLength={5}
@@ -302,7 +317,7 @@ const Signup = () => {
             </Item>
 
             <Input
-              placeholder="나이를 입력하세요"
+              placeholder="나이(15세 이상)"
               type="number"
               name="age"
               min={15}
@@ -310,24 +325,19 @@ const Signup = () => {
               onChange={(e) => setAge(e.target.value)}
             />
 
-            <select
+            <GenderSelect
               name="gender"
-              style={{
-                height: "40px",
-                width: "273px",
-                borderRadius: "5px",
-                border: "1px solid #a1a1a1",
-                padding: "0 10px",
-                marginTop: "7px",
-              }}
               onChange={(e) => setGender(e.target.value)}
             >
-              <option>성별을 선택해주세요</option>
+              <option>성별</option>
               <option value="male">남자</option>
               <option value="female">여자</option>
-            </select>
+            </GenderSelect>
 
-            <ImgFile src={previewImg} alt="" />
+            <ImgFile
+              src={previewImg? previewImg : 'img/addimage.png'}
+              alt='썸네일 사진을 등록해주세요.'
+            />
             <ImgInput
               type="file"
               style={{ display: "none" }}
@@ -344,7 +354,7 @@ const Signup = () => {
                 fileInput.current.click();
               }}
             >
-              사진등록
+              프로필 사진 선택
             </Button>
           </>
 
@@ -460,6 +470,16 @@ const Input = styled.input`
   }
 `;
 
+const GenderSelect = styled.select`
+  height: 40px;
+  width: 273px;
+  border-radius: 5px;
+  border: 1px solid #a1a1a1;
+  padding: 0 10px;
+  margin-top: 7px;
+  outline: none;
+`;
+
 const Input2 = styled.input`
     height: 40px;
     width: 194px;
@@ -480,7 +500,7 @@ const ImgFile = styled.img`
     width: 150px;
     height: 150px;
     margin-top: 7px;
-    border: 1px solid #a1a1a1;
+    /* border: 1px solid #a1a1a1; */
     border-radius: 100%;
 `
 const ImgInput = styled.input`
@@ -503,7 +523,7 @@ const OverlapButton = styled.button`
   border-radius: 5px;
   outline: none;
   color: white;
-  background-color: #d9d9d9;
+  background-color: #bebebe;
   cursor: pointer;
   :hover {
     filter: brightness(95%);
