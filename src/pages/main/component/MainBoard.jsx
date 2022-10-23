@@ -58,7 +58,8 @@ const MainBoard = () => {
   if (cardList.length === 0) {
     return (
       <Stack>
-        <Empty>•••🤔</Empty>
+        {/* <Empty>•••🤔</Empty> */}
+        <div>•••</div>
         <div>등록된 게시물이 없습니다.</div>
         <div>모임을 만들어 주세요.</div>
       </Stack>

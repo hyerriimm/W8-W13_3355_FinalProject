@@ -39,7 +39,7 @@ const DetailEdit = () => {
     dispatch(__detail(params_id))
   },[])
 
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState(detail.category);
   const [title, setTitle] = useState(detail.title);
   const [content, setContent] = useState(detail.content);
   const [maxNum, setMaxNum] = useState(detail.maxNum); 
@@ -64,6 +64,30 @@ const DetailEdit = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setPlace(inputText);
+  };
+
+  const CategoryBeforeEdit = () => {
+    if (detail.category === 'EXERCISE') {
+      return '운동'
+    }
+    if (detail.category === 'TRAVEL') {
+      return '여행'
+    }
+    if (detail.category === 'READING') {
+      return '독서'
+    }
+    if (detail.category === 'STUDY') {
+      return '공부'
+    }
+    if (detail.category === 'RELIGION') {
+      return '종교'
+    }
+    if (detail.category === 'ONLINE') {
+      return '온라인'
+    }
+    if (detail.category === 'ETC') {
+      return '기타'
+    }
   };
 
   const resetAllStates = () => {
@@ -198,14 +222,21 @@ const DetailEdit = () => {
           name="category"
           onChange={(e) => setCategory(e.target.value)}
         >
-          <option>모임 분류를 선택해주세요.</option>
-          <option value="exerciese">운동</option>
+          <option>현재 모임 분류: <CategoryBeforeEdit/></option>
+          {/* <option value="exercise">운동</option>
           <option value="travel">여행</option>
           <option value="reading">독서</option>
           <option value="study">공부</option>
           <option value="religion">종교</option>
           <option value="online">온라인</option>
-          <option value="etc">기타</option>
+          <option value="etc">기타</option> */}
+          <option value="EXERCISE">운동</option>
+          <option value="TRAVEL">여행</option>
+          <option value="READING">독서</option>
+          <option value="STUDY">공부</option>
+          <option value="RELIGION">종교</option>
+          <option value="ONLINE">온라인</option>
+          <option value="ETC">기타</option>
         </CategorySelect>
       </CategoryDiv>
       <StDiv>
@@ -279,10 +310,8 @@ const DetailEdit = () => {
         </div>
       </DatePickerDiv>
       <hr style={{width:'100%', marginTop:'15px'}}/>
-      <AddressDiv>
         <div style={{fontWeight:'bold'}}>모임 장소</div>
-        <div style={{marginTop:'10px',color:'#18a0fb'}}><strong>{placeName}</strong></div>
-        <div style={{margin:'10px 0',color:'#18a0fb'}}>{address} {detailAddress}</div>
+      <AddressDiv>
         <form className="inputForm" onSubmit={handleSubmit}>
           <input
           placeholder='주소 찾기 (키워드, 도로명 주소, 지번 주소 입력 가능)'
@@ -290,14 +319,6 @@ const DetailEdit = () => {
           value={inputText}
           />
           <button type="submit">검색</button>
-          <DetailAddressInput
-            name='detailAddress'
-            maxLength={30}
-            placeholder='(선택) 상세 주소를 입력해주세요.'
-            type='text'
-            value={detailAddress || ''}
-            onChange={(e) => setDetailAddress(e.target.value)}
-          />
           <div style={{fontWeight:'bold', color:'grey', marginBottom:'10px'}}>※ 검색 후 지도의 핀을 눌러 선택해주세요.</div>
         </form>
         <MapOfEdit 
@@ -310,7 +331,17 @@ const DetailEdit = () => {
         placeX={placeX}
         placeY={placeY}
         />
+        <div style={{marginTop:'10px',color:'#18a0fb'}}><strong>{placeName}</strong></div>
+        <div style={{margin:'10px 0',color:'#18a0fb'}}>{address} {detailAddress}</div>
       </AddressDiv>
+          <DetailAddressInput
+            name='detailAddress'
+            maxLength={30}
+            placeholder='(선택) 상세 주소를 입력해주세요.'
+            type='text'
+            value={detailAddress || ''}
+            onChange={(e) => setDetailAddress(e.target.value)}
+          />
       <StButton type='button' style={{ backgroundColor: '#038E00' }}
       onClick={onEditHandler}>
         수정하기
@@ -393,6 +424,7 @@ font-family:'Noto Sans KR', sans-serif;
    padding-left: 10px;
    border: transparent;
    border-bottom: 1px solid grey;
+   resize: none;
    :focus {
       outline: none;
       border-color: #18a0fb;
@@ -458,7 +490,7 @@ input {
   width:87%;
   height:35px;
   @media only screen and (max-width: 720px) {
-  width: 86%;
+  width: 84%;
   }
   :focus {
       outline: none;

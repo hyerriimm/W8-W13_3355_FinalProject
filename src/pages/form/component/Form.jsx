@@ -356,6 +356,7 @@ font-family:'Noto Sans KR', sans-serif;
    padding-left: 10px;
    border: transparent;
    border-bottom: 1px solid grey;
+   resize: none;
    :focus {
       outline: none;
       border-color: #18a0fb;
@@ -421,7 +422,7 @@ input {
   width:87%;
   height:35px;
   @media only screen and (max-width: 720px) {
-  width: 86%;
+  width: 84%;
   }
   :focus {
       outline: none;
