@@ -37,7 +37,6 @@ const InfoEdit = () => {
 
       //중복확인
       const [nickCheckRes, setNickCheckRes] = useState("");
-      const [idCheckRes, setIdCheckRes] = useState("");
 
 
       const nicknameCheckHandler = async () => {
@@ -60,7 +59,8 @@ const InfoEdit = () => {
             return;
           }
         } catch (error) {
-          console.log(error);
+          // console.log(error);
+          alert('요청에 실패했습니다.\n다시 시도 부탁드립니다.')
         }
       };
 
@@ -70,18 +70,9 @@ const InfoEdit = () => {
       if (nickname.trim() === "") {
         return alert("모든 항목을 입력해야 수정 가능합니다.");
       }
-      if (nickCheckRes === "") {
-        return alert("닉네임 중복검사는 필수입니다.");
-      }
-      if (idCheckRes === false) {
-        alert(
-          "이미 존재하는 아이디입니다.\n새로운 아이디를 입력 후 중복검사 바랍니다."
-        );
-        return setIdCheckRes("");
-      }
       if (nickCheckRes === false) {
         alert(
-          "이미 존재하는 닉네임입니다.\n새로운 아이디를 입력 후 중복검사 바랍니다."
+          "이미 존재하는 닉네임입니다.\n새로운 닉네임을 입력 후 중복검사 바랍니다."
         );
         return setNickCheckRes("");
       }
@@ -115,7 +106,8 @@ const InfoEdit = () => {
             return;
           }
         } catch (error) {
-          console.log(error);
+          // console.log(error);
+          alert('요청에 실패했습니다.\n다시 시도 부탁드립니다.')
         }
       }
     };;
@@ -150,7 +142,8 @@ const InfoEdit = () => {
               return
             };
           } catch (error) {
-            console.log(error);
+            // console.log(error);
+            alert('요청에 실패했습니다.\n다시 시도 부탁드립니다.')
           }
         }
       };
@@ -212,7 +205,7 @@ const InfoEdit = () => {
                 >
                   프로필 사진 변경
                 </BtnEdit>
-                <BtnEdit>비밀번호 변경</BtnEdit>
+                {/* <BtnEdit>비밀번호 변경</BtnEdit> */}
                 <BtnEdit
                   type="button"
                   onClick={onChangeRemoveInfo}
