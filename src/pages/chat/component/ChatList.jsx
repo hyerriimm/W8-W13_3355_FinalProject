@@ -136,6 +136,10 @@ const Title = styled.div`
   font-weight: 600;
   margin: 0 0 0 10px;
   font-family: 'NotoSansKR';
+  max-width: 75%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 
 const RedCountBtn = styled.button`
@@ -159,6 +163,10 @@ const Address = styled.div`
   font-weight: 400;
   margin: 10px 0 2px 10px;
   font-family: 'NotoSansKR';
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 
 const Dday = styled.div`
