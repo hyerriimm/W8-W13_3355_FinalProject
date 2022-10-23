@@ -166,13 +166,13 @@ const Form = () => {
           onChange={(e) => setCategory(e.target.value)}
         >
           <option>모임 분류를 선택해주세요.</option>
-          <option value="exercise">운동</option>
-          <option value="travel">여행</option>
-          <option value="reading">독서</option>
-          <option value="study">공부</option>
-          <option value="religion">종교</option>
-          <option value="online">온라인</option>
-          <option value="etc">기타</option>
+          <option value="EXERCISE">운동</option>
+          <option value="TRAVEL">여행</option>
+          <option value="READING">독서</option>
+          <option value="STUDY">공부</option>
+          <option value="RELIGION">종교</option>
+          <option value="ONLINE">온라인</option>
+          <option value="ETC">기타</option>
         </CategorySelect>
       </CategoryDiv>
       <StDiv>
@@ -253,7 +253,7 @@ const Form = () => {
           value={inputText}
           />
           <button type="submit">검색</button>
-          <div style={{fontWeight:'bold', color:'grey', marginBottom:'10px'}}>※ 검색 후 지도의 핀을 눌러 선택해주세요.</div>
+          <div style={{fontWeight:'bold', color:'grey', marginBottom:'10px'}}>※ 검색 후 지도의 핀을 눌러 주소를 선택해주세요.</div>
         </form>
         <MapContainer 
         searchPlace={place} 
@@ -439,6 +439,10 @@ button {
   border-radius: 6px;
   font-size: 15px;
   cursor: pointer;
+  @media only screen and (max-width: 720px) {
+  font-size: 12px;
+  width: fit-content;
+  }
   :hover {
             filter: brightness(90%);
             box-shadow: 1px 1px 3px 0 #bcd7ff;

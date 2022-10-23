@@ -6,6 +6,8 @@ import styled from 'styled-components';
 import { FiTrash2 } from "react-icons/fi";
 import { FiEdit } from "react-icons/fi";
 import { RiAlarmWarningFill } from "react-icons/ri";
+import { HiOutlineHeart } from "react-icons/hi";
+import { HiHeart } from "react-icons/hi";
 import MapOfDetail from './MapOfDetail'
 import ChatFloatingBtn from '../../../components/ChatFloatingBtn';
 
@@ -167,10 +169,14 @@ const Detail = () => {
                 </div>
                 <StDiv>
                   {detail.status === 'RECRUIT' ? (
-                    detail.restDay?.split("일")[0] == 0 ? ( 
-                      <h4 style={{color:'#e51e1e'}}>오늘 마감</h4>
-                    ):(
-                      <RestDayBtn disable>마감 {detail.restDay}</RestDayBtn> 
+                    detail.restDay?.split("일")[0] == 0 ? (
+                      <RestDayBtn disable style={{ color: '#e51e1e' }}>오늘 마감</RestDayBtn>
+                    ) : (
+                      detail.restDay?.split("일")[0] < 0 ? ( 
+                        <RestDayBtn disable style={{ color: 'grey' }}>마감 완료</RestDayBtn> 
+                      ):( 
+                        <RestDayBtn disable>마감 D-{detail.restDay?.split("일")[0]}</RestDayBtn> 
+                      )
                     )
                     ):(
                     <RestDayBtn disable>마감 완료</RestDayBtn>
@@ -178,9 +184,9 @@ const Detail = () => {
                   {logIn == null ? false : 
                     (Id === detail.authorId? false : (
                       !isWish ? (
-                        <WishBtn onClick={onClickWishBtn}>🤍</WishBtn>
+                        <WishBtn onClick={onClickWishBtn}><HiOutlineHeart size='25px'/></WishBtn>
                       ):(
-                        <WishBtn onClick={onClickWishBtn}>💗</WishBtn>
+                        <WishBtn onClick={onClickWishBtn}><HiHeart size='25px' color='red'/></WishBtn>
                       )
                   ))}
                 </StDiv>
@@ -224,11 +230,15 @@ const Detail = () => {
                     </StBtn>
                   </>
                 ):(
-                  <StBtn
-                  onClick={()=>navigate(`/detail/${detail.id}/apply`)}
-                  >
-                  참여 신청하기
-                  </StBtn>
+                  detail.restDay?.split("일")[0] < 0 || detail.status !== 'RECRUIT'? ( 
+                    false
+                  ):( 
+                    <StBtn
+                    onClick={()=>navigate(`/detail/${detail.id}/apply`)}
+                    >
+                    참여 신청하기
+                    </StBtn>
+                  )
                 )
               )}
             </BtnsDiv>
@@ -283,6 +293,9 @@ const Container = styled.div`
   grid-template-areas:
     'a'
     'b';
+  @media only screen and (max-width: 720px) {
+  width: 95vw;
+  }
 `;
 
 const Item1 = styled.div`
@@ -322,6 +335,7 @@ box-sizing: border-box;
   @media only screen and (max-width: 720px) {
     width: 100%;
     height: 80%;
+    padding: 0;
   }
 `;
 
@@ -360,6 +374,8 @@ const ProfileImg = styled.img`
 `;
 
 const WishBtn = styled.button`
+display: flex;
+align-items: center;
 border: transparent;
 background: transparent;
 font-size: 25px;
@@ -375,6 +391,9 @@ margin: 0 10px;
 /* margin-right: 10px; */
 font-size: 12px;
 height: 35px;
+@media only screen and (max-width: 720px) {
+  margin: 0 2px;
+  }
 `;
 
 const BtnsDiv = styled.div`

@@ -90,7 +90,7 @@ export default function BasicTabs() {
               onChange={handleChange}
               aria-label="basic tabs example"
             >
-              <Tab label="내 모임 관리" {...a11yProps(0)} />
+              <Tab label="내 모임 지원확인" {...a11yProps(0)} />
               <Tab label="참여 신청 내역 보기" {...a11yProps(1)} />
             </Tabs>
           </Box>

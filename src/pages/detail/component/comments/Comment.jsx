@@ -155,7 +155,7 @@ const Stcontainer = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 1240px;
+  /* width: 1240px; */
   margin: 0 auto;
 `;
 
