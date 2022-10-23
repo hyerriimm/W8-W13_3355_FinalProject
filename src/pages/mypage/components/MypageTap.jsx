@@ -93,10 +93,14 @@ export default function BasicTabs({someoneWatchingYourMypage, someonesLeaderInfo
                         <TitleWrapper>
                           <Title>{leadlist.title}</Title>
                           <RestDay>
-                            {leadlist.restDay.split("일")[0] <= 0 ? (
-                              <div style={{ color: '#e51e1e' }}>마감 완료</div>
+                            {leadlist.restDa?.split("일")[0] == 0 ? (
+                              <div style={{ color: '#e51e1e' }}>오늘 마감</div>
                             ) : (
-                              <div>마감 {leadlist.restDay}</div>
+                              leadlist.restDay?.split("일")[0] < 0 ? ( 
+                                <div style={{ color: '#e51e1e' }}>마감 완료</div> 
+                              ):( 
+                                <div>마감 D-{leadlist.restDay?.split("일")[0]}</div> 
+                              )
                             )}
                           </RestDay>
                         </TitleWrapper>
@@ -124,10 +128,14 @@ export default function BasicTabs({someoneWatchingYourMypage, someonesLeaderInfo
                       <TitleWrapper>
                         <Title>{leadlist.title}</Title>
                         <RestDay>
-                          {leadlist.restDay.split("일")[0] <= 0 ? (
-                            <div style={{ color: '#e51e1e' }}>마감 완료</div>
+                          {leadlist.restDa?.split("일")[0] == 0 ? (
+                            <div style={{ color: '#e51e1e' }}>오늘 마감</div>
                           ) : (
-                            <div>마감 {leadlist.restDay}</div>
+                            leadlist.restDay?.split("일")[0] < 0 ? ( 
+                              <div style={{ color: '#e51e1e' }}>마감 완료</div> 
+                            ):( 
+                              <div>마감 D-{leadlist.restDay?.split("일")[0]}</div> 
+                            )
                           )}
                         </RestDay>
                       </TitleWrapper>
@@ -154,10 +162,14 @@ export default function BasicTabs({someoneWatchingYourMypage, someonesLeaderInfo
                     <TitleWrapper>
                       <Title>{partilist.title}</Title>
                       <RestDay>
-                        {partilist.restDay.split("일")[0] <= 0 ? (
-                          <div style={{ color: '#e51e1e' }}>마감 완료</div>
+                        {partilist.restDay?.split("일")[0] == 0 ? (
+                          <div style={{ color: '#e51e1e' }}>오늘 마감</div>
                         ) : (
-                          <div>마감 {partilist.restDay}</div>
+                          partilist.restDay?.split("일")[0] < 0 ? ( 
+                            <div style={{ color: '#e51e1e' }}>마감 완료</div> 
+                          ):( 
+                            <div>마감 D-{partilist.restDay?.split("일")[0]}</div> 
+                          )
                         )}
                       </RestDay>
                     </TitleWrapper>

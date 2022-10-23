@@ -7,6 +7,10 @@ import styled from 'styled-components';
 import { IoSearchSharp } from 'react-icons/io5';
 import { IoSearchCircle } from 'react-icons/io5';
 import { MdClear } from "react-icons/md";
+import { BiHeart } from "react-icons/bi";
+import { RiChat3Line } from "react-icons/ri";
+import { CgPin } from "react-icons/cg";
+import { BiCalendarCheck } from "react-icons/bi";
 import ChatFloatingBtn from '../../../components/ChatFloatingBtn';
 
 const Search = () => {
@@ -122,12 +126,12 @@ const Search = () => {
           onClick={() => {
             // When form clicked, set state of baropened to true and focus the input
             setBarOpened(true);
-            inputFocus.current.focus();
+            // inputFocus.current.focus();
           }}
           // on focus open search bar
           onFocus={() => {
             setBarOpened(true);
-            inputFocus.current.focus();
+            // inputFocus.current.focus();
           }}
           // on blur close search bar
           // onBlur={() => {
@@ -190,12 +194,12 @@ const Search = () => {
           onClick={() => {
             // When form clicked, set state of baropened to true and focus the input
             setBarOpened(true);
-            inputFocus.current.focus();
+            // inputFocus.current.focus();
           }}
           // on focus open search bar
           onFocus={() => {
             setBarOpened(true);
-            inputFocus.current.focus();
+            // inputFocus.current.focus();
           }}
           // on blur close search bar
           // onBlur={() => {
@@ -213,7 +217,7 @@ const Search = () => {
               name='category'
               onChange={(e) => {
                 setCategory(e.target.value);
-                setInput('');
+                // setInput('');
               }}
             >
               <option value='ALL'>전체</option>
@@ -247,36 +251,64 @@ const Search = () => {
             ? resList?.map((card) => {
                 return (
                   <CardWrapper
-                    key={uuidv4()}
-                    onClick={() => navigate(`/detail/${card.id}`)}
-                  >
-                    <ImageContainer>
-                      <img src={card.imgUrl} alt='' />
-                    </ImageContainer>
-                    <DescContainer>
-                      <TitleWrapper>
-                        <Title>{card.title}</Title>
-                        <RestDay>
-                          {card.restDay.split('일')[0] == 0 ? (
-                            <p style={{ color: '#e51e1e' }}>오늘 마감</p>
-                          ) : (
-                            <p>마감 {card.restDay}</p>
-                          )}
-                        </RestDay>
-                      </TitleWrapper>
-                      <Address>{card.address}</Address>
-                      <Dday>{card.dday}</Dday>
-                    </DescContainer>
-                  </CardWrapper>
+                  key={uuidv4()}
+                  onClick={() => navigate(`/detail/${card.id}`)}
+                >
+                  <ImageContainer>
+                    <img src={card.imgUrl} alt="" />
+                  </ImageContainer>
+                  <DescContainer>
+                    <Des1Wrapper>
+                      <ProfileDiv>
+                        <ProfileImgDiv style={{backgroundImage: `url(${card.authorImgUrl})`}}/>
+                        <AuthorNicknameH4>{card.authorNickname}</AuthorNicknameH4>
+                      </ProfileDiv>
+                      <CountDiv>
+                        <CountDiv style={{ marginRight: "8px"}}>
+                          <BiHeart size="17px" />
+                          <CountNumSpan>{card.numOfWish}{" "}</CountNumSpan>
+                        </CountDiv>
+                        <CountDiv style={{marginRight: "0px"}}>
+                          <RiChat3Line size="17px" />
+                          <CountNumSpan>{card.numOfComment}{" "}</CountNumSpan>
+                        </CountDiv>
+                      </CountDiv>
+                    </Des1Wrapper>
+                    <Des2TitleWrapper>
+                      <Title>{card.title}</Title>
+                      <RestDay>
+                        {card.restDay?.split("일")[0] == 0 ? (
+                          <div style={{ color: '#e51e1e' }}>오늘 마감</div>
+                        ) : (
+                          card.restDay?.split("일")[0] < 0 ? ( 
+                            <div style={{ color: '#e51e1e' }}>마감 완료</div> 
+                          ):( 
+                            <div>마감 D-{card.restDay.split("일")[0]}</div> 
+                          )
+                        )}
+                      </RestDay>
+                    </Des2TitleWrapper>
+                    <Address>
+                      <CgPin style={{ marginRight: "2px" }} />
+                      {card.address}
+                    </Address>
+                    <Dday>
+                      <BiCalendarCheck style={{ marginRight: "2px" }} />
+                      {card.dday}
+                    </Dday>
+                  </DescContainer>
+                </CardWrapper>
                 );
               })
             : false}
         </ListContainer>
         {/* 인피니티 스크롤 인식 ref */}
-        <div ref={ref} style={{ height: '30px', color: 'transparent' }}>
+        <div ref={ref} style={{ height: "30px", color: "white" }}>
           ¯\_(ツ)_/¯
         </div>
-        <div onClick={() => navigate('/chatlist')}>
+        <div style={{ height: "30px"}}></div>
+        {/* <Footer/> */}
+        <div onClick={() => navigate("/chatlist")}>
           <ChatFloatingBtn />
         </div>
       </Container2>
@@ -309,6 +341,7 @@ const Container = styled.div`
 
 const Form = styled.form`
   /* position: relative; */
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -360,6 +393,7 @@ const CleanButton = styled.button`
 `;
 
 const CategoryDiv = styled.div`
+  width: fit-content;
   display: inline-block;
   flex-direction: column;
   width: 100px;
@@ -369,6 +403,8 @@ z-index: 1;
 
 const CategorySelect = styled.select`
   /* height: 40px; */
+  display: inline-block;
+  z-index: 200;
   width: 100%;
   border: none;
   outline: none;
@@ -376,6 +412,7 @@ const CategorySelect = styled.select`
 `;
 
 const Input = styled.input`
+  display: inline-block;
   font-size: 14px;
   line-height: 1;
   background-color: transparent;
@@ -402,30 +439,31 @@ const Input = styled.input`
 const Container2 = styled.div`
   display: flex;
   margin-top: 20px;
-  /* justify-content: center; */
+  justify-content: center;
   flex-direction: column;
   align-items: center;
-  /* background-color: antiquewhite; */
-  /* border: 1px solid black; */
+  /* width: 100vw; */
+  width: 100%;
 `;
 
 const ListContainer = styled.div`
   display: flex;
-  /* justify-content: space-between; */
+  /* display: inline-block; */
+  /* justify-content: center; */
   flex-wrap: wrap;
   flex-direction: row;
-  width: 1230px;
+  width: 1110px;
   /* background-color: green; */
 
-  @media only screen and (min-width: 854px) and (max-width: 1255px) {
+  @media only screen and (min-width: 768px) and (max-width: 1129px) {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    width: 825px;
+    width: 745px;
     /* background-color: #704d1e; */
   }
 
-  @media only screen and (max-width: 854px) {
+  @media only screen and (max-width: 767px) {
     flex-direction: column;
     align-items: center;
     width: 100%;
@@ -437,14 +475,14 @@ const CardWrapper = styled.div`
   flex-direction: column;
   /* border: 0.5px solid #E3F2FD; */
   width: 100%;
-  min-width: 300px;
-  max-width: 375px;
+  /* min-width: 300px; */
+  max-width: 340px;
   border-radius: 13px;
   /* padding: 5px; */
   /* box-shadow: 0.5px 0.5px 1px 0 #cce0ff; */
   box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.09);
   transition: 0.2s ease-in;
-  margin: 17px;
+  margin: 15px;
   cursor: pointer;
   :hover {
     filter: brightness(80%);
@@ -476,19 +514,64 @@ const DescContainer = styled.div`
   /* background-color: antiquewhite; */
 `;
 
-const TitleWrapper = styled.div`
+const Des1Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 13px 0 0 0;
+  width: 340px;
+  padding: 10px 15px 0px 15px;
+  /* margin: 0 auto; */
+  box-sizing: border-box;
+  /* height: fit-content; */
+`;
+
+const ProfileDiv = styled.div`
+display: flex;
+align-items: center;
+width: 150px;
+height: 40px;
+`;
+
+const ProfileImgDiv = styled.div`
+  width: 40px;
+  height: 30px;
+  border-radius: 100%;
+  border: 2px solid #bcd7ff;
+  background-size: cover;
+  background-position: center;
+`;
+
+const AuthorNicknameH4 = styled.h4`
+width: 100%;
+margin-left: 10px;
+display: inline-block;
+`;
+
+const CountDiv = styled.div`
+display: flex;
+align-items: center;
+`;
+
+const CountNumSpan = styled.span`
+margin-left: 2px;
+`;
+
+const Des2TitleWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0 0 10px;
 `;
 
 const Title = styled.div`
   font-size: 16px;
   font-weight: 600;
   margin: 0 0 0 10px;
-  font-family: 'NotoSansKR';
+  font-family: "NotoSansKR";
   width: 72%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 
 const RestDay = styled.div`
@@ -502,11 +585,16 @@ const RestDay = styled.div`
 const Address = styled.div`
   font-size: 13px;
   font-weight: 400;
-  margin: 0 0 2px 10px;
+  margin: 0 0 2px 20px;
+  display: flex;
+  align-items: center;
 `;
 
 const Dday = styled.div`
   font-size: 13px;
   font-weight: 400;
-  margin: 0 0 10px 10px;
+  margin: 0 0 20px 20px;
+  display: flex;
+  align-items: center;
 `;
+

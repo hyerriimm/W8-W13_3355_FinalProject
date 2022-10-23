@@ -99,13 +99,13 @@ const MainBoard = () => {
                   <Des2TitleWrapper>
                     <Title>{card.title}</Title>
                     <RestDay>
-                      {card.restDay.split("일")[0] == 0 ? (
+                      {card.restDay?.split("일")[0] == 0 ? (
                         <div style={{ color: '#e51e1e' }}>오늘 마감</div>
                       ) : (
-                        card.restDay.split("일")[0] < 0 ? ( 
-                          <div style={{ color: '#e51e1e' }}>마감 완료</div> 
+                        card.restDay?.split("일")[0] < 0 ? ( 
+                          <div style={{ color: 'grey' }}>마감 완료</div> 
                         ):( 
-                          <div>마감 {card.restDay}</div> 
+                          <div>마감 D-{card.restDay.split("일")[0]}</div> 
                         )
                       )}
                     </RestDay>
@@ -119,6 +119,10 @@ const MainBoard = () => {
                     {card.dday}
                   </Dday>
                 </DescContainer>
+                {/* 마감된 카드 뿌옇게 처리 */}
+                {card.restDay?.split("일")[0] < 0 ? <Cover /> : false}
+                {/* 마감된 카드 모집마감 띄워주기 */}
+                {card.restDay?.split("일")[0] < 0 ? <DoneMent /> : false}
               </CardWrapper>
             );
           })}
@@ -187,6 +191,31 @@ const Container = styled.div`
   width: 100%;
   /* background-color: antiquewhite; */
   /* border: 1px solid black; */
+`;
+
+const Cover = styled.div`
+  /* background-color: ${(props) => (props.lighter? 'white' : null )};
+  opacity:  ${(props) => (props.lighter? 'white' : null )}; */
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(255, 255, 255);
+  border-radius: 16px;
+  opacity: 0.8;
+`;
+
+const DoneMent = styled.div`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    padding: 16px;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: bold;
+    background-color: rgb(78, 78, 78);
+    border-radius: 6px;
 `;
 
 const ListContainer = styled.div`
@@ -331,6 +360,10 @@ const Address = styled.div`
   margin: 0 0 2px 20px;
   display: flex;
   align-items: center;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 
 const Dday = styled.div`
