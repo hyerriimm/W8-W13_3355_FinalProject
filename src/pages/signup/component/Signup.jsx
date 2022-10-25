@@ -9,6 +9,7 @@ import axios from 'axios';
 // import AgreementModal from "./AgreementModal"
 import MarketingAgreement from "./MarketingAgreement";
 import RequiredAgreement from "./RequiredAgreement";
+import imageCompression from 'browser-image-compression';
 
 
 
@@ -34,21 +35,40 @@ const Signup = () => {
   const [previewImg, setPreviewImg] = useState();
   const [imgFile, setImgFile] = useState(null);
   const fileInput = useRef(null); 
-  const onChange = (e) => {
+  const onChange = async (e) => {
     // if (e.target.files[0]) {
     // setFile(e.target.files[0]);
     // } else { // //업로드 취소할 시
     // setImage(profileImg);
     // return;
     // } //화면에 프로필 사진 표시
-    setImgFile(e.target.files[0]);
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-          setPreviewImg(reader.result);
-      }
-    };
-    reader.readAsDataURL(e.target.files[0]);
+
+    let file = e.target.files[0];	// 입력받은 file객체
+    const options = { 
+      maxSizeMB: 1, 
+      maxWidthOrHeight: 300
+    }
+    try {
+      const compressedFile = await imageCompression(file, options);
+      setImgFile(compressedFile);
+      
+      // resize된 이미지의 url을 받아 fileUrl에 저장
+      const promise = imageCompression.getDataUrlFromFile(compressedFile);
+      promise.then(result => {
+        setPreviewImg(result);
+      })
+    } catch (error) {
+      console.log(error);
+    }
+
+    // setImgFile(e.target.files[0]);
+    // const reader = new FileReader();
+    // reader.onload = () => {
+    //   if (reader.readyState === 2) {
+    //       setPreviewImg(reader.result);
+    //   }
+    // };
+    // reader.readAsDataURL(e.target.files[0]);
   };
 
   const resetAllStates = () => {
