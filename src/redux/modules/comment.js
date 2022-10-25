@@ -39,7 +39,7 @@ export const createComment = createAsyncThunk(
         }
       );
       if (data.data.success === false) alert(data.data.error.message);
-      else alert(data.data.data);
+      // else alert(data.data.data);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import axios from 'axios';
-import { signUp, _getUsersName } from "../../../redux/modules/user";
+// import { signUp, _getUsersName } from "../../../redux/modules/user";
 // import AgreementModal from "./AgreementModal"
 import MarketingAgreement from "./MarketingAgreement";
 import RequiredAgreement from "./RequiredAgreement";
@@ -175,7 +175,7 @@ const Signup = () => {
         }
     };
 
-    const onSubmitHandler = (e) => {
+    const onSubmitHandler = async (e) => {
         e.preventDefault();
         if (
           userId.trim() === "" ||
@@ -219,10 +219,24 @@ const Signup = () => {
         if (imgFile !== null) {
             formData.append('imgFile', imgFile);
         };
-
-        dispatch(signUp(formData));
-        navigate('/login');
-        resetAllStates();
+        
+        try {
+          const response = await axios.post(`${API_URL}/member/signup`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data"
+            }
+          });
+              
+          if (response.data.success === false) {
+            alert(response.data.error.message);
+          } else {
+            alert(response.data.data);
+            navigate('/login');
+            resetAllStates();
+          }
+      } catch (error) {
+          console.log(error);
+      }
     };
 
   return (
@@ -244,6 +258,7 @@ const Signup = () => {
                 placeholder="아이디"
                 type="text"
                 name="userId"
+                pattern="[A-Za-z]+"
                 onChange={(e) => setUserId(e.target.value)}
               />
 
@@ -362,6 +377,7 @@ const Signup = () => {
             <StTitle>이용약관</StTitle>
             <AgreeBox>
               <input
+              style={{cursor:'pointer'}}
                 type="checkbox"
                 name="allCheck"
                 checked={inputs[0].checked}
@@ -372,6 +388,7 @@ const Signup = () => {
               모두 동의합니다
               <br />
               <input
+                style={{cursor:'pointer'}}
                 type="checkbox"
                 name="ageCheck"
                 onChange={(e) => {
@@ -382,6 +399,7 @@ const Signup = () => {
               만 14세 이상입니다<span>(필수)</span>
               <br />
               <input
+                style={{cursor:'pointer'}}
                 type="checkbox"
                 name="requiredAgreement"
                 onChange={(e) => {
@@ -395,6 +413,7 @@ const Signup = () => {
               </Agree>
               <br />
               <input
+                style={{cursor:'pointer'}}
                 type="checkbox"
                 name="marketingAgreement"
                 onChange={(e) => {
@@ -478,6 +497,7 @@ const GenderSelect = styled.select`
   padding: 0 10px;
   margin-top: 7px;
   outline: none;
+  cursor: pointer;
 `;
 
 const Input2 = styled.input`

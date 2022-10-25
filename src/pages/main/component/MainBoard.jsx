@@ -43,6 +43,7 @@ const MainBoard = () => {
     }
   }, [fetch, hasNextPage, inView]);
 
+
   // if (isLoading) {
   //   return <Loading>
   //     <img alt='로딩중'
@@ -98,17 +99,6 @@ const MainBoard = () => {
                   </Des1Wrapper>
                   <Des2TitleWrapper>
                     <Title>{card.title}</Title>
-                    <RestDay>
-                      {card.restDay?.split("일")[0] == 0 ? (
-                        <div style={{ color: '#e51e1e' }}>오늘 마감</div>
-                      ) : (
-                        card.restDay?.split("일")[0] < 0 ? ( 
-                          <div style={{ color: 'grey' }}>마감 완료</div> 
-                        ):( 
-                          <div>마감 D-{card.restDay.split("일")[0]}</div> 
-                        )
-                      )}
-                    </RestDay>
                   </Des2TitleWrapper>
                   <Address>
                     <CgPin style={{ marginRight: "2px" }} />
@@ -118,11 +108,27 @@ const MainBoard = () => {
                     <BiCalendarCheck style={{ marginRight: "2px" }} />
                     {card.dday}
                   </Dday>
+                  <Category>
+                    {card.category === 'EXERCISE'? (<CategoryWrapper>#운동</CategoryWrapper>):(false)}
+                    {card.category === 'TRAVEL'? (<CategoryWrapper>#여행</CategoryWrapper>):(false)}
+                    {card.category === 'READING'? (<CategoryWrapper>#독서</CategoryWrapper>):(false)}
+                    {card.category === 'STUDY'? (<CategoryWrapper>#공부</CategoryWrapper>):(false)}
+                    {card.category === 'RELIGION'? (<CategoryWrapper>#종교</CategoryWrapper>):(false)}
+                    {card.category === 'ONLINE'? (<CategoryWrapper>#온라인</CategoryWrapper>):(false)}
+                    {card.category === 'ETC'? (<CategoryWrapper>#기타</CategoryWrapper>):(false)}
+                    <RestDay>
+                      {card.restDay?.split("일")[0] == 0 ? (
+                        <div style={{ color: '#e51e1e' }}>오늘 마감</div>
+                        ) : (
+                          card.restDay?.split("일")[0] < 0 ? ( 
+                            <div style={{ color: 'grey' }}>마감 완료</div> 
+                        ):( 
+                          <div>마감 D-{card.restDay.split("일")[0]}</div> 
+                        )
+                      )}
+                    </RestDay>
+                  </Category>
                 </DescContainer>
-                {/* 마감된 카드 뿌옇게 처리 */}
-                {card.restDay?.split("일")[0] < 0 ? <Cover /> : false}
-                {/* 마감된 카드 모집마감 띄워주기 */}
-                {card.restDay?.split("일")[0] < 0 ? <DoneMent /> : false}
               </CardWrapper>
             );
           })}
@@ -191,31 +197,6 @@ const Container = styled.div`
   width: 100%;
   /* background-color: antiquewhite; */
   /* border: 1px solid black; */
-`;
-
-const Cover = styled.div`
-  /* background-color: ${(props) => (props.lighter? 'white' : null )};
-  opacity:  ${(props) => (props.lighter? 'white' : null )}; */
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 100%;
-  height: 100%;
-  background-color: rgb(255, 255, 255);
-  border-radius: 16px;
-  opacity: 0.8;
-`;
-
-const DoneMent = styled.div`
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    padding: 16px;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-weight: bold;
-    background-color: rgb(78, 78, 78);
-    border-radius: 6px;
 `;
 
 const ListContainer = styled.div`
@@ -347,11 +328,11 @@ const Title = styled.div`
 `;
 
 const RestDay = styled.div`
-  font-size: 11px;
+  font-size: 12px;
   /* background-color: #f0f0f0; */
   /* border-radius: 1px; */
   color: #1e88e5;
-  margin: 0 15px 0 0;
+  /* margin: 0 15px 0 0; */
 `;
 
 const Address = styled.div`
@@ -369,7 +350,29 @@ const Address = styled.div`
 const Dday = styled.div`
   font-size: 13px;
   font-weight: 400;
-  margin: 0 0 20px 20px;
+  margin: 0 0 10px 20px;
   display: flex;
   align-items: center;
+`;
+
+const Category = styled.div`
+  font-size: 13px;
+  font-weight: 400;
+  margin: 0 0 10px 20px;
+  display: flex;
+  align-items: center;
+`;
+
+const CategoryWrapper = styled.div`
+display: flex;
+margin: 0 15px 0 0;
+padding: 5px;
+width: fit-content;
+height: 20px;
+align-items: center;
+font-weight: bold;
+font-family: "Noto Sans CJK KR";
+color: #1e88e5;
+background-color: aliceblue;
+border-radius: 10px;
 `;
