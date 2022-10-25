@@ -164,9 +164,11 @@ const StButton = styled.button`
   border-radius: 6px;
   margin-top: 10px;
   font-size: 15px;
+  cursor: pointer;
 `;
 
 const KakaoLogin = styled.img`
   margin-top: 10px;
+  cursor: pointer;
 `;
 
