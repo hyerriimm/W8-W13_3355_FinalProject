@@ -7,6 +7,7 @@ import { DatePicker, RangeDatePicker } from '@y0c/react-datepicker';
 import '@y0c/react-datepicker/assets/styles/calendar.scss';
 import 'moment/locale/ko';
 import MapOfEdit from './MapOfEdit';
+import imageCompression from 'browser-image-compression';
 
 import { __detail } from '../../../redux/modules/detail';
 
@@ -110,9 +111,26 @@ const DetailEdit = () => {
     setPlace(" ");
   };
 
-  const onChangeImgFileInput = (e) => {
-    setImgFile(e.target.files[0]);
-    setPreviewImg(URL.createObjectURL(e.target.files[0]));
+  const onChangeImgFileInput = async (e) => {
+    let file = e.target.files[0];	// 입력받은 file객체
+    const options = { 
+      maxSizeMB: 1, 
+      maxWidthOrHeight: 600
+    }
+    try {
+      const compressedFile = await imageCompression(file, options);
+      setImgFile(compressedFile);
+      
+      // resize된 이미지의 url을 받아 fileUrl에 저장
+      const promise = imageCompression.getDataUrlFromFile(compressedFile);
+      promise.then(result => {
+        setPreviewImg(result);
+      })
+    } catch (error) {
+      console.log(error);
+    }
+    // setImgFile(e.target.files[0]);
+    // setPreviewImg(URL.createObjectURL(e.target.files[0]));
   };
 
   const onEditHandler = async (e) => {
@@ -257,6 +275,7 @@ const DetailEdit = () => {
       </StDiv>
       <MaxNumDiv>
       <div style={{fontWeight:'bold'}}>모집 인원</div>
+      <div style={{fontSize:'13px', color:'grey', marginBottom:'5px'}}>나를 제외한 팀원의 수를 정해주세요.</div>
         <MaxNumInput
           required
           name='maxNum'
@@ -274,6 +293,7 @@ const DetailEdit = () => {
       </MaxNumDiv>
       <DatePickerDiv>
         <div style={{fontWeight:'bold'}}>모집 기간</div>
+        <div style={{fontSize:'13px', color:'grey', marginBottom:'5px'}}>기간 설정은 오늘부터 가능합니다.</div>
         <div style={{marginTop:'10px'}}>
         <RangeDatePicker
             startText='Start'
@@ -292,6 +312,7 @@ const DetailEdit = () => {
       </DatePickerDiv>
       <DatePickerDiv>
         <div style={{fontWeight:'bold'}}>모임 날짜</div>
+        <div style={{fontSize:'13px', color:'grey', marginBottom:'5px'}}>모집 종료일 이후로 선택해주세요.</div>
         <div style={{marginTop:'10px'}}>
           <DatePicker
             placeholder={dDay}

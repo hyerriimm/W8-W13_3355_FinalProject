@@ -147,10 +147,11 @@ const SomeonesMypage = () => {
                     // <Sttag>일반계정</Sttag>
                     <Stdiv>일반계정</Stdiv>
                 ) : (
-                  <ImgKakao
-                    src='img/kakao_login_small.png'
-                    alt='카카오 로그인 버튼'
-                  ></ImgKakao>
+                  // <ImgKakao
+                  //   src='img/kakao_login_small.png'
+                  //   alt='카카오 로그인 버튼'
+                  // ></ImgKakao>
+                  <Stdiv style={{backgroundColor:'yellow' }}>카카오 계정</Stdiv>
                 )}
                 <Stdiv>
                   <div>{someonesInfo?.minAge}대</div>

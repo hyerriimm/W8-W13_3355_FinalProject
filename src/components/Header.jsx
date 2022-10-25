@@ -18,7 +18,9 @@ const Header = () => {
     const myinfo = useSelector((state)=>state.myinfo.myinfo);
 
     useEffect(()=>{
+      if (ACCESSTOKEN) {
         dispatch(__getMyInfo())
+      }
       },[ACCESSTOKEN])
 
     // console.log(myinfo);

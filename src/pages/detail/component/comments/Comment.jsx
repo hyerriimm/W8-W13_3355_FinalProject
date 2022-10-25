@@ -46,7 +46,9 @@ const Comment = () => {
   },[]);
 
   useEffect(() => {
-    GetCommentList();
+    if (localStorage.getItem("ACCESSTOKEN")) {
+      GetCommentList();
+    }
   }, []);
 // -----------------------------------------------------------------------------------------
 

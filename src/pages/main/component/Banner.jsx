@@ -78,11 +78,12 @@ const Banner = () => {
            <div >
                <Image src={isMobile ? bannerMobile : bannerPC} alt=""/>
            </div>
-           <div onClick={()=>window.location.href = 'https://forms.gle/QhmPUGo9REbZ77Kg6'}>
-               <Image src={isMobile ? bannerMobileGift : banner_gift} alt=""/>
+           <div 
+           onClick={()=>window.location.href = 'https://forms.gle/QhmPUGo9REbZ77Kg6'}>
+               <Image style={{cursor:'pointer'}} src={isMobile ? bannerMobileGift : banner_gift} alt=""/>
            </div>
            <div onClick={()=>navigate('/tutorial')}>
-               <Image src={isMobile ? tutorialMobile : tutorialPC} alt=""/>
+               <Image style={{cursor:'pointer'}} src={isMobile ? tutorialMobile : tutorialPC} alt=""/>
            </div>
      </StSlider>
  </SliderWrapper>
