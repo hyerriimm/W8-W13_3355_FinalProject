@@ -131,17 +131,39 @@ const Detail = () => {
           <ContentAndBtns>
             <div>
               <TitleDiv>
-                <h3>{detail.title}</h3>
-                { logIn == null ? false : 
-                (Id === detail.authorId ? ( false ) : 
-                (
-                  <ReportBtn
-                  onClick={goToReportBtn}
-                  >
-                    <RiAlarmWarningFill size='20' color='#1a399c' />
-                  </ReportBtn>
-                )   
-                )}
+                <Category>
+                  {detail.category === 'EXERCISE'? (<CategoryWrapper>#운동</CategoryWrapper>):(false)}
+                  {detail.category === 'TRAVEL'? (<CategoryWrapper>#여행</CategoryWrapper>):(false)}
+                  {detail.category === 'READING'? (<CategoryWrapper>#독서</CategoryWrapper>):(false)}
+                  {detail.category === 'STUDY'? (<CategoryWrapper>#공부</CategoryWrapper>):(false)}
+                  {detail.category === 'RELIGION'? (<CategoryWrapper>#종교</CategoryWrapper>):(false)}
+                  {detail.category === 'ONLINE'? (<CategoryWrapper>#온라인</CategoryWrapper>):(false)}
+                  {detail.category === 'ETC'? (<CategoryWrapper>#기타</CategoryWrapper>):(false)}
+                  <RestDay>
+                    {detail.restDay?.split("일")[0] == 0 ? (
+                      <div style={{ color: '#e51e1e' }}>오늘 마감</div>
+                      ) : (
+                        detail.restDay?.split("일")[0] < 0 ? ( 
+                          <div style={{ color: 'grey' }}>마감 완료</div> 
+                      ):( 
+                        <div>마감 D-{detail.restDay?.split("일")[0]}</div> 
+                      )
+                    )}
+                  </RestDay>
+                </Category>
+                <TitleWrapper>
+                  <h3 style={{margin:'10px 0'}}>{detail.title}</h3>
+                  { logIn == null ? false : 
+                  (Id === detail.authorId ? ( false ) : 
+                  (
+                    <ReportBtn
+                    onClick={goToReportBtn}
+                    >
+                      <RiAlarmWarningFill size='20' color='#1a399c' />
+                    </ReportBtn>
+                  )   
+                  )}
+                </TitleWrapper>
               </TitleDiv>
               <div style={{display:'flex', alignItems: 'center', justifyContent:'space-between'}}>
                 <div style={{display:'flex', alignItems: 'center'}}>
@@ -157,7 +179,7 @@ const Detail = () => {
                   }}
                   />
                   <h4 
-                  style={{width:'150px', cursor:'pointer'}}
+                  style={{width:'150px', cursor:'pointer', margin:'5px 0'}}
                   onClick={()=>{
                     if (logIn && Id === detail.authorId) {
                       navigate('/mypage')
@@ -168,19 +190,19 @@ const Detail = () => {
                   >{detail.authorNickname}</h4>
                 </div>
                 <StDiv>
-                  {detail.status === 'RECRUIT' ? (
+                  {/* {detail.status === 'RECRUIT' ? (
                     detail.restDay?.split("일")[0] == 0 ? (
                       <RestDayBtn disable style={{ color: '#e51e1e' }}>오늘 마감</RestDayBtn>
                     ) : (
                       detail.restDay?.split("일")[0] < 0 ? ( 
                         <RestDayBtn disable style={{ color: 'grey' }}>마감 완료</RestDayBtn> 
                       ):( 
-                        <RestDayBtn disable>마감 D-{detail.restDay?.split("일")[0]}</RestDayBtn> 
+                        <RestDayBtn disable><div>마감</div><div>D-{detail.restDay?.split("일")[0]}</div></RestDayBtn> 
                       )
                     )
                     ):(
                     <RestDayBtn disable>마감 완료</RestDayBtn>
-                  )}
+                  )} */}
                   {logIn == null ? false : 
                     (Id === detail.authorId? false : (
                       !isWish ? (
@@ -341,13 +363,19 @@ box-sizing: border-box;
 
 const TitleDiv = styled.div`
   display: flex;
-  /* flex-direction: column; */
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  /* justify-content: space-between; */
+  /* align-items: center; */
   /* @media only screen and (max-width: 720px) {
     display: flex;
     flex-direction: column;
   } */
+`;
+
+const TitleWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const StDiv = styled.div`
@@ -460,4 +488,33 @@ const Item2Map = styled.div`
   grid-area: b;
   margin-top: 20px;
   width: 100%;
+`;
+
+const Category = styled.div`
+  font-size: 13px;
+  font-weight: 400;
+  margin: 10px 0 0 0;
+  display: flex;
+  align-items: center;
+`;
+
+const RestDay = styled.div`
+  font-size: 12px;
+  /* background-color: #f0f0f0; */
+  /* border-radius: 1px; */
+  color: #1e88e5;
+  margin: 0 0 0 15px;
+`;
+
+const CategoryWrapper = styled.div`
+display: flex;
+padding: 5px;
+width: fit-content;
+height: 15px;
+align-items: center;
+font-weight: bold;
+font-family: "Noto Sans CJK KR";
+color: #1e88e5;
+background-color: aliceblue;
+border-radius: 10px;
 `;
