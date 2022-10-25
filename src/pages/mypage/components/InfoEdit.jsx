@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { __getMyInfo } from '../../../redux/modules/myinfo';
+import imageCompression from 'browser-image-compression';
 
 const API_URL = process.env.REACT_APP_HOST_PORT;
 const ACCESSTOKEN = localStorage.getItem('ACCESSTOKEN');
@@ -113,9 +114,26 @@ const InfoEdit = () => {
       }
     };;
 
-    const onChangeImgFileInput = (e) => {
-        setImgFile(e.target.files[0]);
-        setPreviewImg(URL.createObjectURL(e.target.files[0]));
+    const onChangeImgFileInput = async (e) => {
+      let file = e.target.files[0];	// 입력받은 file객체
+      const options = { 
+        maxSizeMB: 1, 
+        maxWidthOrHeight: 300
+      }
+      try {
+        const compressedFile = await imageCompression(file, options);
+        setImgFile(compressedFile);
+        
+        // resize된 이미지의 url을 받아 fileUrl에 저장
+        const promise = imageCompression.getDataUrlFromFile(compressedFile);
+        promise.then(result => {
+          setPreviewImg(result);
+        })
+      } catch (error) {
+        console.log(error);
+      }
+        // setImgFile(e.target.files[0]);
+        // setPreviewImg(URL.createObjectURL(e.target.files[0]));
       };
 
     const onChangeRemoveInfo = async (e) => { 
