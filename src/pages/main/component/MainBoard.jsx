@@ -412,7 +412,7 @@ const Des1Wrapper = styled.div`
 const ProfileDiv = styled.div`
 display: flex;
 align-items: center;
-width: 150px;
+width: 300px;
 height: 40px;
 `;
 
