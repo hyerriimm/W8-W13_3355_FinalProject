@@ -78,21 +78,25 @@ const MapOfDetail = ({ placeX, placeY, placeName, fullAddress, placeUrl }) => {
         infowindow.open(map, marker);
     });
 
-      window.addEventListener('resize', function() {
-          map.relayout();
-          let markerPosition = marker.getPosition(); 
-          // console.log(markerPosition);
-          map.setCenter(markerPosition);
-      });
-      
-      return () => {
-        window.removeEventListener("resize", function() {
-          map.relayout();
-          let markerPosition = marker.getPosition(); 
-          // console.log(markerPosition);
-          map.setCenter(markerPosition);
-      });
+    const delay = 300;
+    let timer = null;
+
+    const ResizeFunction = () => {
+      clearTimeout(timer);
+      timer = setTimeout(function(){
+        map.relayout();
+        let markerPosition = marker.getPosition(); 
+        console.log('resize event');
+        map.setCenter(markerPosition);
+      },delay);
     };
+
+    window.addEventListener('resize', ResizeFunction);
+    
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", ResizeFunction);
+  };
 
   }, []);
 
