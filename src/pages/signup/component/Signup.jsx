@@ -278,7 +278,6 @@ const Signup = () => {
                 placeholder="아이디"
                 type="text"
                 name="userId"
-                pattern="[A-Za-z]+"
                 onChange={(e) => setUserId(e.target.value)}
               />
 
@@ -340,10 +339,10 @@ const Signup = () => {
 
             <Item>
               <Input2
-                placeholder="닉네임(5자 이내)"
+                placeholder="닉네임(최대 10자)"
                 type="text"
                 name="nickname"
-                maxLength={5}
+                maxLength={10}
                 onChange={(e) => setNickname(e.target.value)}
               />
               <OverlapButton type="button" onClick={nicknameCheckHandler}>

@@ -18,7 +18,7 @@ const MainBoard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { cardList, closingOrderList, hasNextPage, isLoading, error } = useSelector((state) => state.cardlist);
-  console.log(cardList);
+  // console.log(cardList);
   const page = useRef(0);
   const [ref, inView] = useInView({
     /* Optional options */
@@ -412,7 +412,7 @@ const Des1Wrapper = styled.div`
 const ProfileDiv = styled.div`
 display: flex;
 align-items: center;
-width: 150px;
+width: 300px;
 height: 40px;
 `;
 

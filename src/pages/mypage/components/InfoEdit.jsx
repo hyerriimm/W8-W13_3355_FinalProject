@@ -13,23 +13,25 @@ const REFRESHTOKEN = localStorage.getItem('REFRESHTOKEN');
 
 const InfoEdit = () => {
 
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-
-    const myinfo = useSelector((state)=>state.myinfo.myinfo);
-
-    useEffect(()=>{
-        dispatch(__getMyInfo())
-      },[])
-
-    const [imgFile, setImgFile] = useState(null);
-    const [previewImg, setPreviewImg] = useState(myinfo.imgUrl);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
+  const myinfo = useSelector((state)=>state.myinfo.myinfo);
+  // console.log(myinfo);
+  
+  const [imgFile, setImgFile] = useState(null);
+  const [previewImg, setPreviewImg] = useState(myinfo.imgUrl);
     const [nickname, setNickname] = useState(myinfo.nickname);
-    const [isNickEditMode, setIsNickEditMode] = useState(false);
+  const [isNickEditMode, setIsNickEditMode] = useState(false);
 
-    const imgFileInputRef = useRef();
-    const imgFileUploadBtnRef = useRef();
-    const removeinfoBtnRef = useRef();
+  const imgFileInputRef = useRef();
+  const imgFileUploadBtnRef = useRef();
+  const removeinfoBtnRef = useRef();
+
+  useEffect(()=>{
+      dispatch(__getMyInfo())
+    },[])
+
 
     const resetAllStates = () => {
         setNickname('');
@@ -70,7 +72,7 @@ const InfoEdit = () => {
     const onEditHandler = async (e) => {
       e.preventDefault();
       if (nickname.trim() === "") {
-        return alert("모든 항목을 입력해야 수정 가능합니다.");
+        return alert("닉네임을 입력하세요.");
       }
       if (nickCheckRes === false) {
         alert(
@@ -207,8 +209,8 @@ const InfoEdit = () => {
                     <StInput
                       required
                       name="nickname"
-                      maxLength={5}
-                      placeholder="닉네임을 입력하세요."
+                      maxLength={10}
+                      placeholder="최대 10자"
                       type="text"
                       value={nickname}
                       onChange={(e) => setNickname(e.target.value)}
@@ -224,6 +226,7 @@ const InfoEdit = () => {
                     onClick={() => {
                       setIsNickEditMode(false);
                       setNickCheckRes("");
+                      setNickname(myinfo.nickname);
                       }}>
                       변경 취소
                     </OverlapButton>

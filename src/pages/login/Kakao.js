@@ -34,12 +34,12 @@ const Kakao = () => {
       // console.log(response);
 
       if(response.data.success === true) {
-        alert(`카카오 로그인: ${response.data.data}`);
+        // alert(`카카오 로그인: ${response.data.data}`);
         return navigate('/');
       }
     } catch (error) {
-      console.lof(typeof error); //console.lof(typeof 변수명) /변수의 타입을 알려줌
-      console.log('카카오 로그인 실패', error);
+      // console.lof(typeof error); //console.lof(typeof 변수명) /변수의 타입을 알려줌
+      // console.log('카카오 로그인 실패', error);
       alert('카카오 로그인에 실패하였습니다.')
       return navigate('/login');
     }

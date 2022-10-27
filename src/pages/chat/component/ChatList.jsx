@@ -13,7 +13,7 @@ const ChatList = () => {
 
   useEffect(() => {
     dispatch(__getChatList());
-  }, [ChatList.length]);
+  }, []);
 
 
     return (
@@ -29,6 +29,7 @@ const ChatList = () => {
             </StDiv>
             <Container>
               <ListContainer>
+                {!ChatList? (<div>아직 참여중인 모임이 존재하지 않습니다.</div>):(false)}
                 {ChatList?.map((chatroom) => {
                   return (
                     <CardWrapper key={chatroom.roomId} onClick={() => { navigate(`/chatlist/${chatroom.roomId}`) }}>
@@ -81,7 +82,7 @@ const Container = styled.div`
 const ListContainer = styled.div`
     flex-direction: column;
     align-items: center;    
-
+    /* background-color: yellow; */
 `
 
 const CardWrapper = styled.div`
