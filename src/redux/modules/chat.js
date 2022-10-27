@@ -44,8 +44,10 @@ export const __getChatList = createAsyncThunk(
         }
       );
       if (data.data.success === false) {
-        alert(data.data.error.message);
-        window.location.replace("/");
+        if (data.data.error.message === '올바르지 않은 토큰입니다.') {
+          // 폰에서 로그아웃 안하고 한참 뒤 다시 창을 켰을 때 흰색 프사가 뜨는 상태에서 채팅버튼 누를 경우
+          alert('접속 시간이 만료된 상태입니다.\n로그아웃 후 다시 로그인 부탁드립니다.');
+        }
       }
       return thunkAPI.fulfillWithValue({ data: data.data });
     } catch (error) {

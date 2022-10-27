@@ -35,7 +35,7 @@ const Login = () => {
             localStorage.setItem("ImgURL", data.headers.imgurl);
             localStorage.setItem("Id", data.headers.id);
             localStorage.setItem("Role", data.headers.role); //관리자면 'ROLE_ADMIN', 회원이면 'ROLE_MEMBER'
-            alert(data.data.data);
+            // alert(data.data.data);
             return navigate('/');
         };
         if (data.data.success === false) {
@@ -71,7 +71,7 @@ const Login = () => {
       <Item1>
         <input 
         ref={userIdRef}
-        type='email'
+        type='text'
         name='userId'
         placeholder='아이디를 입력하세요'
         />
@@ -164,9 +164,11 @@ const StButton = styled.button`
   border-radius: 6px;
   margin-top: 10px;
   font-size: 15px;
+  cursor: pointer;
 `;
 
 const KakaoLogin = styled.img`
   margin-top: 10px;
+  cursor: pointer;
 `;
 

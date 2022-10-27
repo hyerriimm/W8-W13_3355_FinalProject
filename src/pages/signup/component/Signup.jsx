@@ -5,10 +5,11 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import axios from 'axios';
-import { signUp, _getUsersName } from "../../../redux/modules/user";
+// import { signUp, _getUsersName } from "../../../redux/modules/user";
 // import AgreementModal from "./AgreementModal"
 import MarketingAgreement from "./MarketingAgreement";
 import RequiredAgreement from "./RequiredAgreement";
+import imageCompression from 'browser-image-compression';
 
 
 
@@ -34,21 +35,40 @@ const Signup = () => {
   const [previewImg, setPreviewImg] = useState();
   const [imgFile, setImgFile] = useState(null);
   const fileInput = useRef(null); 
-  const onChange = (e) => {
+  const onChange = async (e) => {
     // if (e.target.files[0]) {
     // setFile(e.target.files[0]);
     // } else { // //업로드 취소할 시
     // setImage(profileImg);
     // return;
     // } //화면에 프로필 사진 표시
-    setImgFile(e.target.files[0]);
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-          setPreviewImg(reader.result);
-      }
-    };
-    reader.readAsDataURL(e.target.files[0]);
+
+    let file = e.target.files[0];	// 입력받은 file객체
+    const options = { 
+      maxSizeMB: 1, 
+      maxWidthOrHeight: 300
+    }
+    try {
+      const compressedFile = await imageCompression(file, options);
+      setImgFile(compressedFile);
+      
+      // resize된 이미지의 url을 받아 fileUrl에 저장
+      const promise = imageCompression.getDataUrlFromFile(compressedFile);
+      promise.then(result => {
+        setPreviewImg(result);
+      })
+    } catch (error) {
+      console.log(error);
+    }
+
+    // setImgFile(e.target.files[0]);
+    // const reader = new FileReader();
+    // reader.onload = () => {
+    //   if (reader.readyState === 2) {
+    //       setPreviewImg(reader.result);
+    //   }
+    // };
+    // reader.readAsDataURL(e.target.files[0]);
   };
 
   const resetAllStates = () => {
@@ -73,7 +93,8 @@ const Signup = () => {
 
 
     //유효성검사
-    const regexuserId = /^[a-z]+[a-z0-9]{5,19}$/g;
+    const regexuserId = /^[a-zA-Z][a-zA-Z0-9]{4,11}$/;
+    // const regexuserId =   /^[a-z0-9]{5,12}$/;
     // const regexuserId =  /(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/
     const regexPassword = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
     // const regexPassword = /^(?=.*?[a-zA-z])(?=.*?[0-9]).{4,12}$/;
@@ -174,7 +195,7 @@ const Signup = () => {
         }
     };
 
-    const onSubmitHandler = (e) => {
+    const onSubmitHandler = async (e) => {
         e.preventDefault();
         if (
           userId.trim() === "" ||
@@ -218,10 +239,24 @@ const Signup = () => {
         if (imgFile !== null) {
             formData.append('imgFile', imgFile);
         };
-
-        dispatch(signUp(formData));
-        navigate('/login');
-        resetAllStates();
+        
+        try {
+          const response = await axios.post(`${API_URL}/member/signup`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data"
+            }
+          });
+              
+          if (response.data.success === false) {
+            alert(response.data.error.message);
+          } else {
+            alert(response.data.data);
+            navigate('/login');
+            resetAllStates();
+          }
+      } catch (error) {
+          console.log(error);
+      }
     };
 
   return (
@@ -250,8 +285,22 @@ const Signup = () => {
                 중복확인
               </OverlapButton>
             </Item>
+
+            {
+              userId &&
+                (regexuserId.test(userId) ? (
+                  <div style={{ color: "green", fontSize: "8px" }}>
+                    사용가능한 아이디 입니다
+                  </div>
+                ) : (
+                  <div style={{ color: "red", fontSize: "8px" }}>
+                    영문자로 시작하여, 영문자 또는 숫자를 사용한 5~12자리 아이디를 입력해주세요
+                  </div>
+                ))
+            }
+
             <Input
-              placeholder="비밀번호를 입력하세요"
+              placeholder="비밀번호"
               type="password"
               name="password"
               onChange={(e) => setPassword(e.target.value)}
@@ -272,7 +321,7 @@ const Signup = () => {
             }
 
             <Input
-              placeholder="비밀번호를 다시 한번 입력하세요"
+              placeholder="비밀번호 재확인"
               type="password"
               name="passwordCheck"
               onChange={(e) => setPasswordCheck(e.target.value)}
@@ -290,10 +339,10 @@ const Signup = () => {
 
             <Item>
               <Input2
-                placeholder="닉네임을 입력하세요(5글자이내)"
+                placeholder="닉네임(최대 10자)"
                 type="text"
                 name="nickname"
-                maxLength={5}
+                maxLength={10}
                 onChange={(e) => setNickname(e.target.value)}
               />
               <OverlapButton type="button" onClick={nicknameCheckHandler}>
@@ -302,7 +351,7 @@ const Signup = () => {
             </Item>
 
             <Input
-              placeholder="나이를 입력하세요"
+              placeholder="나이(15세 이상)"
               type="number"
               name="age"
               min={15}
@@ -310,24 +359,19 @@ const Signup = () => {
               onChange={(e) => setAge(e.target.value)}
             />
 
-            <select
+            <GenderSelect
               name="gender"
-              style={{
-                height: "40px",
-                width: "273px",
-                borderRadius: "5px",
-                border: "1px solid #a1a1a1",
-                padding: "0 10px",
-                marginTop: "7px",
-              }}
               onChange={(e) => setGender(e.target.value)}
             >
-              <option>성별을 선택해주세요</option>
+              <option>성별</option>
               <option value="male">남자</option>
               <option value="female">여자</option>
-            </select>
+            </GenderSelect>
 
-            <ImgFile src={previewImg} alt="" />
+            <ImgFile
+              src={previewImg? previewImg : 'img/addimage.png'}
+              alt='썸네일 사진을 등록해주세요.'
+            />
             <ImgInput
               type="file"
               style={{ display: "none" }}
@@ -344,7 +388,7 @@ const Signup = () => {
                 fileInput.current.click();
               }}
             >
-              사진등록
+              프로필 사진 선택
             </Button>
           </>
 
@@ -352,6 +396,7 @@ const Signup = () => {
             <StTitle>이용약관</StTitle>
             <AgreeBox>
               <input
+              style={{cursor:'pointer'}}
                 type="checkbox"
                 name="allCheck"
                 checked={inputs[0].checked}
@@ -362,6 +407,7 @@ const Signup = () => {
               모두 동의합니다
               <br />
               <input
+                style={{cursor:'pointer'}}
                 type="checkbox"
                 name="ageCheck"
                 onChange={(e) => {
@@ -372,6 +418,7 @@ const Signup = () => {
               만 14세 이상입니다<span>(필수)</span>
               <br />
               <input
+                style={{cursor:'pointer'}}
                 type="checkbox"
                 name="requiredAgreement"
                 onChange={(e) => {
@@ -385,6 +432,7 @@ const Signup = () => {
               </Agree>
               <br />
               <input
+                style={{cursor:'pointer'}}
                 type="checkbox"
                 name="marketingAgreement"
                 onChange={(e) => {
@@ -460,6 +508,17 @@ const Input = styled.input`
   }
 `;
 
+const GenderSelect = styled.select`
+  height: 40px;
+  width: 273px;
+  border-radius: 5px;
+  border: 1px solid #a1a1a1;
+  padding: 0 10px;
+  margin-top: 7px;
+  outline: none;
+  cursor: pointer;
+`;
+
 const Input2 = styled.input`
     height: 40px;
     width: 194px;
@@ -480,7 +539,7 @@ const ImgFile = styled.img`
     width: 150px;
     height: 150px;
     margin-top: 7px;
-    border: 1px solid #a1a1a1;
+    /* border: 1px solid #a1a1a1; */
     border-radius: 100%;
 `
 const ImgInput = styled.input`
@@ -503,7 +562,7 @@ const OverlapButton = styled.button`
   border-radius: 5px;
   outline: none;
   color: white;
-  background-color: #d9d9d9;
+  background-color: #bebebe;
   cursor: pointer;
   :hover {
     filter: brightness(95%);

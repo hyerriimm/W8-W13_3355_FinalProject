@@ -126,7 +126,7 @@ const ApplyForm = () => {
           </PostContent>
         </Item1>
 
-        <StDiv style={{ flexDirection: "column", alignItems: "flex-start" }}>
+        <StDiv style={{ flexDirection: "column"}}>
           <h4 style={{ margin: "0 auto" }}>나를 소개해주세요</h4>
           <StTextarea
             cols="27"
@@ -194,11 +194,10 @@ const StDiv = styled.div`
 
 const StTextarea = styled.textarea`
   font-family: "Noto Sans KR", sans-serif;
-  width: 100%;
+  width: 90%;
   height: 200px;
   margin-top: 10px;
-  padding-top: 10px;
-  padding-left: 10px;
+  padding: 10px;
   border: transparent;
   border-top: 1px solid grey;
   border-bottom: 1px solid grey;
@@ -272,6 +271,7 @@ const PostContent = styled.div`
   @media only screen and (max-width: 720px) {
     width: 100%;
     height: 80%;
+    padding: 0 15px;
   }
 `;
 

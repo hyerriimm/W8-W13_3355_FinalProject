@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { __getMyInfo } from '../../../redux/modules/myinfo';
+import imageCompression from 'browser-image-compression';
 
 const API_URL = process.env.REACT_APP_HOST_PORT;
 const ACCESSTOKEN = localStorage.getItem('ACCESSTOKEN');
@@ -12,22 +13,25 @@ const REFRESHTOKEN = localStorage.getItem('REFRESHTOKEN');
 
 const InfoEdit = () => {
 
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-
-    const myinfo = useSelector((state)=>state.myinfo.myinfo);
-
-    useEffect(()=>{
-        dispatch(__getMyInfo())
-      },[])
-
-    const [imgFile, setImgFile] = useState(null);
-    const [previewImg, setPreviewImg] = useState(myinfo.imgUrl);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
+  const myinfo = useSelector((state)=>state.myinfo.myinfo);
+  // console.log(myinfo);
+  
+  const [imgFile, setImgFile] = useState(null);
+  const [previewImg, setPreviewImg] = useState(myinfo.imgUrl);
     const [nickname, setNickname] = useState(myinfo.nickname);
+  const [isNickEditMode, setIsNickEditMode] = useState(false);
 
-    const imgFileInputRef = useRef();
-    const imgFileUploadBtnRef = useRef();
-    const removeinfoBtnRef = useRef();
+  const imgFileInputRef = useRef();
+  const imgFileUploadBtnRef = useRef();
+  const removeinfoBtnRef = useRef();
+
+  useEffect(()=>{
+      dispatch(__getMyInfo())
+    },[])
+
 
     const resetAllStates = () => {
         setNickname('');
@@ -37,7 +41,6 @@ const InfoEdit = () => {
 
       //중복확인
       const [nickCheckRes, setNickCheckRes] = useState("");
-      const [idCheckRes, setIdCheckRes] = useState("");
 
 
       const nicknameCheckHandler = async () => {
@@ -60,7 +63,8 @@ const InfoEdit = () => {
             return;
           }
         } catch (error) {
-          console.log(error);
+          // console.log(error);
+          alert('요청에 실패했습니다.\n다시 시도 부탁드립니다.')
         }
       };
 
@@ -68,20 +72,11 @@ const InfoEdit = () => {
     const onEditHandler = async (e) => {
       e.preventDefault();
       if (nickname.trim() === "") {
-        return alert("모든 항목을 입력해야 수정 가능합니다.");
-      }
-      if (nickCheckRes === "") {
-        return alert("닉네임 중복검사는 필수입니다.");
-      }
-      if (idCheckRes === false) {
-        alert(
-          "이미 존재하는 아이디입니다.\n새로운 아이디를 입력 후 중복검사 바랍니다."
-        );
-        return setIdCheckRes("");
+        return alert("닉네임을 입력하세요.");
       }
       if (nickCheckRes === false) {
         alert(
-          "이미 존재하는 닉네임입니다.\n새로운 아이디를 입력 후 중복검사 바랍니다."
+          "이미 존재하는 닉네임입니다.\n새로운 닉네임을 입력 후 중복검사 바랍니다."
         );
         return setNickCheckRes("");
       }
@@ -96,8 +91,8 @@ const InfoEdit = () => {
           const response = await axios.put(`${API_URL}/member`, formData, {
             headers: {
               "Content-Type": "multipart/form-data",
-              Authorization: ACCESSTOKEN,
-              RefreshToken: REFRESHTOKEN,
+              Authorization: localStorage.getItem('ACCESSTOKEN'),
+              RefreshToken: localStorage.getItem('REFRESHTOKEN'),
             },
           });
 
@@ -115,14 +110,32 @@ const InfoEdit = () => {
             return;
           }
         } catch (error) {
-          console.log(error);
+          // console.log(error);
+          alert('요청에 실패했습니다.\n다시 시도 부탁드립니다.')
         }
       }
     };;
 
-    const onChangeImgFileInput = (e) => {
-        setImgFile(e.target.files[0]);
-        setPreviewImg(URL.createObjectURL(e.target.files[0]));
+    const onChangeImgFileInput = async (e) => {
+      let file = e.target.files[0];	// 입력받은 file객체
+      const options = { 
+        maxSizeMB: 1, 
+        maxWidthOrHeight: 300
+      }
+      try {
+        const compressedFile = await imageCompression(file, options);
+        setImgFile(compressedFile);
+        
+        // resize된 이미지의 url을 받아 fileUrl에 저장
+        const promise = imageCompression.getDataUrlFromFile(compressedFile);
+        promise.then(result => {
+          setPreviewImg(result);
+        })
+      } catch (error) {
+        console.log(error);
+      }
+        // setImgFile(e.target.files[0]);
+        // setPreviewImg(URL.createObjectURL(e.target.files[0]));
       };
 
     const onChangeRemoveInfo = async (e) => { 
@@ -141,6 +154,8 @@ const InfoEdit = () => {
               localStorage.removeItem("ACCESSTOKEN");
               localStorage.removeItem("REFRESHTOKEN");
               localStorage.removeItem("ImgURL");
+              localStorage.removeItem("Role");
+              localStorage.removeItem("Id");
               resetAllStates();
               alert('회원 탈퇴가 완료되었습니다.')
               return navigate('/');
@@ -150,7 +165,8 @@ const InfoEdit = () => {
               return
             };
           } catch (error) {
-            console.log(error);
+            // console.log(error);
+            alert('요청에 실패했습니다.\n다시 시도 부탁드립니다.')
           }
         }
       };
@@ -176,24 +192,48 @@ const InfoEdit = () => {
                 />
               </Imgwrapper>
               <Contentwrapper>
-                <StId>{myinfo.userId}</StId>
-                <Div>
+                <MyInfo>
+                  <StId>{myinfo.userId}</StId>
+                  <StId>{myinfo.nickname}</StId>
+                </MyInfo>
+
+                <EditNickBtn
+                  type="button"
+                  onClick={() => {setIsNickEditMode(true);}}>
+                  닉네임 변경
+                </EditNickBtn>
+                {isNickEditMode? (
+                  <Div>
                   <StNickname>
                     <span style={{ marginRight: "10px" }}>닉네임</span>
                     <StInput
                       required
                       name="nickname"
-                      maxLength={5}
-                      placeholder="닉네임을 입력하세요."
+                      maxLength={10}
+                      placeholder="최대 10자"
                       type="text"
                       value={nickname}
                       onChange={(e) => setNickname(e.target.value)}
                     />
                   </StNickname>
-                  <OverlapButton type="button" onClick={nicknameCheckHandler}>
-                    중복확인
-                  </OverlapButton>
+                  <div>
+                    <OverlapButton type="button" onClick={nicknameCheckHandler}>
+                      중복확인
+                    </OverlapButton>
+                    <OverlapButton 
+                    style={{backgroundColor:"#d12626"}}
+                    type="button" 
+                    onClick={() => {
+                      setIsNickEditMode(false);
+                      setNickCheckRes("");
+                      setNickname(myinfo.nickname);
+                      }}>
+                      변경 취소
+                    </OverlapButton>
+                  </div>
                 </Div>
+                ):(false)}
+
                 <StInput
                   type="file"
                   style={{ display: "none" }}
@@ -212,7 +252,7 @@ const InfoEdit = () => {
                 >
                   프로필 사진 변경
                 </BtnEdit>
-                <BtnEdit>비밀번호 변경</BtnEdit>
+                {/* <BtnEdit>비밀번호 변경</BtnEdit> */}
                 <BtnEdit
                   type="button"
                   onClick={onChangeRemoveInfo}
@@ -321,6 +361,17 @@ const BtnEdit = styled.div`
   cursor: pointer;
 `;
 
+const EditNickBtn = styled.div`
+  color: #1565C0 !important;
+  border: 0px solid #2196F3;
+  background-color: white !important;
+  border-radius: 6px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 13px;
+  cursor: pointer;
+`;
+
 const Contentwrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -331,6 +382,13 @@ const Contentwrapper = styled.div`
   margin-left: 10px;
   /* background-color: beige; */
 `;
+
+const MyInfo = styled.div`
+height: 60px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+`
 
 const StId = styled.div`
 display: flex;
@@ -350,7 +408,7 @@ align-items: center;
 font-size: 14px;
 font-family: 'NotoSansKR';
 margin-top: 20px;
-margin-bottom: 40px;
+/* margin-bottom: 40px; */
 /* border: 1px solid black; */
 `;
 
@@ -379,7 +437,7 @@ const OverlapButton = styled.button`
   border-radius: 5px;
   outline: none;
   color: white;
-  background-color: #d9d9d9;
+  background-color: grey;
   cursor: pointer;
   :hover {
     filter: brightness(95%);
@@ -388,4 +446,5 @@ const OverlapButton = styled.button`
 
 const Div = styled.div`
   display: flex;
+  flex-direction: column;
 `

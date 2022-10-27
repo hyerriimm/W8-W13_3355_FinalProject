@@ -13,7 +13,7 @@ const ChatList = () => {
 
   useEffect(() => {
     dispatch(__getChatList());
-  }, [ChatList.length]);
+  }, []);
 
 
     return (
@@ -29,6 +29,7 @@ const ChatList = () => {
             </StDiv>
             <Container>
               <ListContainer>
+                {!ChatList? (<div>아직 참여중인 모임이 존재하지 않습니다.</div>):(false)}
                 {ChatList?.map((chatroom) => {
                   return (
                     <CardWrapper key={chatroom.roomId} onClick={() => { navigate(`/chatlist/${chatroom.roomId}`) }}>
@@ -81,7 +82,7 @@ const Container = styled.div`
 const ListContainer = styled.div`
     flex-direction: column;
     align-items: center;    
-
+    /* background-color: yellow; */
 `
 
 const CardWrapper = styled.div`
@@ -136,6 +137,10 @@ const Title = styled.div`
   font-weight: 600;
   margin: 0 0 0 10px;
   font-family: 'NotoSansKR';
+  max-width: 75%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 
 const RedCountBtn = styled.button`
@@ -159,6 +164,10 @@ const Address = styled.div`
   font-weight: 400;
   margin: 10px 0 2px 10px;
   font-family: 'NotoSansKR';
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 
 const Dday = styled.div`

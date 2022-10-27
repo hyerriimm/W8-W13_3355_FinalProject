@@ -85,6 +85,7 @@ const Chat = () => {
 // 이전 채팅 더보기 버튼 조건부 렌더링
   const PrevChatList = () => { 
     if (page.current === totalPage) {
+      // console.log(totalPage);
       return (
         <div style={{marginTop:'15px'}}></div>
       );
@@ -182,7 +183,10 @@ const Chat = () => {
           headers: {
             authorization: localStorage.getItem("ACCESSTOKEN"),
           },
-        }).then((res) => { }).catch((error) => { });
+        }).then((res) => { 
+          // dispatch(__getChat({ id, page: 0 })); 
+          // page.current = 0;
+        }).catch((error) => { });
         // page.current = totalPage;
       });
   };
@@ -253,7 +257,7 @@ const Chat = () => {
     }
   };
 
-  // console.log(chatList);
+  // console.log(chatList.chatList);
   // console.log(messages);
 
 
@@ -375,6 +379,7 @@ const Chat = () => {
                     <ChatMessage
                       style={{ display: "flex", justifyContent: "flex-end" }}
                     >
+                      {/* <div style={{display:'flex'}}>{chat.numOfUnread}</div> */}
                       <MyChat>{chat.message}</MyChat>
                     </ChatMessage>
                   </div>
@@ -390,6 +395,7 @@ const Chat = () => {
                     <div key={i}>
                       <ChatMessage>
                         <Chatting>{chat.message}</Chatting>
+                      {/* <div style={{display:'flex'}}>{chat.numOfUnread}</div> */}
                       </ChatMessage>
                     </div>
                   );
@@ -409,6 +415,7 @@ const Chat = () => {
                       </ChatMessage>
                       <ChatMessage>
                         <Chatting>{chat.message}</Chatting>
+                        {/* <div style={{display:'flex'}}>{chat.numOfUnread}</div> */}
                       </ChatMessage>
                     </div>
                   );

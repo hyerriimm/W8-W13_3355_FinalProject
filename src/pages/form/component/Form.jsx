@@ -6,6 +6,7 @@ import { DatePicker, RangeDatePicker } from '@y0c/react-datepicker';
 import '@y0c/react-datepicker/assets/styles/calendar.scss';
 import 'moment/locale/ko';
 import MapContainer from './MapContainer';
+import imageCompression from 'browser-image-compression';
 
 const API_URL = process.env.REACT_APP_HOST_PORT; 
 
@@ -58,9 +59,26 @@ const Form = () => {
     setPlace(" ");
   };
 
-  const onChangeImgFileInput = (e) => {
-    setImgFile(e.target.files[0]);
-    setPreviewImg(URL.createObjectURL(e.target.files[0]));
+  const onChangeImgFileInput = async(e) => {
+    let file = e.target.files[0];	// 입력받은 file객체
+    const options = { 
+      maxSizeMB: 1, 
+      maxWidthOrHeight: 600
+    }
+    try {
+      const compressedFile = await imageCompression(file, options);
+      setImgFile(compressedFile);
+      
+      // resize된 이미지의 url을 받아 fileUrl에 저장
+      const promise = imageCompression.getDataUrlFromFile(compressedFile);
+      promise.then(result => {
+        setPreviewImg(result);
+      })
+    } catch (error) {
+      console.log(error);
+    }
+    // setImgFile(e.target.files[0]);
+    // setPreviewImg(URL.createObjectURL(e.target.files[0]));
   };
 
   const onSubmitHandler = async (e) => {
@@ -166,13 +184,13 @@ const Form = () => {
           onChange={(e) => setCategory(e.target.value)}
         >
           <option>모임 분류를 선택해주세요.</option>
-          <option value="exercise">운동</option>
-          <option value="travel">여행</option>
-          <option value="reading">독서</option>
-          <option value="study">공부</option>
-          <option value="religion">종교</option>
-          <option value="online">온라인</option>
-          <option value="etc">기타</option>
+          <option value="EXERCISE">운동</option>
+          <option value="TRAVEL">여행</option>
+          <option value="READING">독서</option>
+          <option value="STUDY">공부</option>
+          <option value="RELIGION">종교</option>
+          <option value="ONLINE">온라인</option>
+          <option value="ETC">기타</option>
         </CategorySelect>
       </CategoryDiv>
       <StDiv>
@@ -199,6 +217,7 @@ const Form = () => {
       </StDiv>
       <MaxNumDiv>
       <div style={{fontWeight:'bold'}}>모집 인원 (3~5명) </div>
+      <div style={{fontSize:'13px', color:'grey', marginBottom:'5px'}}>나를 제외한 팀원의 수를 정해주세요.</div>
         <MaxNumInput
           required
           name='maxNum'
@@ -216,6 +235,7 @@ const Form = () => {
       </MaxNumDiv>
       <DatePickerDiv>
         <div style={{fontWeight:'bold'}}>모집 기간</div>
+        <div style={{fontSize:'13px', color:'grey', marginBottom:'5px'}}>기간 설정은 오늘부터 가능합니다.</div>
         <div style={{marginTop:'10px'}}>
         <RangeDatePicker
             startText='시작'
@@ -234,6 +254,7 @@ const Form = () => {
       </DatePickerDiv>
       <DatePickerDiv>
         <div style={{fontWeight:'bold'}}>모임 날짜</div>
+        <div style={{fontSize:'13px', color:'grey', marginBottom:'5px'}}>모집 종료일 이후로 선택해주세요.</div>
         <div style={{marginTop:'10px'}}>
           <DatePicker
             onChange={(date) => setDday(date.$d)}
@@ -253,7 +274,7 @@ const Form = () => {
           value={inputText}
           />
           <button type="submit">검색</button>
-          <div style={{fontWeight:'bold', color:'grey', marginBottom:'10px'}}>※ 검색 후 지도의 핀을 눌러 선택해주세요.</div>
+          <div style={{fontWeight:'bold', color:'grey', marginBottom:'10px'}}>※ 검색 후 지도의 핀을 눌러 주소를 선택해주세요.</div>
         </form>
         <MapContainer 
         searchPlace={place} 
@@ -356,6 +377,7 @@ font-family:'Noto Sans KR', sans-serif;
    padding-left: 10px;
    border: transparent;
    border-bottom: 1px solid grey;
+   resize: none;
    :focus {
       outline: none;
       border-color: #18a0fb;
@@ -421,7 +443,7 @@ input {
   width:87%;
   height:35px;
   @media only screen and (max-width: 720px) {
-  width: 86%;
+  width: 84%;
   }
   :focus {
       outline: none;
@@ -438,6 +460,10 @@ button {
   border-radius: 6px;
   font-size: 15px;
   cursor: pointer;
+  @media only screen and (max-width: 720px) {
+  font-size: 12px;
+  width: fit-content;
+  }
   :hover {
             filter: brightness(90%);
             box-shadow: 1px 1px 3px 0 #bcd7ff;
