@@ -1,9 +1,13 @@
 ## 삼삼오오(3355)
 >같은 관심사를 가진 사람들을 모으고 소통할 수 있도록 돕는 소모임 커뮤니티  
-<img src="https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F8f5d6a9e-f4fc-4826-9c8e-736e1a168e2c%2F%25EC%25A0%259C%25EB%25AA%25A9%25EC%259D%2584-%25EC%259E%2585%25EB%25A0%25A5%25ED%2595%25B4%25EC%25A3%25BC%25EC%2584%25B8%25EC%259A%2594_-005.png?table=block&id=1a27923c-ed68-40b9-97c6-d143fdefe523&spaceId=0603c37a-ae84-4a7b-bb3b-65f4fe11e0f2&width=1830&userId=57c7d7d1-cefd-4daf-8f93-2c234339168a&cache=v2"> 
+
 >https://3355.world  
+
 - 삼삼오오(3355)는 같은 취미, 관심사를 가진 사람들을 모아 소모임을 진행하려는 사람들을 위한 모임 개설 및 소통 커뮤니티입니다.   
+
 - 직접 모임을 주최하여 사람들을 모집하거나 다른 사람들의 모임에 지원하여 다양한 주제의 소모임을 진행할 수 있습니다.
+
+<img src="https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F8f5d6a9e-f4fc-4826-9c8e-736e1a168e2c%2F%25EC%25A0%259C%25EB%25AA%25A9%25EC%259D%2584-%25EC%259E%2585%25EB%25A0%25A5%25ED%2595%25B4%25EC%25A3%25BC%25EC%2584%25B8%25EC%259A%2594_-005.png?table=block&id=1a27923c-ed68-40b9-97c6-d143fdefe523&spaceId=0603c37a-ae84-4a7b-bb3b-65f4fe11e0f2&width=1830&userId=57c7d7d1-cefd-4daf-8f93-2c234339168a&cache=v2"> 
 
 <br />
 
