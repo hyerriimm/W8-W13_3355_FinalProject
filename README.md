@@ -1,79 +1,81 @@
-## 삼삼오오(3355)
+# [삼삼오오(3355)](https://3355.world/)
 >같은 관심사를 가진 사람들을 모으고 소통할 수 있도록 돕는 소모임 커뮤니티  
 
->https://3355.world  
 
 - 삼삼오오(3355)는 같은 취미, 관심사를 가진 사람들을 모아 소모임을 진행하려는 사람들을 위한 모임 개설 및 소통 커뮤니티입니다.   
 
 - 직접 모임을 주최하여 사람들을 모집하거나 다른 사람들의 모임에 지원하여 다양한 주제의 소모임을 진행할 수 있습니다.
 
-<img src="https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F8f5d6a9e-f4fc-4826-9c8e-736e1a168e2c%2F%25EC%25A0%259C%25EB%25AA%25A9%25EC%259D%2584-%25EC%259E%2585%25EB%25A0%25A5%25ED%2595%25B4%25EC%25A3%25BC%25EC%2584%25B8%25EC%259A%2594_-005.png?table=block&id=1a27923c-ed68-40b9-97c6-d143fdefe523&spaceId=0603c37a-ae84-4a7b-bb3b-65f4fe11e0f2&width=1830&userId=57c7d7d1-cefd-4daf-8f93-2c234339168a&cache=v2"> 
+<p align="center"><img src="https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F8f5d6a9e-f4fc-4826-9c8e-736e1a168e2c%2F%25EC%25A0%259C%25EB%25AA%25A9%25EC%259D%2584-%25EC%259E%2585%25EB%25A0%25A5%25ED%2595%25B4%25EC%25A3%25BC%25EC%2584%25B8%25EC%259A%2594_-005.png?table=block&id=1a27923c-ed68-40b9-97c6-d143fdefe523&spaceId=0603c37a-ae84-4a7b-bb3b-65f4fe11e0f2&width=1830&userId=57c7d7d1-cefd-4daf-8f93-2c234339168a&cache=v2" width="80%"></p>
 
 <br />
+
+## 🎬 [시연영상 보러가기](https://youtu.be/jVtFFoKNIOE?t=30)
+
+
+</br>
 
 ## ✔ 주요기능
 >삼삼오오의 핵심 기능은 컨텐츠 등록 및 채팅 기능.
 
->사용자들은 모임을 갖고 싶은 카테고리로 모임을 개설 가능.   
+>사용자들은 카테고리를 선택하여 원하는 주제로 모임 개설 가능.   
 
 >각 사용자들은 원하는 모임에 참여하여 서로 얘기를 나누며 오프라인 만남도 가질 수 있도록 장려.
 
- **`메인 페이지 - 무한스크롤, 검색 기능(카테고리별 조회, 키워드 검색(제목, 내용, 주소))`** 
+### 1. 메인 페이지 
+- 무한스크롤, 검색 기능(카테고리별 조회, 키워드 검색(제목, 내용, 주소))
+ <img src="https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F67ff28d0-1f18-4665-bcee-b745c8308572%2F%25EB%25A9%2594%25EC%259D%25B8.png?id=716f6d98-8c05-4062-b9f6-3465931c7793&table=block&spaceId=0603c37a-ae84-4a7b-bb3b-65f4fe11e0f2&width=2000&userId=57c7d7d1-cefd-4daf-8f93-2c234339168a&cache=v2"> 
+ <img src="https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fbebc049f-5815-4c5e-aec4-dd8a87030eff%2F%25EC%25A0%2584%25EC%25B2%25B4%25EA%25B2%2580%25EC%2583%2589.png?id=19e2105c-2227-4815-8d4d-b6022c63f5ae&table=block&spaceId=0603c37a-ae84-4a7b-bb3b-65f4fe11e0f2&width=2000&userId=57c7d7d1-cefd-4daf-8f93-2c234339168a&cache=v2"> 
+ <img src="https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F432b594d-0c68-4498-9c65-23f72028e45d%2F%25EC%25B9%25B4%25ED%2585%258C%25EA%25B3%25A0%25EB%25A6%25AC%25EA%25B2%2580%25EC%2583%2589.png?id=585b379c-5ad3-4e1b-b24b-709183dca346&table=block&spaceId=0603c37a-ae84-4a7b-bb3b-65f4fe11e0f2&width=2000&userId=57c7d7d1-cefd-4daf-8f93-2c234339168a&cache=v2"> 
  
- **`게시글, 댓글 CRUD`** 
+ ### 2. 게시글, 댓글 CRUD
+ **상세 페이지 - 찜, 지원 확인/마감(주최자), 지원신청(참가자)** 
+ - 이미지, 카테고리, 타이틀, 내용, 인원,  모집기간, 모임날짜, 모임장소(KaKao map)  
+  <img src="https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F27ffabfb-eb81-4dd7-9389-a805aa6226e5%2F%25EA%25B2%258C%25EC%258B%259C%25EA%25B8%2580%25EC%259E%2591%25EC%2584%25B1.png?id=5f4001be-3f9e-4708-879e-f3fe5a7cc5f8&table=block&spaceId=0603c37a-ae84-4a7b-bb3b-65f4fe11e0f2&width=2000&userId=57c7d7d1-cefd-4daf-8f93-2c234339168a&cache=v2">   
+  <img src="https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd514cdf-90c2-449b-a6b6-a0eca52f64c9%2F%25EB%258C%2593%25EA%25B8%2580.png?id=0e3d3b34-9429-42f6-b4e2-2bea540821d9&table=block&spaceId=0603c37a-ae84-4a7b-bb3b-65f4fe11e0f2&width=2000&userId=57c7d7d1-cefd-4daf-8f93-2c234339168a&cache=v2"> 
  
- **`게시글 상세 페이지 - 찜, 지원 확인/마감(주최자), 지원신청(참가자)`** 
  
- **`실시간 채팅`** 
+ ### 3. 실시간 채팅
    - [WebSocket / Stomp pub/sub] 을 활용한 실시간 데이터 전송으로 유저간 채팅 기능
+   - 상대방의 입장/퇴장 확인 가능
+   - 이전 채팅 확인 가능
+   - 채팅 참여자, 방장 확인 가능
+      <p align="center"><img src="https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F36738159-7d33-41d5-93ed-07cf14072f36%2FUntitled.png?id=fa376984-f5c4-4deb-a6c6-baa75a37c636&table=block&spaceId=0603c37a-ae84-4a7b-bb3b-65f4fe11e0f2&width=2000&userId=57c7d7d1-cefd-4daf-8f93-2c234339168a&cache=v2" width="80%"></p>
+      <p align="center"><img src="https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F493ac2b8-f8b9-4bb1-920b-9794018c098e%2FUntitled.png?id=47570e72-c05c-4772-86d8-1ea31d1f6e87&table=block&spaceId=0603c37a-ae84-4a7b-bb3b-65f4fe11e0f2&width=2000&userId=57c7d7d1-cefd-4daf-8f93-2c234339168a&cache=v2" width="80%"></p> 
+
  
- **`실시간 알림 기능`**
+ ### 4. 실시간 알림
   - SSE(Server Sent Event)를 이용한 실시간 알림 기능
+  - 회원이 작성한 게시글에 댓글이 달린 경우
+  - 회원이 작성한 게시글에 신청이 있을 경우
+  - 모임 신청이 승인 또는 거절되었을 경우
+    <p align="center"><img src="https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F57c39d7b-de42-48c7-b8ee-ca39224eb037%2F%25EC%2595%258C%25EB%25A6%25BC%25EC%2583%2588%25EB%25A1%259C.png?id=fb309f1e-d563-41e8-ae59-19f5b7445e38&table=block&spaceId=0603c37a-ae84-4a7b-bb3b-65f4fe11e0f2&width=2000&userId=57c7d7d1-cefd-4daf-8f93-2c234339168a&cache=v2" width="80%"></p>
+  - 채팅에 새로운 메세지가 올 경우 플로팅버튼에 알림 표시
+     <p align="center"><img src="https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fd34a5b70-3911-4a47-afaa-fa22b8d3e47a%2F%25EC%2595%258C%25EB%25A6%25BC3.png?id=31b2e093-65f8-4fce-81d8-f7669ca267ff&table=block&spaceId=0603c37a-ae84-4a7b-bb3b-65f4fe11e0f2&width=2000&userId=57c7d7d1-cefd-4daf-8f93-2c234339168a&cache=v2" width="80%"></p>
  
- **`신고 및 관리 기능`**
+ 
+ ### 5. 신고 및 관리
+  -  게시글, 댓글, 회원 신고기능
+     <p align="center"><img src="https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F9347c658-52a7-4978-96d2-b049800cfe62%2FUntitled.png?id=6324eddc-cdb0-478b-b127-66428c9842b4&table=block&spaceId=0603c37a-ae84-4a7b-bb3b-65f4fe11e0f2&width=2000&userId=57c7d7d1-cefd-4daf-8f93-2c234339168a&cache=v2" width="80%"></p>
+  -  관리자 페이지에서 내역 조회 및 처리
+  - 반려·제재 처리/ 신고 누적 10회시 회원 비활성화
+     <p align="center"><img src="https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fb7394c74-f0da-4520-ac56-c8bce2807738%2FUntitled.png?id=d6bc2d6d-3af5-468a-b7c0-548bf4d949c2&table=block&spaceId=0603c37a-ae84-4a7b-bb3b-65f4fe11e0f2&width=2000&userId=57c7d7d1-cefd-4daf-8f93-2c234339168a&cache=v2" width="80%"></p>
    
-
-### 1. 회원가입 및 로그인 
-  - 카카오톡을 이용한 소셜 로그인 
-  - JWT 발급을 통한 로그인 
-  - 토큰 재발급 구현
-  - 회원 정보 수정 구현
-  - 회원 탈퇴 구현
-
-### 2. 게시글 
-  - 게시글 업로드 구현
-     ##### 백엔드
-    - 카테고리별 다른 기본 이미지 업로드
-    - 스케쥴러 도입
-      1. 모집 마감일이 지났을 때 모집인원이 0인 경우 CLOSE로 업데이트
-      2. 모집 마감일이 지났을 때 모집인원이 1명 이상인 경우 DONE으로 업데이트 
-
-### 3. 지원 신청 기능 
-  - 모임 주최가가 아닌 회원의 경우 모임 참가신청 및 취소 가능
-  - 모임 주최자가 참가 신청 수락 시 모임 참여 가능
-
-### 4 채팅 기능
-  - 게시글 작성시 채팅방 생성
-  - 다른 지원자들의 참가 신청이 수락될 경우 채팅방에 참여 
-  - 채팅방에 읽지 않은 채팅 메세지 개수 조회 가능
-  - 
-### 5. 실시간 알림 기능 
-  - 회원이 작성한 게시글에 댓글이 달린 경우 실시간 알림 전송
-  - 회원이 작성한 게시글에 신청이 있을 경우 실시간 알림 전송
-  - 모임 신청 거절 시 실시간 알림 전송
-  - 모임 신청 승인 시 실시간 알림 전송 
-
-### 6. 신고 기능 
-  - 게시글, 댓글 및 회원에 대해 신고 가능 
-  - 누적 신고 처리 횟수 10회 이상이 되면 회원 제재 
-  - 관리자만 관리할 수 있도록 관리자 권한부여
  
  <br />
 
-## 🗓 프로젝트 기간 & 참여 인원
+## 🗓 프로젝트 기간 & 팀원과 역할
 * 2022년 9월 16일 ~ 2022년 10월 27일   
-- [FrontEnd] : 이혜림, 이경하, 
+- [FrontEnd] : 이혜림, 이경하, 김고은
 - [BackEnd]  : 김범석(팀장), 김하영 
+
+|이름|역할|
+|------|---|
+|김범석(BE)|CI/CD, 배포관리, ERD설계 및 관리, 소셜로그인 구축, 테스트 코드 작성, 신고기능, 채팅 기능, 실시간 알림, 회원가입 및 로그인 담당 |
+|김하영(BE)|메인페이지, 마이페이지 조회, 게시글 찜하기, 지원신청하기, 실시간 알림|
+|김고은(FE)|헤더, 배너, 메인페이지와 마이페이지 구성, 나의 참여 ·찜 모임 조회, 회원 탈퇴|
+|이경하(FE)|회원가입, 댓글 CRUD, 댓글 신고, 모임지원 번복기능, 마이페이지 구성, 내 모임 지원자 조회, 채팅방 멤버 조회, 배너제작, 튜토리얼 제작, PPT제작|
+|이혜림(FE)|회원가입 중복검사, 로그인(일반 로그인, 카카오 소셜 로그인), 게시글 CRUD, 카카오 지도, 무한스크롤,   검색, 실시간 채팅, 실시간 알림, 로그인 연장, 모임 신청, 모임 조기마감/ 회원 수락·거절, 게시글, 회원 신고, 관리자 페이지 신고 처리, 타인 마이페이지 조회|
 
 <br />
 
@@ -81,6 +83,19 @@
 <img src="https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fc50ee6a7-1581-4f99-acba-d378ab8f5557%2FUntitled.png?table=block&id=30e25717-b2ce-4ad8-8b20-5958e25d7e73&spaceId=0603c37a-ae84-4a7b-bb3b-65f4fe11e0f2&width=1510&userId=57c7d7d1-cefd-4daf-8f93-2c234339168a&cache=v2">   
 
 <br />
+
+**Frontend Tech Stack**  
+  <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> 
+  <img src="https://img.shields.io/badge/Redux-Toolkit-764ABC?style=for-the-badge&logo=redux&logoColor=white">
+  <img src="https://img.shields.io/badge/React Router-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white">
+  <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=Axios&logoColor=white">
+  <img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white">
+  <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white">
+  <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
+  <img src="https://img.shields.io/badge/styled-components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white">
+  <img src="https://img.shields.io/badge/Kakao-FFCD00?style=for-the-badge&logo=Kakao&logoColor=black">
+  
+  <br />
 
 ## 🔧 기술적 의사결정
  
@@ -148,18 +163,3 @@
  
  >화면이 렌더링 된 이후 사용자가 액션을 취하지 않아 별다른 http 요청이 없어도 자동으로 토큰을 재발급 받아오게 해오도록 하기 위해서는 2안을 선택하는 것이 낫다고 판단하여 2안으로 결정함
 
- 
- 
-
-<br />
-
-**Frontend Tech Stack**  
-  <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> 
-  <img src="https://img.shields.io/badge/Redux-Toolkit-764ABC?style=for-the-badge&logo=redux&logoColor=white">
-  <img src="https://img.shields.io/badge/React Router-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white">
-  <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=Axios&logoColor=white">
-  <img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white">
-  <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white">
-  <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
-  <img src="https://img.shields.io/badge/styled-components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white">
-  <img src="https://img.shields.io/badge/Kakao-FFCD00?style=for-the-badge&logo=Kakao&logoColor=black">
